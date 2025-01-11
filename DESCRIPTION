@@ -1,0 +1,13 @@
+Package: scapekit
+Title: Visualization
+Version: 0.1.0
+Author: Hua Sun [aut,cre]
+Maintainer: Hua Sun <hua.sun229@gmail.com>
+Description: This is plotting package
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends: R (>= 4.2.0)
+Imports:
+    ggplot2,
+    ggpubr
+RoxygenNote: 7.3.2
