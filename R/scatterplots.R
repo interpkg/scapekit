@@ -17,7 +17,7 @@ ScatterPlotHighlight <- function(df=NULL, highlight='', group='', x='', y='', x_
 
     df <- df[order(df$signal, decreasing=TRUE), ]
 
-    p <- ggplot(df, aes_string(x=x, y=y, color=signal)) + 
+    p <- ggplot(df, aes_string(x=x, y=y, color='signal')) + 
         geom_point(shape = 16, size = 0.5, alpha=0.6) +
         theme_linedraw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
         theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(1, "mm")) +
