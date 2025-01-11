@@ -10,11 +10,14 @@
 #' @export
 #'
 #'
-ScatterPlotHighlight <- function(df=NULL, highlight='', split_by='', x='', y='', x_lab='', y_lab='')
+ScatterPlotHighlight <- function(df=NULL, highlight='', group='', x='', y='', x_lab='', y_lab='')
 {
-    df <- df[order(df[highlight], decreasing=TRUE), ]
+    df$signal <- 'No'
+    df$signal[df[[group]]==highlight] <- 'Yes'
 
-    p <- ggplot(df, aes_string(x=x, y=y, color=highlight)) + 
+    df <- df[order(df$signal, decreasing=TRUE), ]
+
+    p <- ggplot(df, aes_string(x=x, y=y, color=signal)) + 
         geom_point(shape = 16, size = 0.5, alpha=0.6) +
         theme_linedraw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
         theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(1, "mm")) +
@@ -23,16 +26,6 @@ ScatterPlotHighlight <- function(df=NULL, highlight='', split_by='', x='', y='',
         theme(text = element_text(size = 8, face = "bold"), axis.text = element_text(size = 6)) +
         scale_color_manual(breaks = c("No", "Yes"), values=c("#D3D3D3", "#383b9d")) +
         theme(legend.position="none")
-
-    # splite by group
-    if (split_by != ''){
-        p <- p + facet_wrap(vars(split_by)) +
-        theme(
-            strip.text = element_text(size = 8, color = "black", face = "bold"),
-            strip.background = element_rect(color=NA, fill=NA)
-        )
-    }
-    
 
     return(p)
 }
