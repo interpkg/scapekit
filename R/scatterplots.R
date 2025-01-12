@@ -84,13 +84,13 @@ ScatterPlotSplit <- function(
     y='', 
     x_lab='', 
     y_lab='', 
-    color='blue',
+    color_set='#ac3282',
     point_size=0.01, 
     ticks=TRUE
 ){
     p <- ggplot(data, aes_string(x=x, y=y)) + 
         geom_point(data = select(data, -all_of(group)), color = "lightgray", shape = 16, size = 0.01) +
-        geom_point(color=color, shape = 16, size = 0.01) + 
+        geom_point(color=color_set, shape = 16, size = 0.01) + 
         theme_linedraw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
         theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(.5, "mm")) +
         labs(x=x_lab, y=y_lab) +
