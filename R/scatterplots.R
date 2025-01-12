@@ -1,7 +1,15 @@
 
 #' Scatter Plot
 #'
-#' @param data frame
+#' @param data is data frame
+#' @param highlight value
+#' @param group column
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
+#' @param point_size value 
+#' @param ticks show or not
 #'
 #' @return plot
 #'
@@ -10,33 +18,109 @@
 #' @export
 #'
 #'
-ScatterPlotHighlight <- function(df=NULL, highlight='', group='', x='', y='', x_lab='', y_lab='')
-{
-    df$signal <- 'No'
-    df$signal[df[[group]]==highlight] <- 'Yes'
+ScatterPlotHighlight <- function(
+    data=NULL, 
+    highlight='', 
+    group='', 
+    x='', 
+    y='', 
+    x_lab='', 
+    y_lab='', 
+    point_size=0.01, 
+    ticks=TRUE
+){
+    data$signal <- 'No'
+    data[data[[group]]==highlight, 'signal'] <- 'Yes'
 
-    df <- df[order(df$signal, decreasing=TRUE), ]
+    print(unique(data[[group]]))
+    print(highlight)
 
-    p <- ggplot(df, aes_string(x=x, y=y, color='signal')) + 
-        geom_point(shape = 16, size = 0.5, alpha=0.6) +
+    data <- data[order(data$signal, decreasing=FALSE), ]
+
+    p <- ggplot(data, aes_string(x=x, y=y, color='signal')) + 
+        geom_point(shape = 16, size = 0.01) +
         theme_linedraw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(1, "mm")) +
-        labs(x=x_lab, y=y_lab) +
-        theme(plot.title = element_text(hjust = 0.5, size=10)) +
-        theme(text = element_text(size = 8, face = "bold"), axis.text = element_text(size = 6)) +
+        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(.5, "mm")) +
+        labs(title=highlight, x=x_lab, y=y_lab) +
+        theme(plot.title = element_text(hjust = 0.5, size=6)) +
+        theme(text = element_text(size = 5, face = "bold"), axis.text = element_text(size = 4)) +
         scale_color_manual(breaks = c("No", "Yes"), values=c("#D3D3D3", "#383b9d")) +
         theme(legend.position="none")
 
+    if (!ticks){
+        p <- p + theme(axis.text=element_blank(), axis.ticks=element_blank())
+    }
+    
     return(p)
 }
 
 
- 
 
+
+#' Scatter Plot
+#'
+#' @param data frame
+#' @param group column
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
+#' @param point_size value 
+#' @param ticks show or not
+#'
+#' @return plot
+#'
+#' @import dplyr ggplot2
+#'
+#' @export
+#'
+#'
+ScatterPlotSplit <- function(
+    data=NULL, 
+    group='', 
+    x='', 
+    y='', 
+    x_lab='', 
+    y_lab='', 
+    point_size=0.01, 
+    ticks=TRUE
+){
+    data2 <- dplyr::select(data, - .data[[group]])
+
+    p <- ggplot(data, aes_string(x=x, y=y)) + 
+        geom_point(data=data2, color='lightgray', shape = 16, size = 0.01) + 
+        geom_point(color='#FA8072', shape = 16, size = 0.01) + 
+        theme_linedraw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(.5, "mm")) +
+        labs(x=x_lab, y=y_lab) +
+        theme(plot.title = element_text(hjust = 0.5, size=6)) +
+        theme(text = element_text(size = 5, face = "bold"), axis.text = element_text(size = 4)) +
+        theme(legend.position="none")
+
+    if (!ticks){
+        p <- p + theme(axis.text=element_blank(), axis.ticks=element_blank())
+    }
+
+    p <- p + facet_wrap(~ .data[[group]], scales='free', drop = TRUE) +
+        theme(
+            strip.text = element_text(size = 6, color = "black", face = "bold"),
+            strip.background = element_rect(color=NA, fill=NA))
+    
+    return(p)
+}
+
+
+
+ 
 
 #' Scatter Plot With Correlation
 #'
-#' @param data frame
+#' @param data data
+#' @param split_by name 
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
 #'
 #' @return plot
 #'
@@ -46,9 +130,9 @@ ScatterPlotHighlight <- function(df=NULL, highlight='', group='', x='', y='', x_
 #' 
 #' @concept scatter plot with correlation and split plots by split_by
 #'
-ScatterPlotWithCorr <- function(df=NULL, split_by='', x='', y='', x_lab='', y_lab='')
+ScatterPlotWithCorr <- function(data=NULL, split_by='', x='', y='', x_lab='', y_lab='')
 {
-    p <- ggscatter(df, x = x, y = y, 
+    p <- ggscatter(data, x = x, y = y, 
             color='#2278B5', shape = 16, size = 0.5, alpha=0.6,
             add = "reg.line", add.params = list(color = "#E14C32", size=0.5),
             conf.int = TRUE, cor.coef = TRUE, cor.coef.size = 2.5,
@@ -64,14 +148,13 @@ ScatterPlotWithCorr <- function(df=NULL, split_by='', x='', y='', x_lab='', y_la
 
     # splite by group
     if (split_by != ''){
-        p <- p + facet_wrap(vars(split_by)) +
+        p <- p + facet_wrap(vars(.data[[split_by]])) +
         theme(
             strip.text = element_text(size = 8, color = "black", face = "bold"),
             strip.background = element_rect(color=NA, fill=NA)
         )
     }
     
-
     return(p)
 }
 

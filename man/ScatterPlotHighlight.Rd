@@ -5,17 +5,35 @@
 \title{Scatter Plot}
 \usage{
 ScatterPlotHighlight(
-  df = NULL,
+  data = NULL,
   highlight = "",
-  split_by = "",
-  x = NULL,
-  y = NULL,
-  x_lab = NULL,
-  y_lab = NULL
+  group = "",
+  x = "",
+  y = "",
+  x_lab = "",
+  y_lab = "",
+  point_size = 0.01,
+  ticks = TRUE
 )
 }
 \arguments{
-\item{data}{frame}
+\item{data}{is data frame}
+
+\item{highlight}{value}
+
+\item{group}{column}
+
+\item{x}{axis name}
+
+\item{y}{axis name}
+
+\item{x_lab}{name}
+
+\item{y_lab}{name}
+
+\item{point_size}{value}
+
+\item{ticks}{show or not}
 }
 \value{
 plot
