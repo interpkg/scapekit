@@ -11,6 +11,7 @@ ScatterPlotSplit(
   y = "",
   x_lab = "",
   y_lab = "",
+  color = "blue",
   point_size = 0.01,
   ticks = TRUE
 )

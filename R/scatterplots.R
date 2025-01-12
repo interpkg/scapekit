@@ -1,4 +1,6 @@
 
+
+
 #' Scatter Plot
 #'
 #' @param data is data frame
@@ -70,7 +72,7 @@ ScatterPlotHighlight <- function(
 #'
 #' @return plot
 #'
-#' @import dplyr ggplot2
+#' @import ggplot2
 #'
 #' @export
 #'
@@ -82,14 +84,13 @@ ScatterPlotSplit <- function(
     y='', 
     x_lab='', 
     y_lab='', 
+    color='blue',
     point_size=0.01, 
     ticks=TRUE
 ){
-    data2 <- dplyr::select(data, - .data[[group]])
-
     p <- ggplot(data, aes_string(x=x, y=y)) + 
-        geom_point(data=data2, color='lightgray', shape = 16, size = 0.01) + 
-        geom_point(color='#FA8072', shape = 16, size = 0.01) + 
+        geom_point(data = select(data, -all_of(group)), color = "lightgray", shape = 16, size = 0.01) +
+        geom_point(color=color, shape = 16, size = 0.01) + 
         theme_linedraw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
         theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(.5, "mm")) +
         labs(x=x_lab, y=y_lab) +
