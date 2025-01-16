@@ -14,7 +14,7 @@ BarPlotGroup(
   y_lab = "",
   color_set = "",
   hline = "",
-  hcols = "black"
+  hcol = "black"
 )
 }
 \arguments{
@@ -36,7 +36,7 @@ BarPlotGroup(
 
 \item{hline}{number}
 
-\item{hcols}{hline color}
+\item{hcol}{hline color}
 }
 \value{
 plot

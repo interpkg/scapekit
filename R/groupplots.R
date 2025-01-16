@@ -12,7 +12,7 @@
 #' @param title name 
 #' @param color_set code
 #' @param hline number
-#' @param hcols hline color
+#' @param hcol hline color
 #'
 #' @return plot
 #'
@@ -31,7 +31,7 @@ BarPlotGroup <- function(
     y_lab='', 
     color_set='',
     hline='', 
-    hcols='black'
+    hcol='black'
 ){
     p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], fill=.data[[group]])) +
         geom_bar(stat = "identity", position="dodge", width = 0.75) +
@@ -52,12 +52,12 @@ BarPlotGroup <- function(
     }
 
     # add hline with different color
-    if (hline != ''){
-        hline <- as.numeric(stringr::str_split(hline, ',')[[1]])
-        hcols <- as.numeric(stringr::str_split(hcols, ',')[[1]])
+    hline <- as.numeric(stringr::str_split(hline, ',')[[1]])
+    hcol <- stringr::str_split(hcol, ',')[[1]]
 
-        for (i in length(hline)){
-            p <- p + geom_hline(yintercept=hline[i], linetype="dashed", color = hcols[i])
+    if (length(hline) > 0){
+        for (i in 1:length(hline)){
+            p <- p + geom_hline(yintercept=hline[i], linetype="dashed", color = hcol[i])
         }
     }
 
@@ -80,7 +80,7 @@ BarPlotGroup <- function(
 #' @param title name 
 #' @param color_set code
 #' @param hline number
-#' @param hcols hline color
+#' @param hcol hline color
 #'
 #' @return plot
 #'
@@ -99,10 +99,11 @@ DotLinePlotGroup <- function(
     y_lab='', 
     color_set='',
     hline='', 
-    hcols='black'
+    hcol='black'
 ){
-    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], color=.data[[group]])) +
-        geom_line() + geom_point() +
+    p <- ggplot(data, aes_string(x=x, y=y, group=group, color=group)) +
+        geom_point() +
+        geom_line() + 
         theme_classic(base_line_size=0.3) +
         theme(axis.ticks = element_line(size = 0.3)) +
         theme(plot.title = element_text(hjust = 0.5, size=8),
@@ -120,12 +121,12 @@ DotLinePlotGroup <- function(
     }
 
     # add hline with different color
-    if (hline != ''){
-        hline <- as.numeric(stringr::str_split(hline, ',')[[1]])
-        hcols <- as.numeric(stringr::str_split(hcols, ',')[[1]])
+    hline <- as.numeric(stringr::str_split(hline, ',')[[1]])
+    hcol <- stringr::str_split(hcol, ',')[[1]]
 
-        for (i in length(hline)){
-            p <- p + geom_hline(yintercept=hline[i], linetype="dashed", color = hcols[i])
+    if (length(hline) > 0){
+        for (i in 1:length(hline)){
+            p <- p + geom_hline(yintercept=hline[i], linetype="dashed", color = hcol[i])
         }
     }
 
