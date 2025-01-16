@@ -72,7 +72,7 @@ ScatterPlotHighlight <- function(
 #'
 #' @return plot
 #'
-#' @import ggplot2
+#' @import ggplot2 dplyr
 #'
 #' @export
 #'
