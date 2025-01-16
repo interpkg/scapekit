@@ -35,7 +35,7 @@ BarPlotGroup <- function(
 ){
     p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], fill=.data[[group]])) +
         geom_bar(stat = "identity", position="dodge", width = 0.75) +
-        theme_classic() +
+        theme_classic(base_line_size=0.3) +
         labs(title=title, x=x_lab, y=y_lab) +
         theme(plot.title = element_text(hjust = 0.5, size=8),
                 text=element_text(hjust = 0.5, size=8)) +
@@ -105,6 +105,7 @@ DotLinePlotGroup <- function(
         geom_point() +
         geom_line() + 
         theme_classic(base_line_size=0.3) +
+        labs(title=title, x=x_lab, y=y_lab) +
         theme(axis.ticks = element_line(size = 0.3)) +
         theme(plot.title = element_text(hjust = 0.5, size=8),
                 text=element_text(hjust = 0.5, size=8)) +
