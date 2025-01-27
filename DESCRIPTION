@@ -8,7 +8,8 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Depends: R (>= 4.2.0)
 Imports:
-    dplyr,
     ggplot2,
-    ggpubr
+    ggpubr,
+    dplyr,
+    stringr
 RoxygenNote: 7.3.2
