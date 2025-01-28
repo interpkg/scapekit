@@ -67,7 +67,7 @@ BarPlotGroup <- function(
 
     # split group
     if (split_group != ''){
-        p <- p + facet_wrap(~ .data[[split_group]]) 
+        p <- p + facet_wrap(~ .data[[split_group]]) + theme(legend.position='none')
     }
 
     p
@@ -104,7 +104,7 @@ BarPlotGroupPosNeg <- function(
     title='',
     x_lab='', 
     y_lab='', 
-    color_set=''
+    color_set='blue'
 ){  
     color_set <- stringr::str_split(color_set,',')[[1]]
 
