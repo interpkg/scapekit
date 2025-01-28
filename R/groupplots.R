@@ -7,7 +7,6 @@
 #'
 #' @param data frame
 #' @param group column
-#' @param split_group splite group
 #' @param x axis name
 #' @param y axis name
 #' @param x_lab name
@@ -27,7 +26,6 @@
 BarPlotGroup <- function(
     data=NULL, 
     group='', 
-    split_group='',
     x='', 
     y='', 
     title='',
@@ -65,11 +63,6 @@ BarPlotGroup <- function(
         }
     }
 
-    # split group
-    if (split_group != ''){
-        p <- p + facet_wrap(~ .data[[split_group]]) + theme(legend.position='none')
-    }
-
     p
 }
 
@@ -80,14 +73,13 @@ BarPlotGroup <- function(
 #' Bar plot with group for positive and negative
 #'
 #' @param data frame
-#' @param group column
 #' @param split_group column
 #' @param x axis name
 #' @param y axis name
 #' @param x_lab name
 #' @param y_lab name
 #' @param title name 
-#' @param color_set code
+#' @param color code
 #'
 #' @return plot
 #'
@@ -95,24 +87,21 @@ BarPlotGroup <- function(
 #'
 #' @export
 #'
-BarPlotGroupPosNeg <- function(
+BarPlotSplitGroup <- function(
     data=NULL, 
     x='', 
     y='', 
-    group='', 
     split_group='',
     title='',
     x_lab='', 
     y_lab='', 
-    color_set='blue'
+    color='blue'
 ){  
-    color_set <- stringr::str_split(color_set,',')[[1]]
 
-    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], fill=.data[[group]])) + 
-        geom_col() + 
+    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]])) + 
+        geom_col(fill=color) + 
         theme_bw() +
         labs(x=x_lab, y=y_lab) + 
-        scale_fill_manual(values=color_set) +
         theme(legend.position='none') + theme(text = element_text(size=7), axis.text = element_text(color='black')) +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
         theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
