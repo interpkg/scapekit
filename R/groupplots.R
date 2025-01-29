@@ -147,7 +147,7 @@ BarPlotSplitGroup_v2 <- function(
 ){  
 
     p <- ggplot(data) + 
-        geom_bar(aes(x = .data[[x]], y = .data[[y_tar]]), stat = "identity", fill = "gray") + 
+        geom_bar(aes(x = .data[[x]], y = .data[[y_tar]]), stat = "identity", fill = color) + 
         geom_bar(aes(x = .data[[x]], y = .data[[y_all]]), stat = "identity", fill = color, alpha = 0.5) +
         theme_bw() +
         labs(title=title, x=x_lab, y=y_lab) + 
