@@ -115,8 +115,6 @@ BarPlotSplitGroup <- function(
 
 
 
-
-
 #' Bar plot with group for positive and negative v2
 #'
 #' @param data frame
@@ -149,13 +147,15 @@ BarPlotSplitGroup_v2 <- function(
     p <- ggplot(data) + 
         geom_bar(aes(x = .data[[x]], y = .data[[y_all]]), stat = "identity", fill = 'lightgray') +
         geom_bar(aes(x = .data[[x]], y = .data[[y_tar]]), stat = "identity", fill = color, alpha = 0.7) + 
-        theme_bw() +
+        theme_linedraw()+ labs(x='', y='') +
         labs(title=title, x=x_lab, y=y_lab) + 
-        theme(legend.position='none') + 
         theme(plot.title = element_text(hjust = 0.5, size=8, face = "bold")) +
         theme(text = element_text(size=7), axis.text = element_text(color='black')) +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+        theme(strip.text=element_text(size=7, face='bold', color='black'), strip.background=element_blank()) +
+        theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(), panel.spacing=unit(0.1, "lines")) +
+        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
+        theme(legend.position='none')
 
     p <- p + facet_wrap(~ .data[[split_group]]) 
 
