@@ -102,7 +102,57 @@ BarPlotSplitGroup <- function(
         geom_col(fill=color) + 
         theme_bw() +
         labs(x=x_lab, y=y_lab) + 
-        theme(legend.position='none') + theme(text = element_text(size=7), axis.text = element_text(color='black')) +
+        theme(legend.position='none') + 
+        theme(text = element_text(size=7), axis.text = element_text(color='black')) +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
+    p <- p + facet_wrap(~ .data[[split_group]]) 
+
+    p
+}
+
+
+
+
+
+
+#' Bar plot with group for positive and negative v2
+#'
+#' @param data frame
+#' @param split_group column
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
+#' @param title name 
+#' @param color code
+#'
+#' @return plot
+#'
+#' @import ggplot2 stringr
+#'
+#' @export
+#'
+BarPlotSplitGroup_v2 <- function(
+    data=NULL, 
+    x='', 
+    y_all='', 
+    y_tar='', 
+    split_group='',
+    title='',
+    x_lab='', 
+    y_lab='', 
+    color='blue'
+){  
+
+    p <- ggplot(data) + 
+        geom_bar(aes(x = .data[[x]], y = .data[[y_tar]]), stat = "identity", fill = "gray") + 
+        geom_bar(aes(x = .data[[x]], y = .data[[y_all]]), stat = "identity", fill = color, alpha = 0.5) +
+        theme_bw() +
+        labs(title=title, x=x_lab, y=y_lab) + 
+        theme(legend.position='none') + 
+        theme(text = element_text(size=7), axis.text = element_text(color='black')) +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
         theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
