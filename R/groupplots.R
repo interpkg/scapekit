@@ -152,6 +152,7 @@ BarPlotSplitGroup_v2 <- function(
         theme_bw() +
         labs(title=title, x=x_lab, y=y_lab) + 
         theme(legend.position='none') + 
+        theme(plot.title = element_text(hjust = 0.5, size=8, face = "bold")) +
         theme(text = element_text(size=7), axis.text = element_text(color='black')) +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
         theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
