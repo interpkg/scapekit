@@ -2,6 +2,7 @@
 
 export(BarPlotGroup)
 export(BarPlotSplitGroup)
+export(BarPlotSplitGroup_v2)
 export(DotLinePlotGroup)
 export(ScatterPlotHighlight)
 export(ScatterPlotSplit)
