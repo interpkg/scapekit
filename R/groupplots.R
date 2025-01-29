@@ -141,15 +141,15 @@ BarPlotSplitGroup_v2 <- function(
     title='',
     x_lab='', 
     y_lab='', 
-    color='blue'
+    color='#e74c3c'
 ){  
 
     p <- ggplot(data) + 
-        geom_bar(aes(x = .data[[x]], y = .data[[y_all]]), stat = "identity", fill = 'lightgray') +
+        geom_bar(aes(x = .data[[x]], y = .data[[y_all]]), stat = "identity", fill = '#e8e8e8') +
         geom_bar(aes(x = .data[[x]], y = .data[[y_tar]]), stat = "identity", fill = color, alpha = 0.7) + 
         theme_linedraw()+ labs(x='', y='') +
         labs(title=title, x=x_lab, y=y_lab) + 
-        theme(plot.title = element_text(hjust = 0.5, size=8, face = "bold")) +
+        theme(plot.title = element_text(hjust = 0.5, size=9, face = "bold")) +
         theme(text = element_text(size=7), axis.text = element_text(color='black')) +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
         theme(strip.text=element_text(size=7, face='bold', color='black'), strip.background=element_blank()) +
