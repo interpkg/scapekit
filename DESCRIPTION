@@ -10,6 +10,8 @@ Depends: R (>= 4.2.0)
 Imports:
     ggplot2,
     ggpubr,
+    ggridges,
+    randomcoloR,
     dplyr,
     stringr
 RoxygenNote: 7.3.2
