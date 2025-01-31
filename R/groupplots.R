@@ -203,7 +203,7 @@ BarPlotSplitGroup_v2 <- function(
 
 
 
-#' Bar plot for group propotion
+#' Bar plot for group proportion
 #'
 #' @param data frame
 #' @param x sample name
@@ -427,11 +427,11 @@ AreaPlot <- function(data, x='', y='', group='', color_set='', title='', angle=4
 #'
 AreaPlotProportion <- function(data, x='Sample', group='cell_type2', color_set='', title='', angle=45)
 {   
-    table <- reshape2::melt(data, id.vars=.data[[group]], variable.name=.data[[x]], value.name="propotion")
-    table$propotion <- format(round(table$propotion * 100, 2), nsmall=2)
-    table$propotion <- as.numeric(as.character(table$propotion))
+    table <- reshape2::melt(data, id.vars=.data[[group]], variable.name=.data[[x]], value.name="proportion")
+    table$proportion <- format(round(table$proportion * 100, 2), nsmall=2)
+    table$proportion <- as.numeric(as.character(table$proportion))
 
-    p <- ggplot(table, aes(x=.data[[x]], y=propotion, fill=.data[[group]], group=.data[[group]])) + 
+    p <- ggplot(table, aes(x=.data[[x]], y=proportion, fill=.data[[group]], group=.data[[group]])) + 
         geom_area(position = 'fill') +
         theme(panel.background = element_blank(),
             axis.text.x = element_text(angle = angle, hjust=1),
