@@ -212,19 +212,13 @@ BarPlotSplitGroup_v2 <- function(
 #'
 #' @return plot
 #'
-#' @import ggplot2 randomcoloR
+#' @import ggplot2
 #'
 #' @export
 #'
 BarPlotGroupProportion <- function(data, x='', group='', color_set='')
 {
     x_size <- length(unique(data[[x]]))
-
-    my_cols <- c()
-    if (color_set == ''){
-        set.seed(1234)                                
-        color_set <- randomcoloR::distinctColorPalette(x_size)
-    }
 
     dcount <- data %>% group_by(.data[[x]], .data[[group]]) %>% count()
     colnames(dcount) <- c(x, group, 'n')
@@ -246,8 +240,11 @@ BarPlotGroupProportion <- function(data, x='', group='', color_set='')
         guides(fill=guide_legend(nrow=2, byrow=T)) +
         labs(x='', y='Proportion')
 
-    p <- p + scale_fill_manual(values=color_set)
 
+    if (length(color_set) > 1){ 
+        p <- p + scale_fill_manual(values=color_set)
+    }
+    
     p
 }
 
