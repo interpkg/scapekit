@@ -427,11 +427,15 @@ AreaPlot <- function(data, x='', y='', group='', color_set='', title='', angle=4
 #'
 AreaPlotProportion <- function(data, x='Sample', group='cell_type2', color_set='', title='', angle=45)
 {   
-    table <- reshape2::melt(data, id.vars=.data[[group]], variable.name=.data[[x]], value.name="proportion")
+    report <- data.frame(cbind(prop.table(table(data[[group]], data[[x]]),  margin = 2)))
+    report$group <- rownames(report)
+
+    # new colname
+    table <- reshape2::melt(report, id.vars="group", variable.name="sample", value.name="proportion")
     table$proportion <- format(round(table$proportion * 100, 2), nsmall=2)
     table$proportion <- as.numeric(as.character(table$proportion))
 
-    p <- ggplot(table, aes(x=.data[[x]], y=proportion, fill=.data[[group]], group=.data[[group]])) + 
+    p <- ggplot(table, aes(x=sample, y=proportion, fill=group, group=group)) + 
         geom_area(position = 'fill') +
         theme(panel.background = element_blank(),
             axis.text.x = element_text(angle = angle, hjust=1),
