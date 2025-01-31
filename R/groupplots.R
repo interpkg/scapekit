@@ -389,7 +389,7 @@ DensityRidgesGradient_SplitGroup <- function(data, x1='', y='', split_group='', 
 #'
 #' @export
 #'
-AreaPlot <- function(data, x='', y='', group='', color_set='', title='', angle=45)
+AreaPlotGroup <- function(data, x='', y='', group='', color_set='', title='', angle=45)
 {   
     p <- ggplot(table, aes(x=.data[[x]], y=.data[[y]], fill=.data[[group]], group=.data[[group]])) + 
         geom_area(position = 'fill') +
@@ -425,12 +425,13 @@ AreaPlot <- function(data, x='', y='', group='', color_set='', title='', angle=4
 #'
 #' @export
 #'
-AreaPlotProportion <- function(data, x='Sample', group='cell_type2', color_set='', title='', angle=45)
+AreaPlotGroupProportion <- function(data, x='orig.ident', group='cell_type2', color_set='', title='', angle=45)
 {   
+    # make proportion
     report <- data.frame(cbind(prop.table(table(data[[group]], data[[x]]),  margin = 2)))
     report$group <- rownames(report)
 
-    # new colname
+    # make new colname
     table <- reshape2::melt(report, id.vars="group", variable.name="sample", value.name="proportion")
     table$proportion <- format(round(table$proportion * 100, 2), nsmall=2)
     table$proportion <- as.numeric(as.character(table$proportion))

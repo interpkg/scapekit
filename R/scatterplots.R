@@ -20,6 +20,59 @@
 #' @export
 #'
 #'
+ScatterPlotPlus <- function(
+    data=NULL, 
+    group='', 
+    x='', 
+    y='', 
+    x_lab='', 
+    y_lab='', 
+    point_size=0.01, 
+    color_set='',
+    ticks=TRUE
+){
+
+    p <- ggplot(data, aes_string(x=x, y=y, color='signal')) + 
+        geom_point(shape = 16, size = 0.01) +
+        theme_linedraw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(.5, "mm")) +
+        labs(title=highlight, x=x_lab, y=y_lab) +
+        theme(plot.title = element_text(hjust = 0.5, size=6)) +
+        theme(text = element_text(size = 5, face = "bold"), axis.text = element_text(size = 4))
+    
+    if (color_set != ''){
+        p <- p + scale_color_manual(values=color_set)
+        #theme(legend.position="none")
+    }
+
+    if (!ticks){
+        p <- p + theme(axis.text=element_blank(), axis.ticks=element_blank())
+    }
+    
+    return(p)
+}
+
+
+
+#' Scatter Plot Highlight
+#'
+#' @param data is data frame
+#' @param highlight value
+#' @param group column
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
+#' @param point_size value 
+#' @param ticks show or not
+#'
+#' @return plot
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+#'
 ScatterPlotHighlight <- function(
     data=NULL, 
     highlight='', 
@@ -33,9 +86,6 @@ ScatterPlotHighlight <- function(
 ){
     data$signal <- 'No'
     data[data[[group]]==highlight, 'signal'] <- 'Yes'
-
-    print(unique(data[[group]]))
-    print(highlight)
 
     data <- data[order(data$signal, decreasing=FALSE), ]
 
@@ -59,7 +109,7 @@ ScatterPlotHighlight <- function(
 
 
 
-#' Scatter Plot
+#' Scatter Plot split
 #'
 #' @param data frame
 #' @param group column
