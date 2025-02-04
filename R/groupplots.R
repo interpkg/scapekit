@@ -146,13 +146,16 @@ BarPlotSplitGroup <- function(
 ){  
 
     p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], fill=.data[[group]], group=.data[[group]])) + 
-        geom_col() + 
-        theme_bw() +
-        labs(x=x_lab, y=y_lab) + 
-        theme(legend.position='none') + 
+        geom_col(width=0.7) +
+        theme_linedraw()+ labs(x='', y='') +
+        labs(title=title, x=x_lab, y=y_lab) + 
+        theme(plot.title = element_text(hjust = 0.5, size=9, face = "bold")) +
         theme(text = element_text(size=7), axis.text = element_text(color='black')) +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+        theme(strip.text=element_text(size=7, face='bold', color='black'), strip.background=element_blank()) +
+        theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(), panel.spacing=unit(0.1, "lines")) +
+        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
+        theme(legend.title=element_blank(), legend.key.size = unit(2, 'mm'), legend.text=element_text(size=6), legend.position="bottom")
 
     if (length(color_set) > 1){ 
         p <- p + scale_fill_manual(values=color_set)
