@@ -255,6 +255,8 @@ BarPlotGroupProportion <- function(
     p <- ggplot(dcount, aes(x=.data[[x]], y=ratio, fill=.data[[group]], group=.data[[group]])) + 
         geom_col(width=0.7) +
         theme_classic(base_line_size=0.3) + 
+        labs(title=title, x='', y=y_lab) +
+        theme(plot.title = element_text(hjust = 0.5, size=8, face='bold')) +
         theme(text=element_text(size=6), axis.text=element_text(size=6)) +
         scale_x_discrete(guide=guide_axis(angle=45)) +
         theme(panel.background = element_blank(),
@@ -263,8 +265,7 @@ BarPlotGroupProportion <- function(
             legend.text=element_text(size=6),
             legend.position=legend_position
         ) + 
-        guides(fill=guide_legend(nrow=legend_nrow, byrow=T)) +
-        labs(title=title, x='', y=y_lab)
+        guides(fill=guide_legend(nrow=legend_nrow, byrow=T))
 
     # change color
     if (length(color_set) > 1){ 
@@ -273,7 +274,7 @@ BarPlotGroupProportion <- function(
 
     # add text
     if (add_text){
-        p <- p + geom_text(aes(label=paste0(count,'\n','(',ratio,')')), position = position_stack(vjust = 0.5), color=text_color, size=text_size)
+        p <- p + geom_text(aes(label=paste0(count,'\n','(',ratio,'%)')), position = position_stack(vjust = 0.5), color=text_color, size=text_size)
     }
     
     p
