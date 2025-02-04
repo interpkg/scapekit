@@ -232,28 +232,48 @@ BarPlotSplitGroup_v2 <- function(
 #'
 #' @export
 #'
-BarPlotGroupProportion <- function(data, x='', group='', color_set='')
-{   
+BarPlotGroupProportion <- function(
+    data, x='', group='', title='', y_lab='Proportion (%)', 
+    color_set='', legend_nrow=1, legend_position='bottom',
+    add_text=FALSE, text_color='black', text_size=2.5,
+    factor_x=NULL, factor_group=NULL
+){   
     # call proportion
     dcount <- CallProportion(data, x, group)
+    # <x> <group> count total_count ratio
+
+    # factor x
+    if (length(factor_x) > 1){
+        dcount[[x]] <- factor(dcount[[x]], levels=factor_x)
+    }
+
+    # factor group
+    if (length(factor_group) > 1){
+        dcount[[group]] <- factor(dcount[[group]], levels=factor_group)
+    }
 
     p <- ggplot(dcount, aes(x=.data[[x]], y=ratio, fill=.data[[group]], group=.data[[group]])) + 
         geom_col(width=0.7) +
-        theme_classic() + 
+        theme_classic(base_line_size=0.3) + 
         theme(text=element_text(size=6), axis.text=element_text(size=6)) +
         scale_x_discrete(guide=guide_axis(angle=45)) +
         theme(panel.background = element_blank(),
             legend.title=element_blank(),
             legend.key.size = unit(2, 'mm'),
             legend.text=element_text(size=6),
-            legend.position="bottom"
+            legend.position=legend_position
         ) + 
-        guides(fill=guide_legend(nrow=2, byrow=T)) +
-        labs(x='', y='Proportion')
+        guides(fill=guide_legend(nrow=legend_nrow, byrow=T)) +
+        labs(title=title, x='', y=y_lab)
 
-
+    # change color
     if (length(color_set) > 1){ 
         p <- p + scale_fill_manual(values=color_set)
+    }
+
+    # add text
+    if (add_text){
+        p <- p + geom_text(aes(label=paste0(count,'\n','(',ratio,')')), position = position_stack(vjust = 0.5), color=text_color, size=text_size)
     }
     
     p

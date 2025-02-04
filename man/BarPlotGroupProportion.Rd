@@ -4,7 +4,21 @@
 \alias{BarPlotGroupProportion}
 \title{Bar plot for group proportion}
 \usage{
-BarPlotGroupProportion(data, x = "", group = "", color_set = "")
+BarPlotGroupProportion(
+  data,
+  x = "",
+  group = "",
+  title = "",
+  y_lab = "Proportion (\%)",
+  color_set = "",
+  legend_nrow = 1,
+  legend_position = "bottom",
+  add_text = FALSE,
+  text_color = "black",
+  text_size = 2.5,
+  factor_x = NULL,
+  factor_group = NULL
+)
 }
 \arguments{
 \item{data}{frame}
