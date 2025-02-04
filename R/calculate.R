@@ -92,8 +92,10 @@ CallProportion <- function(data, x='', group='')
 
     dcount <- data %>% group_by(.data[[x]], .data[[group]]) %>% count()
     colnames(dcount) <- c(x, group, 'count')
-    n <- data.frame(table(data[[x]]))
-    dcount$total_count <- n$Freq[match(dcount[[x]], n$Var1)]
+
+    d_totalN <- data.frame(table(data[[x]]))
+
+    dcount$total_count <- d_totalN$Freq[match(dcount[[x]], d_totalN$Var1)]
     dcount$ratio <- round(dcount$count/dcount$total_count * 100, 1)
     # <x> <group> count total_count ratio
 
@@ -101,6 +103,36 @@ CallProportion <- function(data, x='', group='')
 }
 
 
+
+
+
+#' Call Proportion 2
+#'
+#' @param data frame
+#' @param x main column
+#' @param g1 group1
+#' @param g2 group2
+#'
+#' @return data frame
+#'
+#' @export
+#'
+CallProportion2 <- function(data, x='', g1='', g2='')
+{
+    x_size <- length(unique(data[[x]]))
+
+    dcount <- data %>% group_by(.data[[x]], .data[[g1]], .data[[g2]]) %>% count()
+    colnames(dcount) <- c(x, g1, g2, 'count')
+
+    d_totalN <- data.frame(table(data[[x]]))
+
+    dcount$total_count <- d_totalN$Freq[match(dcount[[x]], d_totalN$Var1)]
+    dcount$ratio <- round(dcount$count/dcount$total_count * 100, 1)
+    # <x> <g1> <g2> count total_count ratio
+
+
+    return(dcount)
+}
 
 
 
