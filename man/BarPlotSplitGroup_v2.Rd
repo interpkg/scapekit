@@ -7,7 +7,7 @@
 BarPlotSplitGroup_v2(
   data = NULL,
   x = "",
-  y_all = "",
+  y_bkg = "",
   y_tar = "",
   split_group = "",
   title = "",

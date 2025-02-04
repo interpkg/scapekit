@@ -137,21 +137,26 @@ BarPlotSplitGroup <- function(
     data=NULL, 
     x='', 
     y='', 
+    group='',
     split_group='',
     title='',
     x_lab='', 
     y_lab='', 
-    color='blue'
+    color_set=''
 ){  
 
-    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]])) + 
-        geom_col(fill=color) + 
+    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], fill=.data[[group]], group=.data[[group]])) + 
+        geom_col() + 
         theme_bw() +
         labs(x=x_lab, y=y_lab) + 
         theme(legend.position='none') + 
         theme(text = element_text(size=7), axis.text = element_text(color='black')) +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
         theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
+    if (length(color_set) > 1){ 
+        p <- p + scale_fill_manual(values=color_set)
+    }
 
     p <- p + facet_wrap(~ .data[[split_group]]) 
 
@@ -181,7 +186,7 @@ BarPlotSplitGroup <- function(
 BarPlotSplitGroup_v2 <- function(
     data=NULL, 
     x='', 
-    y_all='', 
+    y_bkg='', 
     y_tar='', 
     split_group='',
     title='',
@@ -191,7 +196,7 @@ BarPlotSplitGroup_v2 <- function(
 ){  
 
     p <- ggplot(data) + 
-        geom_bar(aes(x = .data[[x]], y = .data[[y_all]]), stat = "identity", fill = '#E0E0E0') +
+        geom_bar(aes(x = .data[[x]], y = .data[[y_bkg]]), stat = "identity", fill = '#E0E0E0') +
         geom_bar(aes(x = .data[[x]], y = .data[[y_tar]]), stat = "identity", fill = color, alpha = 0.7) + 
         theme_linedraw()+ labs(x='', y='') +
         labs(title=title, x=x_lab, y=y_lab) + 

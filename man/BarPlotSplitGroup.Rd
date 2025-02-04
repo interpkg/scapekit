@@ -8,11 +8,12 @@ BarPlotSplitGroup(
   data = NULL,
   x = "",
   y = "",
+  group = "",
   split_group = "",
   title = "",
   x_lab = "",
   y_lab = "",
-  color = "blue"
+  color_set = ""
 )
 }
 \arguments{
