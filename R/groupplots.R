@@ -1,3 +1,11 @@
+#' @include calculate.R
+#'
+NULL
+
+
+
+
+
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 #      Bar plot
@@ -217,14 +225,9 @@ BarPlotSplitGroup_v2 <- function(
 #' @export
 #'
 BarPlotGroupProportion <- function(data, x='', group='', color_set='')
-{
-    x_size <- length(unique(data[[x]]))
-
-    dcount <- data %>% group_by(.data[[x]], .data[[group]]) %>% count()
-    colnames(dcount) <- c(x, group, 'n')
-    n <- data.frame(table(data[[x]]))
-    dcount$n_total <- n$Freq[match(dcount[[x]], n$Var1)]
-    dcount$ratio <- round(dcount$n/dcount$n_total * 100, 1)
+{   
+    # call proportion
+    dcount <- CallProportion(data, x, group)
 
     p <- ggplot(dcount, aes(x=.data[[x]], y=ratio, fill=.data[[group]], group=.data[[group]])) + 
         geom_col(width=0.7) +
