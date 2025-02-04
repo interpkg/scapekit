@@ -235,7 +235,8 @@ BarPlotSplitGroup_v2 <- function(
 BarPlotGroupProportion <- function(
     data, x='', group='', title='', y_lab='Proportion (%)', 
     color_set='', legend_nrow=1, legend_position='bottom',
-    add_text=FALSE, text_color='black', text_size=2.5,
+    text_size=7, title_size=8,
+    add_label=FALSE, label_color='black', label_size=2,
     factor_x=NULL, factor_group=NULL
 ){   
     # call proportion
@@ -253,16 +254,16 @@ BarPlotGroupProportion <- function(
     }
 
     p <- ggplot(dcount, aes(x=.data[[x]], y=ratio, fill=.data[[group]], group=.data[[group]])) + 
-        geom_col(width=0.7) +
+        geom_col(width=0.8) +
         theme_classic(base_line_size=0.3) + 
         labs(title=title, x='', y=y_lab) +
-        theme(plot.title = element_text(hjust = 0.5, size=8, face='bold')) +
-        theme(text=element_text(size=6), axis.text=element_text(size=6)) +
+        theme(plot.title = element_text(hjust = 0.5, size=title_size, face='bold')) +
+        theme(text=element_text(size=text_size), axis.text=element_text(size=text_size)) +
         scale_x_discrete(guide=guide_axis(angle=45)) +
         theme(panel.background = element_blank(),
             legend.title=element_blank(),
             legend.key.size = unit(2, 'mm'),
-            legend.text=element_text(size=6),
+            legend.text=element_text(size=text_size),
             legend.position=legend_position
         ) + 
         guides(fill=guide_legend(nrow=legend_nrow, byrow=T))
