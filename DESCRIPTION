@@ -18,4 +18,5 @@ RoxygenNote: 7.3.2
 Collate: 
     'calculate.R'
     'groupplots.R'
+    'plots.R'
     'scatterplots.R'

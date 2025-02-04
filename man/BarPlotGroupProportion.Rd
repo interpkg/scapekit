@@ -7,6 +7,7 @@
 BarPlotGroupProportion(
   data,
   x = "",
+  y = "ratio",
   group = "",
   title = "",
   y_lab = "Proportion (\%)",
