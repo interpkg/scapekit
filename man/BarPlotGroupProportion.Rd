@@ -13,9 +13,11 @@ BarPlotGroupProportion(
   color_set = "",
   legend_nrow = 1,
   legend_position = "bottom",
-  add_text = FALSE,
-  text_color = "black",
-  text_size = 2.5,
+  text_size = 7,
+  title_size = 8,
+  add_label = FALSE,
+  label_color = "black",
+  label_size = 2,
   factor_x = NULL,
   factor_group = NULL
 )

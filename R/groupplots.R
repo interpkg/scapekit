@@ -274,8 +274,8 @@ BarPlotGroupProportion <- function(
     }
 
     # add text
-    if (add_text){
-        p <- p + geom_text(aes(label=paste0(count,'\n','(',ratio,'%)')), position = position_stack(vjust = 0.5), color=text_color, size=text_size)
+    if (add_label){
+        p <- p + geom_text(aes(label=paste0(count,'\n','(',ratio,'%)')), position = position_stack(vjust = 0.5), color=label_color, size=label_size)
     }
     
     p
