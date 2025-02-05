@@ -20,7 +20,7 @@ BarPlotGroupProportion(
   line_size = 0.3,
   add_label = FALSE,
   label_color = "black",
-  label_size = 1.5,
+  label_size = 1.8,
   factor_x = NULL,
   factor_group = NULL
 )
