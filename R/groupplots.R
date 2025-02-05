@@ -192,11 +192,24 @@ BarPlotSplitGroup_v2 <- function(
 #' @export
 #'
 BarPlotGroupProportion <- function(
-    data, x='', y='ratio', group='', title='', y_lab='Proportion (%)', 
-    color_set='', legend_nrow=1, legend_position='bottom',
-    text_size=7, title_size=8,
-    add_label=FALSE, label_color='black', label_size=2,
-    factor_x=NULL, factor_group=NULL
+    data, 
+    x='', 
+    y='ratio', 
+    group='', 
+    title='', 
+    y_lab='Proportion (%)', 
+    color_set='', 
+    legend_nrow=1, 
+    legend_position='bottom',
+    text_size=7, 
+    title_size=8, 
+    angle=45, 
+    line_size=0.3,
+    add_label=FALSE, 
+    label_color='black', 
+    label_size=1.5,
+    factor_x=NULL, 
+    factor_group=NULL
 ){   
     # call proportion
     dcount <- CallProportion(data, x, group)
@@ -214,11 +227,13 @@ BarPlotGroupProportion <- function(
 
     p <- ggplot(dcount, aes(x=.data[[x]], y=.data[[y]], fill=.data[[group]], group=.data[[group]])) + 
         geom_col(width=0.8) +
-        theme_classic(base_line_size=0.3) + 
+        theme_classic(base_line_size=line_size) + 
         labs(title=title, x='', y=y_lab) +
         theme(plot.title = element_text(hjust = 0.5, size=title_size, face='bold')) +
-        theme(text=element_text(size=text_size), axis.text=element_text(size=text_size)) +
-        scale_x_discrete(guide=guide_axis(angle=45)) +
+        theme(text=element_text(size=text_size), 
+            axis.title=element_text(size= text_size + 1), 
+            axis.text=element_text(size=text_size, color='black')) +
+        scale_x_discrete(guide=guide_axis(angle=angle)) +
         theme(panel.background = element_blank(),
             legend.title=element_blank(),
             legend.key.size = unit(2, 'mm'),
