@@ -75,6 +75,131 @@ BarPlotGroup <- function(
 
 
 
+
+#' BarPlot Two Group +- in X-axis
+#'
+#' @param data frame
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
+#' @param title name 
+#' @param split_group column
+#' @param color_set code
+#'
+#' @return plot
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+#'
+BarPlotTwoGroupLR <- function(
+    data=NULL, 
+    x='', 
+    y='', 
+    title='',
+    x_lab='', 
+    y_lab='', 
+    split_group=NULL,
+    reverse=FALSE,
+    color_set=c('pos'='#FC766AFF', 'neg'='#5B84B1FF')
+){
+    data <- mutate(data, signal = ifelse(.data[[x]] > 0, 'pos', 'neg'))
+
+    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], fill=signal)) +
+        geom_col(width=0.8) +
+        theme_linedraw() +
+        theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(), panel.spacing=unit(0.1, "lines")) +
+        labs(title=title, x=x_lab, y=y_lab) +
+        theme(plot.title = element_text(hjust = 0.5, size=8),
+            text=element_text(hjust = 0.5, size=8)) +
+        theme(axis.text=element_text(color='black'), 
+            axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
+        theme(legend.position='none') 
+    
+    p <- p + scale_fill_manual(values=color_set)
+
+    # reverse order 
+    if (reverse){
+        p <- p + scale_y_discrete(limits=rev)
+    }
+
+    if (length(split_group) > 0){
+        p <- p + facet_wrap(~ .data[[split_group]]) +
+            theme(strip.text=element_text(size=7, face='bold', color='black'), strip.background=element_blank())
+    }
+
+    p
+}
+
+
+
+
+
+#' BarPlot Two Group +- in Y-axis
+#'
+#' @param data frame
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
+#' @param title name 
+#' @param split_group column
+#' @param color_set code
+#'
+#' @return plot
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+#'
+BarPlotTwoGroupUD <- function(
+    data=NULL, 
+    x='', 
+    y='', 
+    title='',
+    x_lab='', 
+    y_lab='', 
+    split_group=NULL,
+    reverse=FALSE,
+    color_set=c('pos'='#FC766AFF', 'neg'='#5B84B1FF')
+){
+    data <- mutate(data, signal = ifelse(.data[[y]] > 0, 'pos', 'neg'))
+
+    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], fill=signal)) +
+        geom_col(width=0.8) +
+        theme_linedraw() +
+        theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(), panel.spacing=unit(0.1, "lines")) +
+        labs(title=title, x=x_lab, y=y_lab) +
+        theme(plot.title = element_text(hjust = 0.5, size=8),
+            text=element_text(hjust = 0.5, size=8)) +
+        theme(axis.text=element_text(color='black'), 
+            axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
+        theme(legend.position='none') 
+
+    p <- p + scale_fill_manual(values=color_set)
+
+    # reverse order 
+    if (reverse){
+        p <- p + scale_x_discrete(limits=rev)
+    }
+
+    if (length(split_group) > 0){
+        p <- p + facet_wrap(~ .data[[split_group]]) +
+            theme(strip.text=element_text(size=7, face='bold', color='black'), strip.background=element_blank())
+    }
+
+    p
+}
+
+
+
+
+
 #' Bar plot with group for positive and negative
 #'
 #' @param data frame
@@ -92,7 +217,107 @@ BarPlotGroup <- function(
 #'
 #' @export
 #'
-BarPlotSplitGroup <- function(
+BarPlotSplitGroup_v1 <- function(
+    data=NULL, 
+    x='', 
+    y='', 
+    split_group='',
+    title='',
+    x_lab='', 
+    y_lab='', 
+    color=''
+){  
+
+    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]])) + 
+        geom_col(width=0.8, fill=color) +
+        theme_linedraw() +
+        labs(title=title, x=x_lab, y=y_lab) + 
+        theme(plot.title = element_text(hjust = 0.5, size=9, face = "bold")) +
+        theme(text = element_text(size=7), axis.text = element_text(color='black')) +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+        theme(strip.text=element_text(size=7, face='bold', color='black'), strip.background=element_blank()) +
+        theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(), panel.spacing=unit(0.1, "lines")) +
+        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
+        theme(legend.title=element_blank(), legend.key.size = unit(2, 'mm'), legend.text=element_text(size=6), legend.position="bottom")
+
+    p <- p + facet_wrap(~ .data[[split_group]]) 
+
+    p
+}
+
+
+
+
+
+#' Bar plot with group for positive and negative II
+#'
+#' @param data frame
+#' @param split_group column
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
+#' @param title name 
+#' @param color code
+#'
+#' @return plot
+#'
+#' @import ggplot2 stringr
+#'
+#' @export
+#'
+BarPlotSplitGroup_v1b <- function(
+    data=NULL, 
+    x='', 
+    y_bkg='', 
+    y_tar='', 
+    split_group='',
+    title='',
+    x_lab='', 
+    y_lab='', 
+    color='#c91f1f'
+){  
+
+    p <- ggplot(data) + 
+        geom_bar(aes(x = .data[[x]], y = .data[[y_bkg]]), stat = "identity", fill = '#E0E0E0') +
+        geom_bar(aes(x = .data[[x]], y = .data[[y_tar]]), stat = "identity", fill = color, alpha = 0.7) + 
+        theme_linedraw() + 
+        labs(title=title, x=x_lab, y=y_lab) + 
+        theme(plot.title = element_text(hjust = 0.5, size=9, face = "bold")) +
+        theme(text = element_text(size=7), axis.text = element_text(color='black')) +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+        theme(strip.text=element_text(size=7, face='bold', color='black'), strip.background=element_blank()) +
+        theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(), panel.spacing=unit(0.1, "lines")) +
+        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
+        theme(legend.position='none')
+
+    p <- p + facet_wrap(~ .data[[split_group]]) 
+
+    p
+}
+
+
+
+
+
+#' Bar plot with group for positive and negative
+#'
+#' @param data frame
+#' @param split_group column
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
+#' @param title name 
+#' @param color_set code
+#'
+#' @return plot
+#'
+#' @import ggplot2 stringr
+#'
+#' @export
+#'
+BarPlotSplitGroup_v2 <- function(
     data=NULL, 
     x='', 
     y='', 
@@ -106,7 +331,7 @@ BarPlotSplitGroup <- function(
 
     p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], fill=.data[[group]], group=.data[[group]])) + 
         geom_col(width=0.8) +
-        theme_linedraw()+ labs(x='', y='') +
+        theme_linedraw() + 
         labs(title=title, x=x_lab, y=y_lab) + 
         theme(plot.title = element_text(hjust = 0.5, size=9, face = "bold")) +
         theme(text = element_text(size=7), axis.text = element_text(color='black')) +
@@ -126,54 +351,6 @@ BarPlotSplitGroup <- function(
 }
 
 
-
-
-#' Bar plot with group for positive and negative v2
-#'
-#' @param data frame
-#' @param split_group column
-#' @param x axis name
-#' @param y axis name
-#' @param x_lab name
-#' @param y_lab name
-#' @param title name 
-#' @param color code
-#'
-#' @return plot
-#'
-#' @import ggplot2 stringr
-#'
-#' @export
-#'
-BarPlotSplitGroup_v2 <- function(
-    data=NULL, 
-    x='', 
-    y_bkg='', 
-    y_tar='', 
-    split_group='',
-    title='',
-    x_lab='', 
-    y_lab='', 
-    color='#c91f1f'
-){  
-
-    p <- ggplot(data) + 
-        geom_bar(aes(x = .data[[x]], y = .data[[y_bkg]]), stat = "identity", fill = '#E0E0E0') +
-        geom_bar(aes(x = .data[[x]], y = .data[[y_tar]]), stat = "identity", fill = color, alpha = 0.7) + 
-        theme_linedraw()+ labs(x='', y='') +
-        labs(title=title, x=x_lab, y=y_lab) + 
-        theme(plot.title = element_text(hjust = 0.5, size=9, face = "bold")) +
-        theme(text = element_text(size=7), axis.text = element_text(color='black')) +
-        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-        theme(strip.text=element_text(size=7, face='bold', color='black'), strip.background=element_blank()) +
-        theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(), panel.spacing=unit(0.1, "lines")) +
-        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
-        theme(legend.position='none')
-
-    p <- p + facet_wrap(~ .data[[split_group]]) 
-
-    p
-}
 
 
 

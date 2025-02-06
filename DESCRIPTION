@@ -13,10 +13,12 @@ Imports:
     ggridges,
     randomcoloR,
     dplyr,
+    reshape2,
     stringr
 RoxygenNote: 7.3.2
 Collate: 
     'calculate.R'
+    'convert.R'
     'groupplots.R'
     'plots.R'
     'scatterplots.R'
