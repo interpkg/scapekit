@@ -173,10 +173,10 @@ BarPlotGroupPosNeg2 <- function(
         geom_col(width=0.8) +
         theme_classic(base_line_size=line_size) +
         labs(title=title, x=x_lab, y=y_lab) +
-        theme(plot.title = element_text(hjust = 0.5, size=9, face='bold'),
+        theme(plot.title = element_text(hjust = 0.5, size=8, face='bold'),
             text=element_text(size=8), axis.text=element_text(color='black'),
             axis.text.x=element_text(size=7)) +
-        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
+        theme(axis.ticks = element_line(linewidth = line_size), axis.ticks.length=unit(1, "mm")) +
         theme(legend.position='none')
     
     p <- p + scale_fill_manual(values=color_set)
