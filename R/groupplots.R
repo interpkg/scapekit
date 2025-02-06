@@ -75,69 +75,6 @@ BarPlotGroup <- function(
 
 
 
-
-#' BarPlot Two Group +- in X-axis
-#'
-#' @param data frame
-#' @param x axis name
-#' @param y axis name
-#' @param x_lab name
-#' @param y_lab name
-#' @param title name 
-#' @param split_group column
-#' @param color_set code
-#'
-#' @return plot
-#'
-#' @import ggplot2
-#'
-#' @export
-#'
-#'
-BarPlotGroupPosNegV <- function(
-    data=NULL, 
-    x='', 
-    y='', 
-    title='',
-    x_lab='', 
-    y_lab='', 
-    split_group=NULL,
-    reverse=FALSE,
-    color_set=c('pos'='#FC766AFF', 'neg'='#5B84B1FF')
-){
-    data <- mutate(data, signal = ifelse(.data[[x]] > 0, 'pos', 'neg'))
-
-    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], fill=signal)) +
-        geom_col(width=0.8) +
-        theme_linedraw() +
-        theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(), panel.spacing=unit(0.1, "lines")) +
-        labs(title=title, x=x_lab, y=y_lab) +
-        theme(plot.title = element_text(hjust = 0.5, size=8),
-            text=element_text(hjust = 0.5, size=8)) +
-        theme(axis.text=element_text(color='black'), 
-            axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
-        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
-        theme(legend.position='none') 
-    
-    p <- p + scale_fill_manual(values=color_set)
-
-    # reverse order 
-    if (reverse){
-        p <- p + scale_y_discrete(limits=rev)
-    }
-
-    if (length(split_group) > 0){
-        p <- p + facet_wrap(~ .data[[split_group]]) +
-            theme(strip.text=element_text(size=7, face='bold', color='black'), strip.background=element_blank())
-    }
-
-    p
-}
-
-
-
-
-
 #' BarPlot Two Group +- in Y-axis
 #'
 #' @param data frame
@@ -174,7 +111,7 @@ BarPlotGroupPosNeg <- function(
         theme_linedraw() +
         theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(), panel.spacing=unit(0.1, "lines")) +
         labs(title=title, x=x_lab, y=y_lab) +
-        theme(plot.title = element_text(hjust = 0.5, size=8),
+        theme(plot.title = element_text(hjust = 0.5, size=9, face='bold'),
             text=element_text(hjust = 0.5, size=8)) +
         theme(axis.text=element_text(color='black'), 
             axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
@@ -186,6 +123,67 @@ BarPlotGroupPosNeg <- function(
     # reverse order 
     if (reverse){
         p <- p + scale_x_discrete(limits=rev)
+    }
+
+    if (length(split_group) > 0){
+        p <- p + facet_wrap(~ .data[[split_group]]) +
+            theme(strip.text=element_text(size=7, face='bold', color='black'), strip.background=element_blank())
+    }
+
+    p
+}
+
+
+
+
+
+#' BarPlot Two Group +- in X-axis
+#'
+#' @param data frame
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
+#' @param title name 
+#' @param split_group column
+#' @param color_set code
+#'
+#' @return plot
+#'
+#' @import ggplot2 forcats
+#'
+#' @export
+#'
+#'
+BarPlotGroupPosNeg2 <- function(
+    data=NULL, 
+    x='', 
+    y='', 
+    title='',
+    x_lab='', 
+    y_lab='', 
+    line_size=0.5,
+    split_group=NULL,
+    reverse=FALSE,
+    color_set=c('pos'='#FC766AFF', 'neg'='#5B84B1FF')
+){
+    data <- mutate(data, signal = ifelse(.data[[x]] > 0, 'pos', 'neg'))
+
+    p <- ggplot(data, aes(x=.data[[x]], y=forcats::fct_reorder(.data[[y]], .data[[x]]), fill=signal)) +
+        geom_col(width=0.8) +
+        theme_classic(base_line_size=line_size) +
+        labs(title=title, x=x_lab, y=y_lab) +
+        theme(plot.title = element_text(hjust = 0.5, size=9, face='bold'),
+            text=element_text(size=8), axis.text=element_text(color='black'),
+            axis.text.x=element_text(size=7)) +
+        theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
+        theme(legend.position='none')
+    
+    p <- p + scale_fill_manual(values=color_set)
+
+    # reverse order 
+    if (reverse){
+        p <- p + scale_y_discrete(limits=rev)
     }
 
     if (length(split_group) > 0){
