@@ -94,7 +94,7 @@ BarPlotGroup <- function(
 #' @export
 #'
 #'
-BarPlotTwoGroupLR <- function(
+BarPlotGroupPosNegV <- function(
     data=NULL, 
     x='', 
     y='', 
@@ -156,7 +156,7 @@ BarPlotTwoGroupLR <- function(
 #' @export
 #'
 #'
-BarPlotTwoGroupUD <- function(
+BarPlotGroupPosNeg <- function(
     data=NULL, 
     x='', 
     y='', 
