@@ -55,7 +55,6 @@ BarPlotGroup <- function(
 
     # set color for bar
     if (color_set != ''){
-        color_set <- as.numeric(stringr::str_split(color_set, ',')[[1]])
         p <- p + scale_fill_manual(values=color_set)
     }
 
@@ -489,7 +488,6 @@ DotLinePlotGroup <- function(
 
     # set color for bar
     if (color_set != ''){
-        color_set <- as.numeric(stringr::str_split(color_set, ',')[[1]])
         p <- p + scale_color_manual(values=color_set)
     }
 
