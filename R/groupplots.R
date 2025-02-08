@@ -54,7 +54,7 @@ BarPlotGroup <- function(
                 legend.key.size=unit(2,"mm"))
 
     # set color for bar
-    if (color_set != ''){
+    if (length(color_set) > 1){ 
         p <- p + scale_fill_manual(values=color_set)
     }
 
@@ -487,8 +487,8 @@ DotLinePlotGroup <- function(
                 legend.key.size=unit(2,"mm"))
 
     # set color for bar
-    if (color_set != ''){
-        p <- p + scale_color_manual(values=color_set)
+    if (length(color_set) > 1){ 
+        p <- p + scale_fill_manual(values=color_set)
     }
 
     # add hline with different color
