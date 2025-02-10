@@ -2,21 +2,21 @@
 
 #' Signal UMAPPlot Group
 #'
-#' @param df dataframe
+#' @param data dataframe
 #'
 #' @export
 #'
-Signal_UMAPPlot <- function(df=NULL, x='UMAP_1', y='UMAP_2', 
+Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', 
     group='cell_type2', decreasing_group=TRUE,
     colors=NULL,
     xa=1.2, xb=.3, ya=1.1, yb=.25
 ){
     # decreasing true
     if (decreasing_group){
-        df <- df[order(df$group, decreasing=TRUE), ]
+        data <- data[order(data[[group]], decreasing=TRUE), ]
     }
     
-    p <- ggplot(df, aes(x=.data[[x]], y=.data[[y]], color=.data[[group]])) + 
+    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], color=.data[[group]])) + 
             geom_point(size=0.01) +
             theme_void() +
             guides(color = guide_legend(override.aes = list(size = 2))) +
@@ -29,11 +29,11 @@ Signal_UMAPPlot <- function(df=NULL, x='UMAP_1', y='UMAP_2',
 
     # customized umap
     #print(colnames(obj@reductions$umap@cell.embeddings))
-    xmin <- min(df[[x]]) # UMAP-1
-    xmax <- max(df[[x]])
+    xmin <- min(data[[x]]) # UMAP-1
+    xmax <- max(data[[x]])
 
-    ymin <- min(df[[y]]) # UMAP-2
-    ymax <- max(df[[y]])
+    ymin <- min(data[[y]]) # UMAP-2
+    ymax <- max(data[[y]])
 
     # (optional) arrow = arrow(length = unit(2, "mm"), type = "closed")
     p <- p + theme(panel.grid.major = element_blank(), 

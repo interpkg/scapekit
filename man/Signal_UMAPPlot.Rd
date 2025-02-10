@@ -5,7 +5,7 @@
 \title{Signal UMAPPlot Group}
 \usage{
 Signal_UMAPPlot(
-  df = NULL,
+  data = NULL,
   x = "UMAP_1",
   y = "UMAP_2",
   group = "cell_type2",
@@ -18,7 +18,7 @@ Signal_UMAPPlot(
 )
 }
 \arguments{
-\item{df}{dataframe}
+\item{data}{dataframe}
 }
 \description{
 Signal UMAPPlot Group
