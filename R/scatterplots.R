@@ -1,10 +1,62 @@
 
 
+#' Signal UMAPPlot Group
+#'
+#' @param df dataframe
+#'
+#' @export
+#'
+Signal_UMAPPlot <- function(df=NULL, x='UMAP_1', y='UMAP_2', 
+    group='cell_type2', decreasing_group=TRUE,
+    colors=NULL,
+    xa=1.2, xb=.3, ya=1.1, yb=.25
+){
+    # decreasing true
+    if (decreasing_group){
+        df <- df[order(df$group, decreasing=TRUE), ]
+    }
+    
+    p <- ggplot(df, aes(x=.data[[x]], y=.data[[y]], color=.data[[group]])) + 
+            geom_point(size=0.01) +
+            theme_void() +
+            guides(color = guide_legend(override.aes = list(size = 2))) +
+            theme(legend.title = element_text(size=8)) +
+            theme(text=element_text(size=8))
+
+    if (length(colors) > 0){
+        p <- p + scale_color_manual(values=colors)
+    }
+
+    # customized umap
+    #print(colnames(obj@reductions$umap@cell.embeddings))
+    xmin <- min(df[[x]]) # UMAP-1
+    xmax <- max(df[[x]])
+
+    ymin <- min(df[[y]]) # UMAP-2
+    ymax <- max(df[[y]])
+
+    # (optional) arrow = arrow(length = unit(2, "mm"), type = "closed")
+    p <- p + theme(panel.grid.major = element_blank(), 
+                panel.grid.minor = element_blank(),
+                axis.line = element_blank()) +
+            # x
+            annotation_custom(grob = grid::linesGrob(), xmin = xmin*xa, xmax = xmin + abs(xmin)*xb, ymin = ymin*ya, ymax = ymin*ya) +
+            # y
+            annotation_custom(grob = grid::linesGrob(), xmin = xmin*xa, xmax = xmin*xa, ymin = ymin*ya, ymax = ymin + abs(ymin)*yb) +
+            coord_cartesian(xlim=c(xmin, xmax), ylim = c(ymin, ymax), clip = "off") +
+            theme(axis.title = element_text(hjust = 0))
+
+    p
+}
+
+
+
+
+
 
 #' Scatter Plot
 #'
 #' @param data is data frame
-#' @param highlight value
 #' @param group column
 #' @param x axis name
 #' @param y axis name
@@ -25,22 +77,23 @@ ScatterPlotPlus <- function(
     group='', 
     x='', 
     y='', 
+    title='',
     x_lab='', 
     y_lab='', 
     point_size=0.01, 
-    color_set='',
+    color_set=NULL,
     ticks=TRUE
 ){
 
-    p <- ggplot(data, aes_string(x=x, y=y, color='signal')) + 
+    p <- ggplot(data, aes_string(x=x, y=y, color=group)) + 
         geom_point(shape = 16, size = 0.01) +
         theme_linedraw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
         theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(.5, "mm")) +
-        labs(title=highlight, x=x_lab, y=y_lab) +
+        labs(title=title, x=x_lab, y=y_lab) +
         theme(plot.title = element_text(hjust = 0.5, size=6)) +
         theme(text = element_text(size = 5, face = "bold"), axis.text = element_text(size = 4))
     
-    if (color_set != ''){
+    if (length(color_set) > 0){
         p <- p + scale_color_manual(values=color_set)
         #theme(legend.position="none")
     }
@@ -51,6 +104,8 @@ ScatterPlotPlus <- function(
     
     return(p)
 }
+
+
 
 
 
@@ -208,6 +263,9 @@ ScatterPlotWithCorr <- function(data=NULL, split_by='', x='', y='', x_lab='', y_
     
     return(p)
 }
+
+
+
 
 
 
