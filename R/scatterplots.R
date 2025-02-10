@@ -23,7 +23,9 @@ Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2
             theme(text=element_text(size=8)) +
             theme(legend.position = 'none')
 
-    p <- p + scale_color_viridis_c(option='color_opt', direction = color_direc, limits=color_limits)
+    # color_opt: https://ggplot2.tidyverse.org/reference/scale_viridis.html
+    # 'magma','inferno','plasma','viridis','cividis','rocket','mako','turbo'
+    p <- p + scale_color_viridis_c(option=color_opt, direction = color_direc, limits=color_limits)
 
     # not used
     if (show_umap_lab){
