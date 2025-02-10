@@ -7,9 +7,8 @@
 #' @export
 #'
 Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', 
-    group='cell_type2', decreasing_group=TRUE,
-    colors=NULL,
-    xa=1.2, xb=.3, ya=1.1, yb=.25
+    group='cell_type2', decreasing_group=TRUE, colors='viridis', color_direc=1,
+    show_umap_lab=FALSE, xa=1.2, xb=.3, ya=1.1, yb=.25
 ){
     # decreasing true
     if (decreasing_group){
@@ -21,31 +20,38 @@ Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2',
             theme_void() +
             guides(color = guide_legend(override.aes = list(size = 2))) +
             theme(legend.title = element_text(size=8)) +
-            theme(text=element_text(size=8))
+            theme(text=element_text(size=8)) 
 
-    if (length(colors) > 0){
-        p <- p + scale_color_manual(values=colors)
+    if (colors == 'viridis'){
+        p <- p + scale_color_viridis_d(direction = color_direc)
+    }
+    if (colors == 'plasma'){
+        p <- p + scale_color_viridis_d(option='plasma', direction = color_direc)
     }
 
-    # customized umap
-    #print(colnames(obj@reductions$umap@cell.embeddings))
-    xmin <- min(data[[x]]) # UMAP-1
-    xmax <- max(data[[x]])
 
-    ymin <- min(data[[y]]) # UMAP-2
-    ymax <- max(data[[y]])
+    # not used
+    if (show_umap_lab){
+        # customized umap
+        #print(colnames(obj@reductions$umap@cell.embeddings))
+        xmin <- min(data[[x]]) # UMAP-1
+        xmax <- max(data[[x]])
 
-    # (optional) arrow = arrow(length = unit(2, "mm"), type = "closed")
-    p <- p + theme(panel.grid.major = element_blank(), 
-                panel.grid.minor = element_blank(),
-                axis.line = element_blank()) +
-            # x
-            annotation_custom(grob = grid::linesGrob(), xmin = xmin*xa, xmax = xmin + abs(xmin)*xb, ymin = ymin*ya, ymax = ymin*ya) +
-            # y
-            annotation_custom(grob = grid::linesGrob(), xmin = xmin*xa, xmax = xmin*xa, ymin = ymin*ya, ymax = ymin + abs(ymin)*yb) +
-            coord_cartesian(xlim=c(xmin, xmax), ylim = c(ymin, ymax), clip = "off") +
-            theme(axis.title = element_text(hjust = 0))
+        ymin <- min(data[[y]]) # UMAP-2
+        ymax <- max(data[[y]])
 
+        # (optional) arrow = arrow(length = unit(2, "mm"), type = "closed")
+        p <- p + theme(panel.grid.major = element_blank(), 
+                    panel.grid.minor = element_blank(),
+                    axis.line = element_blank()) +
+                # x
+                annotation_custom(grob = grid::linesGrob(), xmin = xmin*xa, xmax = xmin + abs(xmin)*xb, ymin = ymin*ya, ymax = ymin*ya) +
+                # y
+                annotation_custom(grob = grid::linesGrob(), xmin = xmin*xa, xmax = xmin*xa, ymin = ymin*ya, ymax = ymin + abs(ymin)*yb) +
+                coord_cartesian(xlim=c(xmin, xmax), ylim = c(ymin, ymax), clip = "off") +
+                theme(axis.title = element_text(hjust = 0))
+    }
+    
     p
 }
 
