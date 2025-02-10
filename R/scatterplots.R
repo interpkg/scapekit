@@ -6,8 +6,8 @@
 #'
 #' @export
 #'
-Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', 
-    group='cell_type2', decreasing_group=TRUE, colors='viridis', color_direc=1,
+Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2', 
+    decreasing_group=TRUE, color_opt='viridis', color_direc=1, color_limits=NA, 
     show_umap_lab=FALSE, xa=1.2, xb=.3, ya=1.1, yb=.25
 ){
     # decreasing true
@@ -15,20 +15,15 @@ Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2',
         data <- data[order(data[[group]], decreasing=TRUE), ]
     }
     
-    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], color=.data[[group]])) + 
-            geom_point(size=0.01) +
+    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]])) + 
+            geom_point(aes(color=.data[[group]]), size=0.01) +
             theme_void() +
             guides(color = guide_legend(override.aes = list(size = 2))) +
             theme(legend.title = element_text(size=8)) +
-            theme(text=element_text(size=8)) 
+            theme(text=element_text(size=8)) +
+            theme(legend.position = 'none')
 
-    if (colors == 'viridis'){
-        p <- p + scale_color_viridis_d(direction = color_direc)
-    }
-    if (colors == 'plasma'){
-        p <- p + scale_color_viridis_d(option='plasma', direction = color_direc)
-    }
-
+    p <- p + scale_color_viridis_c(option='color_opt', direction = color_direc, limits=color_limits)
 
     # not used
     if (show_umap_lab){
