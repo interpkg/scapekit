@@ -30,7 +30,8 @@ Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2
                 legend.key.width = unit(3, 'mm'),
                 legend.key.height = unit(4, 'mm')) +
             theme(text=element_text(size=8)) +
-            ggtitle(title)
+            ggtitle(title) +
+            theme(plot.title = element_text(hjust = 0.5, size=8, face = "bold"))
 
     # color_opt: https://ggplot2.tidyverse.org/reference/scale_viridis.html
     # 'magma','inferno','plasma','viridis','cividis','rocket','mako','turbo'
