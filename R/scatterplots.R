@@ -6,7 +6,7 @@
 #'
 #' @export
 #'
-Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2', 
+Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2', title='',
     decreasing_group=TRUE, color_opt='viridis', color_direc=1, color_limits=NA, 
     show_umap_lab=FALSE, xa=1.2, xb=.3, ya=1.1, yb=.25
 ){
@@ -18,9 +18,9 @@ Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2
     p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]])) + 
             geom_point(aes(color=.data[[group]]), size=0.01) +
             theme_void() +
-            guides(color = guide_legend(override.aes = list(size = 2))) +
-            theme(legend.title = element_text(size=8)) +
-            theme(text=element_text(size=8)) 
+            theme(legend.title=element_blank()) +
+            theme(text=element_text(size=8)) +
+            ggtitle(title)
 
     # color_opt: https://ggplot2.tidyverse.org/reference/scale_viridis.html
     # 'magma','inferno','plasma','viridis','cividis','rocket','mako','turbo'
