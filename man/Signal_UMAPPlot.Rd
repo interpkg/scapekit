@@ -9,15 +9,19 @@ Signal_UMAPPlot(
   x = "UMAP_1",
   y = "UMAP_2",
   group = "cell_type2",
-  decreasing_group = TRUE,
-  color_opt = "viridis",
-  color_direc = 1,
-  color_limits = NA,
+  title = "",
+  decreasing_group = FALSE,
+  point_size = 0.01,
+  color = "rocket",
+  color_direc = -1,
+  color_limits = NULL,
   show_umap_lab = FALSE,
-  xa = 1.2,
+  xa = 1.1,
   xb = 0.3,
-  ya = 1.1,
-  yb = 0.25
+  ya = 1.05,
+  yb = 0.25,
+  x_hjust = 0.03,
+  y_hjust = 0.04
 )
 }
 \arguments{

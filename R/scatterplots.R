@@ -7,16 +7,24 @@
 #' @export
 #'
 Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2', title='',
-    decreasing_group=TRUE, color_opt='viridis', color_direc=1, color_limits=NA, 
-    show_umap_lab=FALSE, xa=1.2, xb=.3, ya=1.1, yb=.25
+    decreasing_group=FALSE, 
+    point_size=0.01, color='rocket', color_direc=-1, color_limits=NULL, 
+    show_umap_lab=FALSE, 
+    xa=1.1, xb=.3, ya=1.05, yb=.25,
+    x_hjust=.03, y_hjust=.04
 ){
     # decreasing true
-    if (decreasing_group){
-        data <- data[order(data[[group]], decreasing=TRUE), ]
+    data <- data[order(data[[group]], decreasing=decreasing_group), ]
+
+    # change data based on color limits
+    if (length(color_limits) > 0){
+        limits_max_val <- color_limits[2]
+        data[[group]][data[[group]] > limits_max_val] = limits_max_val
+        print(max(data[[group]]))
     }
     
     p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]])) + 
-            geom_point(aes(color=.data[[group]]), size=0.01) +
+            geom_point(aes(color=.data[[group]]), size=point_size) +
             theme_void() +
             theme(legend.title=element_blank()) +
             theme(text=element_text(size=8)) +
@@ -24,7 +32,7 @@ Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2
 
     # color_opt: https://ggplot2.tidyverse.org/reference/scale_viridis.html
     # 'magma','inferno','plasma','viridis','cividis','rocket','mako','turbo'
-    p <- p + scale_color_viridis_c(option=color_opt, direction = color_direc, limits=color_limits)
+    p <- p + scale_color_viridis_c(option=color, direction = color_direc, limits=color_limits)
 
     # not used
     if (show_umap_lab){
@@ -37,15 +45,13 @@ Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2
         ymax <- max(data[[y]])
 
         # (optional) arrow = arrow(length = unit(2, "mm"), type = "closed")
-        p <- p + theme(panel.grid.major = element_blank(), 
-                    panel.grid.minor = element_blank(),
-                    axis.line = element_blank()) +
+        p <- p + 
                 # x
                 annotation_custom(grob = grid::linesGrob(), xmin = xmin*xa, xmax = xmin + abs(xmin)*xb, ymin = ymin*ya, ymax = ymin*ya) +
                 # y
                 annotation_custom(grob = grid::linesGrob(), xmin = xmin*xa, xmax = xmin*xa, ymin = ymin*ya, ymax = ymin + abs(ymin)*yb) +
                 coord_cartesian(xlim=c(xmin, xmax), ylim = c(ymin, ymax), clip = "off") +
-                theme(axis.title = element_text(hjust = 0))
+                theme(axis.title.x = element_text(hjust = x_hjust), axis.title.y = element_text(angle=90, hjust = y_hjust))
     }
     
     p
