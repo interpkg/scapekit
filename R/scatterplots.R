@@ -8,7 +8,7 @@
 #'
 Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2', title='',
     decreasing_group=FALSE, 
-    point_size=0.01, color='rocket', color_direc=-1, color_limits=NULL, 
+    point_size=0.01, color='rocket', color_direc=-1, color_limits=c(0.1, 3), 
     show_umap_lab=FALSE, 
     xa=1.1, xb=.3, ya=1.05, yb=.25,
     x_hjust=.03, y_hjust=.04
