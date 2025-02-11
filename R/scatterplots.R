@@ -64,6 +64,102 @@ Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2
 
 
 
+#' Signal UMAPPlot Split
+#'
+#' @param data dataframe
+#'
+#' @export
+#'
+Signal_UMAPPlotSplit <- function(data=NULL, x='UMAP_1', y='UMAP_2', 
+    group='cell_type2', split_by='orig.ident',
+    title='', decreasing_group=FALSE, 
+    point_size=0.01, color='rocket', color_direc=-1, color_limits=c(0.1, 3), 
+    show_umap_lab=FALSE, 
+    xa=1.1, xb=.3, ya=1.05, yb=.25,
+    x_hjust=.03, y_hjust=.04
+){
+    # decreasing true
+    data <- data[order(data[[group]], decreasing=decreasing_group), ]
+    
+    # change data based on color limits
+    if (length(color_limits) > 0){
+        limits_max_val <- color_limits[2]
+        data[[group]][data[[group]] > limits_max_val] = limits_max_val
+        print(max(data[[group]]))
+    }
+    
+    # Create a background dataset WITHOUT the faceting variable (split_by)
+    d_background <- data
+    d_background[[split_by]] <- NULL  # Remove the split_by column
+
+    # Build the plot
+    p <- ggplot(data, aes(x = .data[[x]], y = .data[[y]])) +
+      # Plot ALL data as background (no split_by column → appears in all facets)
+      geom_point(
+        data = d_background,  # Use background data without split_by
+        color = "#E0E0E0", 
+        alpha = 0.3, 
+        shape = 16, 
+        size = point_size
+      ) +
+      # Plot main data (colored by group) WITH faceting
+      geom_point(
+        aes(color =.data[[group]]),
+        shape = 16,
+        size = point_size
+      ) +
+      # Facet by split_by (only affects the main data layer)
+      facet_wrap(vars(.data[[split_by]])) +
+      # Use discrete color scale (since group is converted to a factor)
+      scale_color_viridis_c(
+        option = color,
+        direction = color_direc,
+        na.value = '#E0E0E0'
+      ) +
+      # Theme and labels
+      theme_void() +
+      theme(
+        legend.title = element_blank(),
+        legend.key.width = unit(3, 'mm'),
+        legend.key.height = unit(4, 'mm'),
+        text = element_text(size = 8),
+        strip.text = element_text(size = 8, color = "black", face = "bold"),
+        strip.background = element_rect(color = NA, fill = NA),
+        plot.title = element_text(hjust = 0.5, size = 8, face = "bold")
+      ) +
+      ggtitle(title)
+
+
+    if (show_umap_lab){
+        # customized umap
+        #print(colnames(obj@reductions$umap@cell.embeddings))
+        xmin <- min(data[[x]]) # UMAP-1
+        xmax <- max(data[[x]])
+
+        ymin <- min(data[[y]]) # UMAP-2
+        ymax <- max(data[[y]])
+
+        # (optional) arrow = arrow(length = unit(2, "mm"), type = "closed")
+        p <- p + 
+                # x
+                annotation_custom(grob = grid::linesGrob(), xmin = xmin*xa, xmax = xmin + abs(xmin)*xb, ymin = ymin*ya, ymax = ymin*ya) +
+                # y
+                annotation_custom(grob = grid::linesGrob(), xmin = xmin*xa, xmax = xmin*xa, ymin = ymin*ya, ymax = ymin + abs(ymin)*yb) +
+                coord_cartesian(xlim=c(xmin, xmax), ylim = c(ymin, ymax), clip = "off") +
+                theme(axis.title.x = element_text(hjust = x_hjust), axis.title.y = element_text(angle=90, hjust = y_hjust))
+    }
+    
+
+    return(p)
+
+}
+
+
+
+
+
+
+
 
 #' Scatter Plot
 #'
