@@ -26,7 +26,9 @@ Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2
     p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]])) + 
             geom_point(aes(color=.data[[group]]), size=point_size) +
             theme_void() +
-            theme(legend.title=element_blank()) +
+            theme(legend.title=element_blank(),
+                legend.key.width = unit(3, 'mm'),
+                legend.key.height = unit(4, 'mm')) +
             theme(text=element_text(size=8)) +
             ggtitle(title)
 
