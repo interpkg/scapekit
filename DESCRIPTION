@@ -21,5 +21,6 @@ Collate:
     'calculate.R'
     'convert.R'
     'groupplots.R'
+    'heatmap.R'
     'plots.R'
     'scatterplots.R'
