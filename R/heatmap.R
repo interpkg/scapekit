@@ -82,7 +82,7 @@ ComplexHeatmap_Group2b <- function(
     feature_info=NULL, gene='gene',
     levels=NULL,
     colors=c("blue", "white", "red"),
-    min_cutoff=NULL,
+    limits=NULL,
     max_cutoff=NULL
 ){
 
@@ -123,8 +123,8 @@ ComplexHeatmap_Group2b <- function(
 
 
     color_set <- NULL
-    if (length(min_cutoff) > 0 & length(max_cutoff) > 0){
-        color_set <- circlize::colorRamp2(c(min_cutoff, 0, max_cutoff), colors)
+    if (length(limits) > 0){
+        color_set <- circlize::colorRamp2(c(limits[1], 0, limits[2]), colors)
     } else {
         color_set <- circlize::colorRamp2(c(min(d_mtx), 0, max(d_mtx)), colors)
     }

@@ -17,7 +17,7 @@ ComplexHeatmap_Group2b(
   gene = "gene",
   levels = NULL,
   colors = c("blue", "white", "red"),
-  min_cutoff = NULL,
+  limits = NULL,
   max_cutoff = NULL
 )
 }
