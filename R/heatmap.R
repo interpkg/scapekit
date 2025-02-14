@@ -72,6 +72,8 @@ ComplexHeatmap_Group2 <- function(
 #'
 #' @export
 #'
+
+
 ComplexHeatmap_Group2b <- function(
     data=NULL, group='', sample_id='',
     ht_title ='', col_group=NULL, col_sample=NULL,
@@ -104,8 +106,8 @@ ComplexHeatmap_Group2b <- function(
     
 
     ha <- HeatmapAnnotation(
-                Group = anno_simple(x = top_anno[[group]], simple_anno_size = unit(3, "mm"), col=col_group),
-                Sample = anno_simple(x = top_anno[[sample_id]], simple_anno_size = unit(3, "mm"), col=col_sample),
+                Group = anno_simple(x = top_anno[[group]], simple_anno_size = unit(2, "mm"), col=col_group),
+                Sample = anno_simple(x = top_anno[[sample_id]], simple_anno_size = unit(2, "mm"), col=col_sample),
                 annotation_name_side = "left",
                 annotation_name_gp = gpar(fontsize = 7, fontface="bold")
             )
@@ -122,13 +124,13 @@ ComplexHeatmap_Group2b <- function(
                     
                 show_row_names = T,
                 row_names_side = "left",
-                row_names_gp = gpar(fontsize = 7),
+                row_names_gp = gpar(fontsize = 6),
                 show_row_dend = F,
                 cluster_rows = F,
 
                 show_column_names = F,
                 column_names_rot = 60,
-                column_names_gp = gpar(fontsize = 7, fontface="bold"),
+                column_names_gp = gpar(fontsize = 6, fontface="bold"),
                 show_column_dend = T,
                 cluster_columns = cluster_columns,
 
@@ -152,21 +154,21 @@ ComplexHeatmap_Group2b <- function(
                         title = ht_title,
                         direction = "horizontal",
                         title_position = "lefttop",
-                        title_gp = gpar(fontsize = 10, fontface="bold"), 
-                        labels_gp = gpar(fontsize = 7),
-                        legend_width = unit(4, "cm")
+                        title_gp = gpar(fontsize = 8, fontface="bold"), 
+                        labels_gp = gpar(fontsize = 6),
+                        legend_width = unit(4, "cm"),
+                        grid_height = unit(3, "mm")
                     )
             )
 
-    lgd1 = Legend(title = "Group", labels = names(col_group), legend_gp = gpar(fill = col_group, fontsize = 7), nrow=1)
-    lgd2 = Legend(title = "Sample", labels = names(col_sample), legend_gp = gpar(fill = col_sample, fontsize = 7), nrow=1)
+    lgd1 = Legend(title = "Group", labels = names(col_group), legend_gp = gpar(fill = col_group, fontsize = 6), nrow=1)
+    lgd2 = Legend(title = "Sample", labels = names(col_sample), legend_gp = gpar(fill = col_sample, fontsize = 6), nrow=1)
     pd = packLegend(list = list(lgd1, lgd2), direction = "horizontal", max_width = unit(10, "cm"), column_gap = unit(5, "mm"), row_gap = unit(5, "mm"))
 
     #-- draw plot
     draw(ht_exp, heatmap_legend_side = "bottom", annotation_legend_side = "bottom", annotation_legend_list = pd)
 
 }
-
 
 
 
