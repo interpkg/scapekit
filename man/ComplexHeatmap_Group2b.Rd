@@ -15,7 +15,10 @@ ComplexHeatmap_Group2b(
   cluster_columns = TRUE,
   feature_info = NULL,
   gene = "gene",
-  levels = NULL
+  levels = NULL,
+  colors = c("blue", "white", "red"),
+  min_cutoff = NULL,
+  max_cutoff = NULL
 )
 }
 \arguments{

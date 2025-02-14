@@ -80,7 +80,10 @@ ComplexHeatmap_Group2b <- function(
     zscore=FALSE,
     cluster_columns=TRUE,
     feature_info=NULL, gene='gene',
-    levels=NULL
+    levels=NULL,
+    colors=c("blue", "white", "red"),
+    min_cutoff=NULL,
+    max_cutoff=NULL
 ){
 
     top_anno <- data[,c(sample_id, group)]
@@ -114,14 +117,24 @@ ComplexHeatmap_Group2b <- function(
 
     if (zscore){
         d_mtx = t(scale(t(d_mtx)))
-        col_zscore = colorRamp2(c(-2, -1, 0, 1, 2), c("#09103b", "#5f79cf", "white", "#eb6565", "#540506"))
+        colors = colorRamp2(c(-2, -1, 0, 1, 2), c("#09103b", "#5f79cf", "white", "#eb6565", "#540506"))
         ht_title = "Row Z-Score"
+    }
+
+
+    color_set <- NULL
+    if (length(min_cutoff) > 0 & length(max_cutoff) > 0){
+        color_set <- circlize::colorRamp2(c(min_cutoff, 0, max_cutoff), colors)
+    } else {
+        color_set <- circlize::colorRamp2(c(min(d_mtx), 0, max(d_mtx)), colors)
     }
     
 
     ht_exp <- Heatmap(
                 d_mtx,
-                    
+                
+                col = color_set,
+
                 show_row_names = T,
                 row_names_side = "left",
                 row_names_gp = gpar(fontsize = 6),
