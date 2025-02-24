@@ -18,6 +18,7 @@ ComplexHeatmapMotif_Group2x(
   labels = NULL,
   levels = NULL,
   colors = c("blue", "white", "red"),
+  gap = 0.4,
   border = FALSE,
   limits = NULL,
   max_cutoff = NULL

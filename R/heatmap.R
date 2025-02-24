@@ -204,6 +204,7 @@ ComplexHeatmapMotif_Group2x <- function(
     labels=NULL,
     levels=NULL,
     colors=c("blue", "white", "red"),
+    gap=0.4,
     border=FALSE,
     limits=NULL,
     max_cutoff=NULL
@@ -280,7 +281,7 @@ ComplexHeatmapMotif_Group2x <- function(
 
                 # split row
                 row_split = row_split,
-                row_gap = unit(0.3, "mm"),
+                row_gap = unit(gap, "mm"),
                 row_title = NULL,
                 cluster_row_slices = FALSE,
                 #row_title_gp = grid::gpar(fontsize = 7),
@@ -288,7 +289,7 @@ ComplexHeatmapMotif_Group2x <- function(
                 # split column
                 column_split = col_split,
                 cluster_column_slices = FALSE,
-                column_gap = unit(0.3, "mm"),
+                column_gap = unit(gap, "mm"),
                 column_title_gp = grid::gpar(fontsize = 8, fontface="bold"),
 
                 border = border,
