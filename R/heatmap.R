@@ -204,7 +204,7 @@ ComplexHeatmapMotif_Group2x <- function(
     labels=NULL,
     levels=NULL,
     colors=c("blue", "white", "red"),
-    border=FLASE,
+    border=FALSE,
     limits=NULL,
     max_cutoff=NULL
 ){
