@@ -200,6 +200,9 @@ ComplexHeatmapMotif_Group2x <- function(
     ht_title ='Motif Score', col_group=NULL, col_sample=NULL,
     zscore=FALSE,
     cluster_columns=TRUE,
+    cluster_rows=FALSE,
+    show_row_dend=FALSE,
+    show_column_dend=TRUE,
     feature_info=NULL, gene='gene',
     labels=NULL,
     levels=NULL,
@@ -270,13 +273,13 @@ ComplexHeatmapMotif_Group2x <- function(
 
                 show_row_names = F,
                 row_names_gp = gpar(fontsize = 6),
-                show_row_dend = F,
-                cluster_rows = F,
+                show_row_dend = show_row_dend,
+                cluster_rows = cluster_rows,
 
                 show_column_names = F,
                 column_names_rot = 60,
                 column_names_gp = gpar(fontsize = 6, fontface="bold"),
-                show_column_dend = T,
+                show_column_dend = show_column_dend,
                 cluster_columns = cluster_columns,
 
                 # split row
