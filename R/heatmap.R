@@ -253,7 +253,7 @@ ComplexHeatmapMotif_Group2x <- function(
 
     if (zscore){
         d_mtx = t(scale(t(d_mtx)))
-        colors = colorRamp2(c(-2, -1, 0, 1, 2), c("#09103b", "#5f79cf", "white", "#eb6565", "#540506"))
+        #colors = colorRamp2(c(-2, -1, 0, 1, 2), c("#09103b", "#5f79cf", "white", "#eb6565", "#540506"))
         ht_title = "Row Z-Score"
     }
 
