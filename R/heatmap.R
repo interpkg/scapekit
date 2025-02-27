@@ -206,10 +206,10 @@ ComplexHeatmapMotif_Group2x <- function(
     feature_info=NULL, gene='gene',
     labels=NULL,
     levels=NULL,
+    limits=NULL,
     colors=c("blue", "white", "red"),
     gap=0.4,
     border=FALSE,
-    limits=NULL,
     max_cutoff=NULL
 ){
 
@@ -252,20 +252,21 @@ ComplexHeatmapMotif_Group2x <- function(
     haR <- rowAnnotation(Motif=anno_mark(at=label_index, labels=labels, labels_gp=gpar(fontsize=7), padding = unit(1, "mm")))
 
 
+    # z-score
+    if (zscore){
+        d_mtx = t(scale(t(d_mtx))) 
+        ht_title = "Row Z-Score"
+    }
+
+
+    # customized color set
     color_set <- NULL
     if (length(limits) > 0){
-        color_set <- circlize::colorRamp2(c(limits[1], 0, limits[2]), colors)
+        color_set <- circlize::colorRamp2(c(limits[1], limits[2], limits[3]), colors)
     } else {
         color_set <- circlize::colorRamp2(c(min(d_mtx), 0, max(d_mtx)), colors)
     }
 
-    # z-score
-    if (zscore){
-        d_mtx = t(scale(t(d_mtx)))
-        color_set = colorRamp2(c(-2, -1, 0, 1, 2), c("#09103b", "#5f79cf", "white", "#eb6565", "#540506"))
-        ht_title = "Row Z-Score"
-    }
-    
 
     ht_map <- Heatmap(
                 d_mtx,
