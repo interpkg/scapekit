@@ -262,7 +262,7 @@ ComplexHeatmapMotif_Group2x <- function(
     # customized color set
     color_set <- NULL
     if (length(limits) > 0){
-        color_set <- circlize::colorRamp2(c(limits[1], limits[2], limits[3]), colors)
+        color_set <- circlize::colorRamp2(limits, colors)
     } else {
         color_set <- circlize::colorRamp2(c(min(d_mtx), 0, max(d_mtx)), colors)
     }
