@@ -14,7 +14,7 @@ BarPlotGroupPosNeg2(
   line_size = 0.5,
   split_group = NULL,
   reverse = FALSE,
-  color_set = c(pos = "#FC766AFF", neg = "#5B84B1FF")
+  colors = c(pos = "#FC766AFF", neg = "#5B84B1FF")
 )
 }
 \arguments{
@@ -32,7 +32,7 @@ BarPlotGroupPosNeg2(
 
 \item{split_group}{column}
 
-\item{color_set}{code}
+\item{colors}{code}
 }
 \value{
 plot

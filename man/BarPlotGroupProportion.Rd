@@ -11,7 +11,7 @@ BarPlotGroupProportion(
   group = "",
   title = "",
   y_lab = "Proportion (\%)",
-  color_set = "",
+  colors = "",
   legend_nrow = 1,
   legend_position = "bottom",
   text_size = 7,
@@ -32,7 +32,7 @@ BarPlotGroupProportion(
 
 \item{group}{cell type}
 
-\item{color_set}{code}
+\item{colors}{code}
 }
 \value{
 plot

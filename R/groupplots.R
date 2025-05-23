@@ -18,7 +18,7 @@ NULL
 #' @param x_lab name
 #' @param y_lab name
 #' @param title name 
-#' @param color_set code
+#' @param colors code
 #' @param hline number
 #' @param hcol hline color
 #'
@@ -37,7 +37,7 @@ BarPlotGroup <- function(
     title='',
     x_lab='', 
     y_lab='', 
-    color_set='',
+    colors='',
     hline='', 
     hcol='black'
 ){
@@ -54,8 +54,8 @@ BarPlotGroup <- function(
                 legend.key.size=unit(2,"mm"))
 
     # set color for bar
-    if (length(color_set) > 1){ 
-        p <- p + scale_fill_manual(values=color_set)
+    if (length(colors) > 1){ 
+        p <- p + scale_fill_manual(values=colors)
     }
 
     # add hline with different color
@@ -83,7 +83,7 @@ BarPlotGroup <- function(
 #' @param y_lab name
 #' @param title name 
 #' @param split_group column
-#' @param color_set code
+#' @param colors code
 #'
 #' @return plot
 #'
@@ -101,7 +101,7 @@ BarPlotGroupPosNeg <- function(
     y_lab='', 
     split_group=NULL,
     reverse=FALSE,
-    color_set=c('pos'='#FC766AFF', 'neg'='#5B84B1FF')
+    colors=c('pos'='#FC766AFF', 'neg'='#5B84B1FF')
 ){
     data <- mutate(data, signal = ifelse(.data[[y]] > 0, 'pos', 'neg'))
 
@@ -117,7 +117,7 @@ BarPlotGroupPosNeg <- function(
         theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
         theme(legend.position='none') 
 
-    p <- p + scale_fill_manual(values=color_set)
+    p <- p + scale_fill_manual(values=colors)
 
     # reverse order 
     if (reverse){
@@ -145,7 +145,7 @@ BarPlotGroupPosNeg <- function(
 #' @param y_lab name
 #' @param title name 
 #' @param split_group column
-#' @param color_set code
+#' @param colors code
 #'
 #' @return plot
 #'
@@ -164,7 +164,7 @@ BarPlotGroupPosNeg2 <- function(
     line_size=0.5,
     split_group=NULL,
     reverse=FALSE,
-    color_set=c('pos'='#FC766AFF', 'neg'='#5B84B1FF')
+    colors=c('pos'='#FC766AFF', 'neg'='#5B84B1FF')
 ){
     data <- mutate(data, signal = ifelse(.data[[x]] > 0, 'pos', 'neg'))
 
@@ -178,7 +178,7 @@ BarPlotGroupPosNeg2 <- function(
         theme(axis.ticks = element_line(linewidth = line_size), axis.ticks.length=unit(1, "mm")) +
         theme(legend.position='none')
     
-    p <- p + scale_fill_manual(values=color_set)
+    p <- p + scale_fill_manual(values=colors)
 
     # reverse order 
     if (reverse){
@@ -306,7 +306,7 @@ BarPlotSplitGroup_v1b <- function(
 #' @param x_lab name
 #' @param y_lab name
 #' @param title name 
-#' @param color_set code
+#' @param colors code
 #'
 #' @return plot
 #'
@@ -323,7 +323,7 @@ BarPlotSplitGroup_v2 <- function(
     title='',
     x_lab='', 
     y_lab='', 
-    color_set=''
+    colors=''
 ){  
 
     p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], fill=.data[[group]], group=.data[[group]])) + 
@@ -338,8 +338,8 @@ BarPlotSplitGroup_v2 <- function(
         theme(axis.ticks = element_line(linewidth = 0.3), axis.ticks.length=unit(0.5, "mm")) +
         theme(legend.title=element_blank(), legend.key.size = unit(2, 'mm'), legend.text=element_text(size=6), legend.position="bottom")
 
-    if (length(color_set) > 1){ 
-        p <- p + scale_fill_manual(values=color_set)
+    if (length(colors) > 1){ 
+        p <- p + scale_fill_manual(values=colors)
     }
 
     p <- p + facet_wrap(~ .data[[split_group]]) 
@@ -357,7 +357,7 @@ BarPlotSplitGroup_v2 <- function(
 #' @param data frame
 #' @param x sample name
 #' @param group cell type
-#' @param color_set code
+#' @param colors code
 #'
 #' @return plot
 #'
@@ -372,7 +372,7 @@ BarPlotGroupProportion <- function(
     group='', 
     title='', 
     y_lab='Proportion (%)', 
-    color_set='', 
+    colors='', 
     legend_nrow=1, 
     legend_position='bottom',
     text_size=7, 
@@ -417,8 +417,8 @@ BarPlotGroupProportion <- function(
         guides(fill=guide_legend(nrow=legend_nrow, byrow=T))
 
     # change color
-    if (length(color_set) > 1){ 
-        p <- p + scale_fill_manual(values=color_set)
+    if (length(colors) > 1){ 
+        p <- p + scale_fill_manual(values=colors)
     }
 
     # add text
@@ -432,7 +432,45 @@ BarPlotGroupProportion <- function(
 
 
 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
+#      Box plot
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 
+#' ggboxplot with P-val for group
+#'
+#' @param data frame
+#' @param x sample name
+#' @param y value 
+#' @param y_lab y lab 
+#' @param group cell type
+#' @param colors code
+#'
+#' @return plot
+#'
+#' @import ggpubr
+#'
+#' @export
+#'
+GGboxplotPval <- function(
+    data=NULL, x='sample', y='mean_peak_sig', group=NA, 
+    y_lab='Mean peak signal',
+    colors="supp"
+){
+    p <- ggboxplot(data, x = x, y = y, 
+            color = group, palette = colors, 
+            outlier.size = .1, 
+            bxp.errorbar=F
+          )
+    p <- p + stat_compare_means(size=2)
+    p <- p + theme(axis.line=element_line(size=0.5), 
+                  axis.ticks = element_line(size = 0.5)) +
+            labs(x="", y = y_lab) +
+            theme(plot.title = element_text(hjust = 0.5, size=8)) +
+            theme(text = element_text(size = 7, face="bold"), axis.text= element_text(size = 7)) +
+            theme(legend.title=element_blank()) +
+            theme(legend.key.size = unit(4, 'mm'))
+    p 
+}
 
 
 
@@ -450,7 +488,7 @@ BarPlotGroupProportion <- function(
 #' @param x_lab name
 #' @param y_lab name
 #' @param title name 
-#' @param color_set code
+#' @param colors code
 #' @param hline number
 #' @param hcol hline color
 #'
@@ -468,7 +506,7 @@ DotLinePlotGroup <- function(
     title='',
     x_lab='', 
     y_lab='', 
-    color_set='',
+    colors='',
     hline='', 
     hcol='black'
 ){
@@ -487,8 +525,8 @@ DotLinePlotGroup <- function(
                 legend.key.size=unit(2,"mm"))
 
     # set color for bar
-    if (length(color_set) > 1){ 
-        p <- p + scale_fill_manual(values=color_set)
+    if (length(colors) > 1){ 
+        p <- p + scale_fill_manual(values=colors)
     }
 
     # add hline with different color
@@ -571,7 +609,7 @@ DensityRidgesGradient_SplitGroup <- function(data, x1='', y='', split_group='', 
 #'
 #' @export
 #'
-AreaPlotGroup <- function(data, x='', y='', group='', color_set='', title='', angle=45)
+AreaPlotGroup <- function(data, x='', y='', group='', colors='', title='', angle=45)
 {   
     p <- ggplot(table, aes(x=.data[[x]], y=.data[[y]], fill=.data[[group]], group=.data[[group]])) + 
         geom_area(position = 'fill') +
@@ -585,8 +623,8 @@ AreaPlotGroup <- function(data, x='', y='', group='', color_set='', title='', an
             legend.position="bottom") + 
         labs(title=title, x='', y='')
 
-    if (length(color_set) > 1){ 
-        p <- p + scale_fill_manual(values=color_set)
+    if (length(colors) > 1){ 
+        p <- p + scale_fill_manual(values=colors)
     }
 
     p
@@ -607,7 +645,7 @@ AreaPlotGroup <- function(data, x='', y='', group='', color_set='', title='', an
 #'
 #' @export
 #'
-AreaPlotGroupProportion <- function(data, x='orig.ident', group='cell_type2', color_set='', title='', angle=45)
+AreaPlotGroupProportion <- function(data, x='orig.ident', group='cell_type2', colors='', title='', angle=45)
 {   
     # make proportion
     report <- data.frame(cbind(prop.table(table(data[[group]], data[[x]]),  margin = 2)))
@@ -630,8 +668,8 @@ AreaPlotGroupProportion <- function(data, x='orig.ident', group='cell_type2', co
             legend.position="bottom") + 
         labs(title=title, x='', y='')
 
-    if (length(color_set) > 1){ 
-        p <- p + scale_fill_manual(values=color_set)
+    if (length(colors) > 1){ 
+        p <- p + scale_fill_manual(values=colors)
     }
 
     p

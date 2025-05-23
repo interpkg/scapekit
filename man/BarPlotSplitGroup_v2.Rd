@@ -13,7 +13,7 @@ BarPlotSplitGroup_v2(
   title = "",
   x_lab = "",
   y_lab = "",
-  color_set = ""
+  colors = ""
 )
 }
 \arguments{
@@ -31,7 +31,7 @@ BarPlotSplitGroup_v2(
 
 \item{y_lab}{name}
 
-\item{color_set}{code}
+\item{colors}{code}
 }
 \value{
 plot

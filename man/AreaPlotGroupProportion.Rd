@@ -8,7 +8,7 @@ AreaPlotGroupProportion(
   data,
   x = "orig.ident",
   group = "cell_type2",
-  color_set = "",
+  colors = "",
   title = "",
   angle = 45
 )

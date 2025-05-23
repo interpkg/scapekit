@@ -9,7 +9,7 @@ AreaPlotGroup(
   x = "",
   y = "",
   group = "",
-  color_set = "",
+  colors = "",
   title = "",
   angle = 45
 )

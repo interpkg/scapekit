@@ -12,7 +12,7 @@ DotLinePlotGroup(
   title = "",
   x_lab = "",
   y_lab = "",
-  color_set = "",
+  colors = "",
   hline = "",
   hcol = "black"
 )
@@ -32,7 +32,7 @@ DotLinePlotGroup(
 
 \item{y_lab}{name}
 
-\item{color_set}{code}
+\item{colors}{code}
 
 \item{hline}{number}
 
