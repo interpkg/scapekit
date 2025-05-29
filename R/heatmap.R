@@ -54,7 +54,6 @@ Customize_LegendParam <- function(
 #'
 #' @export
 #'
-
 ComplexHeatmap_CellType <- function(
     data=NULL, 
     top_anno1=NULL, 
@@ -85,7 +84,10 @@ ComplexHeatmap_CellType <- function(
     if (zscore){
         d_mtx = t(scale(t(d_mtx)))
         #c("#09103b", "#5f79cf", "white", "#eb6565", "#540506")
-        colors = circlize::colorRamp2(c(-2, -1, 0, 1, 2), c("#2709ce", "#3FA0FFFF", "white", "#FFAD72FF", "#A50021FF"))
+        d_mtx[!is.na(d_mtx) & d_mtx < -1] <- -1
+        d_mtx[!is.na(d_mtx) & d_mtx > 1] <- 1
+
+        colors = circlize::colorRamp2(c(-1, -0.5, 0, 0.5, 1), c("#00A9E0FF", "#CCEEF9FF", "white", "#FFAD72FF", "#A50021FF"))
         ht_title = "Row Z-Score"
     }
 
@@ -136,6 +138,7 @@ ComplexHeatmap_CellType <- function(
                 cluster_column_slices = FALSE,
                 column_gap = unit(0.3, "mm"),
                 column_title_gp = gpar(fontsize = 0), 
+                use_raster = FALSE,
                 
                 # show anno group
                 top_annotation = ha,
@@ -155,5 +158,7 @@ ComplexHeatmap_CellType <- function(
 
     return(ht_exp)
 }
+
+
 
 
