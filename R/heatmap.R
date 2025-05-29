@@ -73,6 +73,7 @@ ComplexHeatmap_CellType <- function(
     show_column_dend=TRUE,
     cluster_columns=TRUE,
     top_annotation=TRUE,
+    show_annotation_name=FALSE,
     show_feature=NULL,
     row_split=NULL,
     font_size=6,
@@ -96,9 +97,10 @@ ComplexHeatmap_CellType <- function(
     ha <- NULL
     if (top_annotation){
         ha <- HeatmapAnnotation(
-                CellType = anno_block(x=info[[top_anno1]], simple_anno_size = unit(2, "mm"), col=col_celltype),
-                Group = anno_block(x=info[[top_anno2]], simple_anno_size = unit(2, "mm"), col=col_group),
-                annotation_name_gp = gpar(fontsize = font_size)
+                CellType = anno_simple(x=info[[top_anno1]], simple_anno_size = unit(2, "mm"), col=col_celltype),
+                Group = anno_simple(x=info[[top_anno2]], simple_anno_size = unit(2, "mm"), col=col_group),
+                annotation_name_gp = gpar(fontsize = font_size),
+                show_annotation_name = show_annotation_name
               )
     }
 
