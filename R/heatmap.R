@@ -58,10 +58,11 @@ ComplexHeatmap_CellType <- function(
     data=NULL, 
     top_anno1=NULL, 
     top_anno2=NULL,
-    colors=circlize::colorRamp2(c(-1, -0.5, 0, 0.5, 1), c("#00A9E0FF", "#CCEEF9FF", "white", "#FFE099FF", "#A50021FF")),
+    colors=NULL,
     col_celltype=NULL,
     col_group=NULL,
     zscore=FALSE,
+    zcolor=NULL,
     show_row_names=FALSE,
     show_row_dend=FALSE,
     cluster_rows=FALSE,
@@ -88,8 +89,12 @@ ComplexHeatmap_CellType <- function(
         d_mtx[!is.na(d_mtx) & d_mtx < -1] <- -1
         d_mtx[!is.na(d_mtx) & d_mtx > 1] <- 1
 
-        #colors = circlize::colorRamp2(c(-1, -0.5, 0, 0.5, 1), c("#00A9E0FF", "#CCEEF9FF", "white", "#FFE099FF", "#A50021FF"))
         ht_title = "Row Z-Score"
+        if (length(zcolor)==0){
+            colors = circlize::colorRamp2(c(-1, -0.5, 0, 0.5, 1), c("#00A9E0FF", "#CCEEF9FF", "white", "#FFE099FF", "#A50021FF"))
+        } else{
+            colors <- zcolor
+        }
     }
 
     
