@@ -54,6 +54,7 @@ Customize_LegendParam <- function(
 #'
 #' @export
 #'
+
 ComplexHeatmap_CellType <- function(
     data=NULL, 
     top_anno1=NULL, 
@@ -61,6 +62,8 @@ ComplexHeatmap_CellType <- function(
     colors=NULL,
     col_celltype=NULL,
     col_group=NULL,
+    limit_val=NULL,
+    title='Expression',
     zscore=FALSE,
     zcolor=NULL,
     show_row_names=FALSE,
@@ -82,19 +85,23 @@ ComplexHeatmap_CellType <- function(
     features <- gene_names[!gene_names %in% c(top_anno1, top_anno2)]
     d_mtx <- as.matrix(t(data[, features]))
 
-
+    # z-score
     if (zscore){
         d_mtx = t(scale(t(d_mtx)))
         #c("#09103b", "#5f79cf", "white", "#eb6565", "#540506")
-        d_mtx[!is.na(d_mtx) & d_mtx < -1] <- -1
-        d_mtx[!is.na(d_mtx) & d_mtx > 1] <- 1
-
-        ht_title = "Row Z-Score"
         if (length(zcolor)==0){
             colors = circlize::colorRamp2(c(-1, -0.5, 0, 0.5, 1), c("#00A9E0FF", "#CCEEF9FF", "white", "#FFE099FF", "#A50021FF"))
         } else{
             colors <- zcolor
         }
+    }
+
+    # set min/max value for matrix
+    if (length(limit_val) > 0){
+        min_val <- limit_val[1]
+        max_val <- limit_val[2]
+        d_mtx[!is.na(d_mtx) & d_mtx < min_val] <- min_val
+        d_mtx[!is.na(d_mtx) & d_mtx > max_val] <- max_val
     }
 
     
@@ -152,7 +159,7 @@ ComplexHeatmap_CellType <- function(
 
                 # legend
                 heatmap_legend_param = list(
-                        title = 'Expression',
+                        title = title,
                         direction = "horizontal",
                         title_position = "lefttop",
                         title_gp = gpar(fontsize = font_size), 
@@ -164,7 +171,6 @@ ComplexHeatmap_CellType <- function(
 
     return(ht_exp)
 }
-
 
 
 
