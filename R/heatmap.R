@@ -60,17 +60,23 @@ Customize_LegendParam <- function(
 
 ComplexHeatmap_CellType <- function(
     data=NULL, 
-    top_anno1='', 
-    top_anno2='',
-    colors=c('blue', 'white', 'red'),
+    top_anno1=NULL, 
+    top_anno2=NULL,
+    colors=NULL,
     col_celltype=NULL,
     col_group=NULL,
     zscore=FALSE,
     show_row_names=FALSE,
+    show_row_dend=FALSE,
+    cluster_rows=FALSE,
+    show_column_names=FALSE,
     show_column_dend=TRUE,
+    cluster_columns=TRUE,
     top_annotation=TRUE,
     show_feature=NULL,
-    row_split=NULL
+    row_split=NULL,
+    font_size=6,
+    label_font=5
 ){
 
     info <- data[,c(top_anno1, top_anno2)]
@@ -91,8 +97,8 @@ ComplexHeatmap_CellType <- function(
     if (top_annotation){
         ha <- HeatmapAnnotation(
                 CellType = anno_simple(x=info[[top_anno1]], simple_anno_size = unit(2, "mm"), col=col_celltype),
-                Group = anno_simple(x=info[[top_anno2]], simple_anno_size = unit(2, "mm"), col=col_group)
-                #annotation_name_gp = gpar(fontsize = 6)  # show column name for CellType
+                Group = anno_simple(x=info[[top_anno2]], simple_anno_size = unit(2, "mm"), col=col_group),
+                annotation_name_gp = gpar(fontsize = font_size)
               )
     }
 
@@ -102,7 +108,7 @@ ComplexHeatmap_CellType <- function(
         colnames(feature_set) <- 'gene'
         feature_set$id <- 1:nrow(feature_set)
         index_id <- feature_set[feature_set$gene %in% show_feature,]$id
-        feature_anno = rowAnnotation('Gene' = anno_mark(at =index_id, labels = show_feature, labels_gp = gpar(col = "black", fontsize = 5), link_width = unit(3, "mm")))
+        feature_anno = rowAnnotation('Gene' = anno_mark(at =index_id, labels = show_feature, labels_gp = gpar(col = "black", fontsize = label_font), link_width = unit(3, "mm")))
     }
     
     
@@ -113,26 +119,26 @@ ComplexHeatmap_CellType <- function(
                     
                 show_row_names = show_row_names,
                 row_names_side = "left",
-                row_names_gp = gpar(fontsize = 6),
-                show_row_dend = F,
-                cluster_rows = F,
+                row_names_gp = gpar(fontsize = font_size),
+                show_row_dend = show_row_dend,
+                cluster_rows = cluster_rows,
 
-                show_column_names = F,
+                show_column_names = show_column_names,
                 column_names_rot = 60,
-                column_names_gp = gpar(fontsize = 6),
+                column_names_gp = gpar(fontsize = font_size),
                 show_column_dend = show_column_dend,
-                cluster_columns = T,
+                cluster_columns = cluster_columns,
 
                 # split row
                 row_split = row_split,
                 row_gap = unit(0.3, "mm"),
-                row_title_gp = grid::gpar(fontsize = 6),
+                row_title_gp = grid::gpar(fontsize = font_size),
                 
                 # split column
                 column_split = factor(info[[top_anno1]], levels = unique(info[[top_anno1]])),
                 cluster_column_slices = FALSE,
                 column_gap = unit(0.3, "mm"),
-                column_title_gp = grid::gpar(fontsize = 6),
+                column_title_gp = grid::gpar(fontsize = font_size),
                 
                 # show anno group
                 top_annotation = ha,
@@ -143,8 +149,8 @@ ComplexHeatmap_CellType <- function(
                         title = 'Expression',
                         direction = "horizontal",
                         title_position = "lefttop",
-                        title_gp = gpar(fontsize = 6), 
-                        labels_gp = gpar(fontsize = 5),
+                        title_gp = gpar(fontsize = font_size), 
+                        labels_gp = gpar(fontsize = label_font),
                         grid_width = unit(2, "mm"),
                         grid_height = unit(2, "mm")
                     )
