@@ -1,8 +1,5 @@
 
 
-
-
-
 #' Customized Legend
 #'
 #' @param title title
@@ -73,7 +70,6 @@ ComplexHeatmap_CellType <- function(
     show_column_dend=TRUE,
     cluster_columns=TRUE,
     top_annotation=TRUE,
-    show_annotation_name=FALSE,
     show_feature=NULL,
     row_split=NULL,
     font_size=6,
@@ -99,8 +95,7 @@ ComplexHeatmap_CellType <- function(
         ha <- HeatmapAnnotation(
                 CellType = anno_simple(x=info[[top_anno1]], simple_anno_size = unit(2, "mm"), col=col_celltype),
                 Group = anno_simple(x=info[[top_anno2]], simple_anno_size = unit(2, "mm"), col=col_group),
-                annotation_name_gp = gpar(fontsize = font_size),
-                show_annotation_name = show_annotation_name
+                annotation_name_gp = gpar(fontsize = font_size)
               )
     }
 
@@ -134,13 +129,13 @@ ComplexHeatmap_CellType <- function(
                 # split row
                 row_split = row_split,
                 row_gap = unit(0.3, "mm"),
-                row_title_gp = grid::gpar(fontsize = font_size),
+                row_title_gp = gpar(fontsize = font_size),
                 
                 # split column
                 column_split = factor(info[[top_anno1]], levels = unique(info[[top_anno1]])),
                 cluster_column_slices = FALSE,
                 column_gap = unit(0.3, "mm"),
-                column_title_gp = grid::gpar(fontsize = font_size),
+                column_title_gp = gpar(fontsize = 0), 
                 
                 # show anno group
                 top_annotation = ha,
@@ -160,10 +155,5 @@ ComplexHeatmap_CellType <- function(
 
     return(ht_exp)
 }
-
-
-
-
-
 
 
