@@ -65,7 +65,7 @@ ComplexHeatmap_CellType <- function(
     limit_val=NULL,
     title='Expression',
     zscore=FALSE,
-    zcolor=NULL,
+    zcolors=NULL,
     show_row_names=FALSE,
     show_row_dend=FALSE,
     cluster_rows=FALSE,
@@ -89,10 +89,10 @@ ComplexHeatmap_CellType <- function(
     if (zscore){
         d_mtx = t(scale(t(d_mtx)))
         #c("#09103b", "#5f79cf", "white", "#eb6565", "#540506")
-        if (length(zcolor)==0){
+        if (length(zcolors)==0){
             colors = circlize::colorRamp2(c(-1, -0.5, 0, 0.5, 1), c("#00A9E0FF", "#CCEEF9FF", "white", "#FFE099FF", "#A50021FF"))
         } else{
-            colors <- zcolor
+            colors <- zcolors
         }
     }
 
