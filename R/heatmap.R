@@ -58,7 +58,7 @@ ComplexHeatmap_CellType <- function(
     data=NULL, 
     top_anno1=NULL, 
     top_anno2=NULL,
-    colors=circlize::colorRamp2(c(-1, -0.5, 0, 0.5, 1), c("#00A9E0FF", "#CCEEF9FF", "white", "#FFE099FF", "#A50021FF"),
+    colors=circlize::colorRamp2(c(-1, -0.5, 0, 0.5, 1), c("#00A9E0FF", "#CCEEF9FF", "white", "#FFE099FF", "#A50021FF")),
     col_celltype=NULL,
     col_group=NULL,
     zscore=FALSE,
