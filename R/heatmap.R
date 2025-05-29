@@ -70,6 +70,7 @@ ComplexHeatmap_CellType <- function(
     cluster_columns=TRUE,
     top_annotation=TRUE,
     show_feature=NULL,
+    use_raster=FALSE,
     row_split=NULL,
     font_size=6,
     label_font=5
@@ -87,7 +88,7 @@ ComplexHeatmap_CellType <- function(
         d_mtx[!is.na(d_mtx) & d_mtx < -1] <- -1
         d_mtx[!is.na(d_mtx) & d_mtx > 1] <- 1
 
-        colors = circlize::colorRamp2(c(-1, -0.5, 0, 0.5, 1), c("#00A9E0FF", "#CCEEF9FF", "white", "#FFAD72FF", "#A50021FF"))
+        colors = circlize::colorRamp2(c(-1, -0.5, 0, 0.5, 1), c("#00A9E0FF", "#CCEEF9FF", "white", "#FFE099FF", "#A50021FF"))
         ht_title = "Row Z-Score"
     }
 
@@ -138,7 +139,7 @@ ComplexHeatmap_CellType <- function(
                 cluster_column_slices = FALSE,
                 column_gap = unit(0.3, "mm"),
                 column_title_gp = gpar(fontsize = 0), 
-                use_raster = FALSE,
+                use_raster = use_raster,
                 
                 # show anno group
                 top_annotation = ha,
