@@ -75,15 +75,16 @@ StandardBoxplot <- function(
     font_size=7, font_size_title=8,
     nolegend=FALSE, add_test=FALSE,
     outlier=16,
+    alpha=1,
     colors=""
 ){
-    p <- ggplot(data, aes_string(x=x, y=y, fill=group, color=group)) +
+    p <- ggplot(data, aes_string(x=x, y=y, fill=x)) +
             stat_boxplot(geom = "errorbar", width = 0.2) +
-            geom_boxplot(width=0.5, outlier.shape = outlier) +
+            geom_boxplot(alpha=alpha, width=0.5, outlier.shape = outlier) +
             theme_classic()
 
     if (nchar(colors) > 0){
-        p <- p + scale_color_manual(values = colors)
+        p <- p + scale_fill_manual(values = colors)
     }
 
     p <- p + theme(axis.line=element_line(size=0.5), 
@@ -95,7 +96,8 @@ StandardBoxplot <- function(
             theme(legend.key.size = unit(4, 'mm'))
             
     if (add_test){
-        p <- p + stat_compare_means(comparisons = data, label.y = max(data[[y]])*1.2, size=2)
+        stat.test <- compare_means(formula = as.formula(paste(y, "~", x)), data = data, method = "wilcox.test")
+        p <- p + stat_pvalue_manual(stat.test, label = "p = {p.adj}", size=2)
     }
 
     if (nolegend){
