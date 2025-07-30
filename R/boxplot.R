@@ -92,9 +92,7 @@ GGboxplotWithErrorBar <- function(
             theme(legend.key.size = unit(4, 'mm'))
             
     if (add_test){
-        stat.test <- stat.test %>% add_xy_position(x = x, dodge = 0.8)
-        p <- p + stat_pvalue_manual(stat.test,  label = "p", tip.length = 0) +
-                scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
+        p <- p + stat_compare_means(comparisons = data, label.y = max(data[[y]])*1.2, size=2)
     }
 
     if (nolegend){
