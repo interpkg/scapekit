@@ -54,7 +54,7 @@ GGboxplotPval <- function(
 
 
 
-#' ggboxplot with P-val for group
+#' StandardBoxplot
 #'
 #' @param data frame
 #' @param x sample name
