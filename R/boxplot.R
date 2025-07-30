@@ -76,7 +76,7 @@ GGboxplotWithErrorBar <- function(
     nolegend=FALSE, add_test=FALSE,
     colors=""
 ){
-    p <- ggplot(data, aes(x=x, y=y, fill=group, color=group)) +
+    p <- ggplot(data, aes_string(x=x, y=y, fill=group, color=group)) +
             stat_boxplot(geom = "errorbar", linetype=1, width = 0.2) +
             geom_boxplot(width=0.5, outlier.shape = NA) +
     if (nchar(colors) > 0){
