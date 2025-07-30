@@ -21,7 +21,7 @@
 #'
 GGboxplotPval <- function(
     data=NULL, x='sample', y='mean_peak_sig', group=NA, 
-    x_lab="", y_lab='Mean peak signal', 
+    title='', x_lab='', y_lab='Mean peak signal', 
     font_size=7, font_size_title=8,
     nolegend=FALSE, add_test=FALSE,
     colors="supp"
@@ -33,7 +33,7 @@ GGboxplotPval <- function(
           )
     p <- p + theme(axis.line=element_line(size=0.5), 
                   axis.ticks = element_line(size = 0.5)) +
-            labs(x=x_lab, y = y_lab) +
+            labs(title=title, x=x_lab, y = y_lab) +
             theme(plot.title = element_text(hjust = 0.5, size=font_size_title)) +
             theme(text = element_text(size = font_size, face="bold"), axis.text= element_text(size = font_size)) +
             theme(legend.title=element_blank()) +
@@ -71,7 +71,7 @@ GGboxplotPval <- function(
 #'
 StandardBoxplot <- function(
     data=NULL, x='sample', y='mean_peak_sig', 
-    x_lab="", y_lab='Mean peak signal', 
+    title='', x_lab='', y_lab='Mean peak signal', 
     font_size=7, font_size_title=8,
     nolegend=FALSE, 
     add_test=FALSE, test_method='wilcox.test',
@@ -86,7 +86,7 @@ StandardBoxplot <- function(
 
     p <- p + theme(axis.line=element_line(size=0.5), 
                   axis.ticks = element_line(size = 0.5)) +
-            labs(x=x_lab, y = y_lab) +
+            labs(title =title, x=x_lab, y = y_lab) +
             theme(plot.title = element_text(hjust = 0.5, size=font_size_title)) +
             theme(text = element_text(size = font_size, face="bold"), axis.text= element_text(size = font_size)) +
             theme(legend.title=element_blank()) +
