@@ -77,16 +77,12 @@ StandardBoxplot <- function(
     add_test=FALSE, test_method='wilcox.test',
     outlier=16,
     alpha=1,
-    colors=NULL
+    colors='blue'
 ){
     p <- ggplot(data, aes_string(x=x, y=y)) +
             stat_boxplot(geom = "errorbar", width = 0.2) +
             geom_boxplot(fill=colors, alpha=alpha, width=0.5, outlier.shape = outlier) +
             theme_classic()
-
-    if (length(colors) > 0){
-        p <- p + scale_fill_manual(values = colors)
-    }
 
     p <- p + theme(axis.line=element_line(size=0.5), 
                   axis.ticks = element_line(size = 0.5)) +
