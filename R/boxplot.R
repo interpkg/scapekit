@@ -20,7 +20,7 @@
 #' @export
 #'
 GGboxplotPval <- function(
-    data=NULL, x='sample', y='mean_peak_sig', group=NULL, 
+    data=NULL, x='sample', y='mean_peak_sig', group=NA, 
     x_lab="", y_lab='Mean peak signal', 
     font_size=7, font_size_title=8,
     nolegend=FALSE, add_test=FALSE,
@@ -70,20 +70,21 @@ GGboxplotPval <- function(
 #' @export
 #'
 StandardBoxplot <- function(
-    data=NULL, x='sample', y='mean_peak_sig', group=NULL, 
+    data=NULL, x='sample', y='mean_peak_sig', 
     x_lab="", y_lab='Mean peak signal', 
     font_size=7, font_size_title=8,
-    nolegend=FALSE, add_test=FALSE,
+    nolegend=FALSE, 
+    add_test=FALSE, test_method='wilcox.test',
     outlier=16,
     alpha=1,
-    colors=""
+    colors=NULL
 ){
-    p <- ggplot(data, aes_string(x=x, y=y, fill=x)) +
+    p <- ggplot(data, aes_string(x=x, y=y)) +
             stat_boxplot(geom = "errorbar", width = 0.2) +
-            geom_boxplot(alpha=alpha, width=0.5, outlier.shape = outlier) +
+            geom_boxplot(fill=colors, alpha=alpha, width=0.5, outlier.shape = outlier) +
             theme_classic()
 
-    if (nchar(colors) > 0){
+    if (length(colors) > 0){
         p <- p + scale_fill_manual(values = colors)
     }
 
@@ -96,7 +97,9 @@ StandardBoxplot <- function(
             theme(legend.key.size = unit(4, 'mm'))
             
     if (add_test){
-        stat.test <- compare_means(formula = as.formula(paste(y, "~", x)), data = data, method = "wilcox.test")
+        stat.test <- ggpubr::compare_means(formula = as.formula(paste(y, "~", x)), data = data, method = test_method)
+        ymax <- max(df[[y]])
+        stat.test <- stat.test %>% mutate(y.position=c(ymax*1.1, ymax*1.3, ymax*1.5))
         p <- p + stat_pvalue_manual(stat.test, label = "p = {p.adj}", size=2)
     }
 
