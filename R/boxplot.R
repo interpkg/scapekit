@@ -75,13 +75,14 @@ StandardBoxplot <- function(
     font_size=7, font_size_title=8,
     nolegend=FALSE, 
     add_test=FALSE, test_method='wilcox.test',
+    show_pval_position=10,
     outlier=16,
     alpha=1,
     colors='blue'
 ){
     p <- ggplot(data, aes_string(x=x, y=y)) +
             stat_boxplot(geom = "errorbar", width = 0.2) +
-            geom_boxplot(fill=colors, alpha=alpha, width=0.5, outlier.shape = outlier, outlier.size = 1) +
+            geom_boxplot(fill=colors, color="black", alpha=alpha, width=0.5, outlier.shape = outlier, outlier.size = 0.5) +
             theme_classic()
 
     p <- p + theme(axis.line=element_line(size=0.5, color = "black"), 
@@ -94,8 +95,7 @@ StandardBoxplot <- function(
             
     if (add_test){
         stat.test <- ggpubr::compare_means(formula = as.formula(paste(y, "~", x)), data = data, method = test_method)
-        ymax <- max(df[[y]])
-        stat.test <- stat.test %>% mutate(y.position=c(ymax*1.1, ymax*1.3, ymax*1.5))
+        stat.test <- stat.test %>% mutate(y.position=show_pval_position)
         p <- p + stat_pvalue_manual(stat.test, label = "p = {p.adj}", size=2)
     }
 
