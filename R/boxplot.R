@@ -74,7 +74,7 @@ StandardBoxplot <- function(
     title='', x_lab='', y_lab='Mean peak signal', 
     font_size=7, font_size_title=8,
     nolegend=FALSE, 
-    add_test=FALSE, test_method='kruskal.test',
+    add_test=FALSE, test_method="wilcox.test",
     show_pval_position=10,
     outlier=16,
     alpha=1,
