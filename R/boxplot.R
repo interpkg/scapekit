@@ -84,11 +84,11 @@ StandardBoxplot <- function(
             geom_boxplot(fill=colors, alpha=alpha, width=0.5, outlier.shape = outlier, outlier.size = 1) +
             theme_classic()
 
-    p <- p + theme(axis.line=element_line(size=0.5), 
-                  axis.ticks = element_line(size = 0.5)) +
+    p <- p + theme(axis.line=element_line(size=0.5, color = "black"), 
+                  axis.ticks = element_line(size = 0.5, color = "black")) +
             labs(title =title, x=x_lab, y = y_lab) +
-            theme(plot.title = element_text(hjust = 0.5, size=font_size_title)) +
-            theme(text = element_text(size = font_size, face="bold"), axis.text= element_text(size = font_size)) +
+            theme(plot.title = element_text(hjust = 0.5, size=font_size_title, color = "black")) +
+            theme(text = element_text(size = font_size, face="bold", color = "black"), axis.text= element_text(size = font_size, color = "black")) +
             theme(legend.title=element_blank()) +
             theme(legend.key.size = unit(4, 'mm'))
             
