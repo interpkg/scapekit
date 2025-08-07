@@ -2,21 +2,24 @@
 % Please edit documentation in R/boxplot.R
 \name{StandardBoxplot}
 \alias{StandardBoxplot}
-\title{ggboxplot with P-val for group}
+\title{StandardBoxplot}
 \usage{
 StandardBoxplot(
   data = NULL,
   x = "sample",
   y = "mean_peak_sig",
-  group = NULL,
+  title = "",
   x_lab = "",
   y_lab = "Mean peak signal",
   font_size = 7,
   font_size_title = 8,
   nolegend = FALSE,
   add_test = FALSE,
+  test_method = "wilcox.test",
+  show_pval_position = 10,
   outlier = 16,
-  colors = ""
+  alpha = 1,
+  colors = "blue"
 )
 }
 \arguments{
@@ -26,15 +29,15 @@ StandardBoxplot(
 
 \item{y}{value}
 
-\item{group}{cell type}
-
 \item{y_lab}{y lab}
 
 \item{colors}{code}
+
+\item{group}{cell type}
 }
 \value{
 plot
 }
 \description{
-ggboxplot with P-val for group
+StandardBoxplot
 }

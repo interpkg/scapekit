@@ -96,7 +96,7 @@ StandardBoxplot <- function(
     if (add_test){
         stat.test <- ggpubr::compare_means(formula = as.formula(paste(y, "~", x)), data = data, method = test_method)
         stat.test <- stat.test %>% mutate(y.position=show_pval_position)
-        p <- p + stat_pvalue_manual(stat.test, label = "p = {p.adj}", size=2)
+        p <- p + stat_pvalue_manual(stat.test, label = "p = {p.adj}", size=1.5)
     }
 
     if (nolegend){

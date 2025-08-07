@@ -4,7 +4,7 @@
 \alias{ComplexHeatmap_Motif}
 \title{ComplexHeatmap Motif}
 \usage{
-ComplexHeatmap_Motif(data)
+ComplexHeatmap_Motif(data, out)
 }
 \arguments{
 \item{data}{dataframe}

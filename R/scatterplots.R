@@ -343,13 +343,17 @@ ScatterPlotSplit <- function(
 #' 
 #' @concept scatter plot with correlation and split plots by split_by
 #'
-ScatterPlotWithCorr <- function(data=NULL, split_by='', x='', y='', x_lab='', y_lab='')
+ScatterPlotWithCor <- function(
+    data=NULL, split_by='', x='', y='', x_lab='', y_lab='', 
+    dot_size=0.5, dot_col='#2278B5', alpha=0.6,
+    lwd=0.5, reg_line_cor='#E14C32',
+    cor_method='pearson')
 {
     p <- ggscatter(data, x = x, y = y, 
-            color='#2278B5', shape = 16, size = 0.5, alpha=0.6,
-            add = "reg.line", add.params = list(color = "#E14C32", size=0.5),
+            color=dot_col, shape = 16, size = dot_size, alpha=alpha,
+            add = "reg.line", add.params = list(color = reg_line_cor, size=lwd),
             conf.int = TRUE, cor.coef = TRUE, cor.coef.size = 2.5,
-            cor.coeff.args = list(method = "pearson"), ggtheme=clean_theme()
+            cor.coeff.args = list(method = cor_method), ggtheme=clean_theme()
            ) + 
         theme_linedraw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
         theme(

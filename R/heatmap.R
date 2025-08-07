@@ -812,43 +812,41 @@ ComplexHeatmap_Cluster <- function(data){
 #'
 #' @export
 #'
-ComplexHeatmap_Motif <- function(data){
+ComplexHeatmap_Motif <- function(data, out){
 
-library(ComplexHeatmap)
-library(circlize)
+    color_motif = c('#440154FF', '#414487FF', '#2A788EFF', '#22A884FF', '#7AD151FF', '#FDE725FF')
+    # c('blue','#F9E79F','red')
 
+    NR=dim(data)[1]
+    NC=dim(data)[2]
 
-NR=dim(df_new)[1]
-NC=dim(df_new)[2]
+    ht <- ComplexHeatmap::Heatmap(as.matrix(data), 
+            cluster_columns = F,
+            name = "Mean motif signal", col = color_motif,
+            row_names_side = "left", row_dend_side = "right", row_dend_width = unit(3, "mm"),
+            column_names_side = "top", column_dend_side = "bottom", column_dend_height = unit(3, "mm"), 
+            column_names_gp = grid::gpar(fontsize = 6),
+            row_names_gp = grid::gpar(fontsize = 6),
+            column_names_rot = 45,
 
-ht <- ComplexHeatmap::Heatmap(as.matrix(df_new), 
-        cluster_columns = F,
-        name = "Mean motif signal", col = c('blue','#F9E79F','red'),
-        row_names_side = "left", row_dend_side = "right", row_dend_width = unit(3, "mm"),
-        column_names_side = "top", column_dend_side = "bottom", column_dend_height = unit(3, "mm"), 
-        column_names_gp = grid::gpar(fontsize = 6),
-        row_names_gp = grid::gpar(fontsize = 6),
-        column_names_rot = 45,
+            width = unit(5, "mm")*NC,
+            height = unit(3, "mm")*NR,
 
-        width = unit(5, "mm")*NC,
-        height = unit(3, "mm")*NR,
+            # legend
+            heatmap_legend_param = list(
+                            title = 'Motif activity (Mean)',
+                            title_position = "leftcenter",
+                            direction = "horizontal",
+                            title_gp = gpar(fontsize = 5), 
+                            labels_gp = gpar(fontsize = 5),
+                            grid_width = unit(1.5, "mm"),
+                            grid_height = unit(1.5, "mm")
+                            )
+            )
 
-        # legend
-        heatmap_legend_param = list(
-                        title = 'Motif activity (Mean)',
-                        title_position = "leftcenter",
-                        direction = "horizontal",
-                        title_gp = gpar(fontsize = 5), 
-                        labels_gp = gpar(fontsize = 5),
-                        grid_width = unit(1.5, "mm"),
-                        grid_height = unit(1.5, "mm")
-                        )
-        )
-
-outfile <- paste0(outdir, '/out_heatmap.avgMotifSig.plag_family.v2.pdf')
-pdf(outfile, width = 2, height = 2, useDingbats=FALSE)
-draw(ht, heatmap_legend_side = "bottom")
-dev.off()
+    pdf(out, width = 2, height = 2, useDingbats=FALSE)
+    draw(ht, heatmap_legend_side = "bottom")
+    dev.off()
 
 }
 
