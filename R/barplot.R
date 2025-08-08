@@ -376,7 +376,7 @@ BarPlotGroupProportion <- function(
     breaks = waiver(),
     legend_nrow=1, 
     legend_position='bottom',
-    text_size=7, 
+    text_size=6, 
     title_size=8, 
     angle=45, 
     line_size=0.3,
@@ -407,7 +407,9 @@ BarPlotGroupProportion <- function(
         theme(plot.title = element_text(hjust = 0.5, size=title_size, face='bold')) +
         theme(text=element_text(size=text_size), 
             axis.title=element_text(size= text_size + 1), 
-            axis.text=element_text(size=text_size, color='black')) +
+            axis.text=element_text(size=text_size, color='black'),
+            axis.text.y = element_text(size = text_size - 1)
+        ) +
         scale_x_discrete(guide=guide_axis(angle=angle)) +
         theme(panel.background = element_blank(),
             legend.title=element_blank(),
