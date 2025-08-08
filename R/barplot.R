@@ -405,7 +405,7 @@ BarPlotGroupProportion <- function(
         theme_classic(base_line_size=line_size) + 
         labs(title=title, x='', y=y_lab) +
         theme(plot.title = element_text(hjust = 0.5, size=title_size, face='bold')) +
-        theme(text=element_text(size=text_size), 
+        theme(text=element_text(size=text_size, face='bold'), 
             axis.title=element_text(size= text_size + 1), 
             axis.text=element_text(size=text_size, color='black'),
             axis.text.y = element_text(size = text_size - 1)
