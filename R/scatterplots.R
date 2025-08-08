@@ -15,8 +15,8 @@ UMAPSignalSplit <- function(data=NULL,
                 title='',
                 legend_title='Signal',
                 legend_size=1,
-                colors=c("High"="#CB4335", "Middle"="#2E86C1", "Low"="#D7DBDD"),
-                breaks=c('High', 'Middle', 'Low'),
+                colors=c("High"="#CB4335", "Medium"="#2E86C1", "Low"="#D7DBDD"),
+                breaks=c('High', 'Medium', 'Low'),
                 ncol=6
 ){
     # decreasing or not by signal
@@ -31,7 +31,7 @@ UMAPSignalSplit <- function(data=NULL,
             theme_classic(base_line_size=0.1) +
 
             theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-            theme(axis.ticks = element_line(), axis.text.x=element_blank(), axis.text.y=element_blank()) +
+            theme(axis.ticks = element_blank(), axis.text.x=element_blank(), axis.text.y=element_blank()) +
             labs(title=title, x=x, y=y, color=group) +
             theme(plot.title = element_text(hjust = 0.5, size=8)) +
             theme(text = element_text(size = 6, face = "bold"))

@@ -452,8 +452,8 @@ BarPlotSignal <- function(
     y='ratio', 
     clusters='clusters',
     signal='group', 
-    colors=c("High"="#CB4335", "Middle"="#2E86C1", "Low"="#D7DBDD"),
-    breaks=c('High', 'Middle', 'Low'),
+    colors=c("High"="#CB4335", "Medium"="#2E86C1", "Low"="#D7DBDD"),
+    breaks=c('High', 'Medium', 'Low'),
     title='', 
     x_lab='',
     y_lab='The number of cells'
@@ -468,7 +468,7 @@ BarPlotSignal <- function(
     table <- data %>% count(.data[[clusters]], .data[[signal]], sort = TRUE)
     colnames(table) <- c('clusters', 'signal', 'n')
     
-    #colors <- c("High"="#CB4335", "Middle"="#2E86C1", "Low"="#D7DBDD")
+    #colors <- c("High"="#CB4335", "Medium"="#2E86C1", "Low"="#D7DBDD")
     p <- ggplot(table) +
             aes(x = clusters, y=n, fill=signal) +
             geom_bar(stat = "identity") + 
