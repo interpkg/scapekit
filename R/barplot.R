@@ -373,6 +373,7 @@ BarPlotGroupProportion <- function(
     title='', 
     y_lab='Proportion (%)', 
     colors='', 
+    breaks = waiver(),
     legend_nrow=1, 
     legend_position='bottom',
     text_size=7, 
@@ -418,7 +419,7 @@ BarPlotGroupProportion <- function(
 
     # change color
     if (length(colors) > 1){ 
-        p <- p + scale_fill_manual(values=colors)
+        p <- p + scale_fill_manual(breaks=breaks, values=colors)
     }
 
     # add text
@@ -430,6 +431,75 @@ BarPlotGroupProportion <- function(
 }
 
 
+
+
+
+
+#' Bar plot for signal
+#'
+#' @param data frame
+#'
+#' @return plot
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+BarPlotSignal <- function(
+    data, 
+    x='', 
+    y='ratio', 
+    clusters='clusters',
+    signal='group', 
+    colors=c("High"="#CB4335", "Middle"="#2E86C1", "Low"="#D7DBDD"),
+    breaks=c('High', 'Middle', 'Low'),
+    title='', 
+    x_lab='',
+    y_lab='The number of cells', 
+
+){   
+    # 1.order cell type
+    report <- as.data.frame(table(data[[clusters]]))
+    colnames(report) <- c('clusters', 'n')
+    order_clusters <- (dplyr::arrange(report, desc(n)))[[clusters]]
+
+    # 2.
+    table <- data %>% count(.data[[clusters]], .data[[signal]], sort = TRUE)
+    colnames(table) <- c('clusters', 'signal', 'n')
+    
+    #colors <- c("High"="#CB4335", "Middle"="#2E86C1", "Low"="#D7DBDD")
+    p <- ggplot(table) +
+            aes(x = clusters, y=n, fill=signal) +
+            geom_bar(stat = "identity") + 
+            coord_flip() +
+            scale_x_discrete(limits = rev(order_clusters))
+
+    p <- p + scale_fill_manual(breaks=breaks, values=colors)
+    
+    p <- p + theme_classic() + 
+            labs(title=title, x=x_lab, y=y_lab) +
+            theme(
+                axis.title = element_text(size = 7),
+                text = element_text(size=6),
+                axis.text.y = element_text(size = 6),
+                axis.title.x = element_text(size = 6),
+
+                legend.title = element_blank(),
+                legend.text = element_text(),
+                legend.key.size=unit(3,"mm"),
+                    
+                axis.line.y = element_blank(),
+                axis.line.x = element_line(color="grey"),
+                axis.ticks = element_line(color="grey"),
+
+                panel.grid.major = element_blank(), 
+                panel.grid.minor = element_blank(), 
+                panel.background = element_blank(), 
+                panel.border = element_blank()
+            )
+
+    return(p)
+}
 
 
 
