@@ -15,15 +15,14 @@ BarPlotGroupProportion(
   breaks = waiver(),
   legend_nrow = 1,
   legend_position = "bottom",
-  text_size = 7,
+  text_size = 6,
   title_size = 8,
   angle = 45,
   line_size = 0.3,
   add_label = FALSE,
   label_color = "black",
   label_size = 1.8,
-  factor_x = NULL,
-  factor_group = NULL
+  factor_x = NULL
 )
 }
 \arguments{

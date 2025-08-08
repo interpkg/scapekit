@@ -6,6 +6,51 @@
 #'
 #' @export
 #'
+UMAPSignalSplit <- function(data=NULL, 
+                x='UMAP_1', y='UMAP_2', 
+                sample='Sample', signal='signal', group='group',
+                sorted_sample='',
+                decreasing_group=FALSE,
+                pt_size=0.01,
+                title='',
+                ncol=6
+){
+    # decreasing or not by signal
+    data <- data[order(data[[signal]], decreasing=decreasing_group), ]
+
+    if (length(sorted_sample) > 2){
+        data[[sample]] <- factor(data[[sample]], levels=sorted_sample)
+    }
+    
+    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]])) + 
+            geom_point(aes(color=.data[[group]]), size=pt_size) +
+            theme_classic(base_line_size=0.1) +
+
+            theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+            theme(axis.ticks = element_line(), axis.text.x=element_blank(), axis.text.y=element_blank()) +
+            labs(title=title, x=x, y=y) +
+            theme(plot.title = element_text(hjust = 0.5, size=8)) +
+            theme(text = element_text(size = 6, face = "bold")) +
+            theme(legend.title=element_text(size=5, face = "bold"))
+
+    p <- p + facet_wrap(~ .data[[sample]], ncol=ncol) +
+        theme(strip.background = element_blank(), strip.text = element_text(size = 5.5, color = "black", face = "bold")) +
+        theme(panel.spacing=unit(1, 'mm', data=NULL))
+    
+    return(p)
+}
+
+
+
+
+
+
+#' Signal UMAPPlot Group
+#'
+#' @param data dataframe
+#'
+#' @export
+#'
 Signal_UMAPPlot <- function(data=NULL, x='UMAP_1', y='UMAP_2', group='cell_type2', title='',
     decreasing_group=FALSE, 
     point_size=0.01, color='rocket', color_direc=-1, color_limits=c(0.1, 3), 

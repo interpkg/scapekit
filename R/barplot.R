@@ -383,8 +383,7 @@ BarPlotGroupProportion <- function(
     add_label=FALSE, 
     label_color='black', 
     label_size=1.8,
-    factor_x=NULL, 
-    factor_group=NULL
+    factor_x=NULL
 ){   
     # call proportion
     dcount <- CallProportion(data, x, group)
@@ -396,8 +395,8 @@ BarPlotGroupProportion <- function(
     }
 
     # factor group
-    if (length(factor_group) > 1){
-        dcount[[group]] <- factor(dcount[[group]], levels=factor_group)
+    if (length(breaks) > 0){
+        dcount[[group]] <- factor(dcount[[group]], levels=breaks)
     }
 
     p <- ggplot(dcount, aes(x=.data[[x]], y=.data[[y]], fill=.data[[group]], group=.data[[group]])) + 
