@@ -455,7 +455,7 @@ BarPlotSignal <- function(
     breaks=c('High', 'Middle', 'Low'),
     title='', 
     x_lab='',
-    y_lab='The number of cells', 
+    y_lab='The number of cells'
 
 ){   
     # 1.order cell type

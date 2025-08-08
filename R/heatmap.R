@@ -758,51 +758,6 @@ HeatMap_Peaks_Groups <- function(data=NULL, metadata=NULL, top_anno_info=NULL, o
 
 
 
-#' ComplexHeatmap Cluster
-#'
-#' @param data dataframe
-#'
-#' @export
-#'
-ComplexHeatmap_Cluster <- function(data){
-
-    NR=dim(data)[1]
-    NC=dim(data)[2]
-
-    ht <- ComplexHeatmap::Heatmap(as.matrix(df_new), 
-            cluster_columns = F,
-            name = "Mean motif signal", col = c('blue','#F9E79F','red'),
-            row_names_side = "left", row_dend_side = "right", row_dend_width = unit(3, "mm"),
-            column_names_side = "top", column_dend_side = "bottom", column_dend_height = unit(3, "mm"), 
-            column_names_gp = grid::gpar(fontsize = 6),
-            row_names_gp = grid::gpar(fontsize = 6),
-            column_names_rot = 45,
-
-            width = unit(5, "mm")*NC,
-            height = unit(3, "mm")*NR,
-
-            # legend
-            heatmap_legend_param = list(
-                            title = 'Motif activity (Mean)',
-                            title_position = "leftcenter",
-                            direction = "horizontal",
-                            title_gp = gpar(fontsize = 5), 
-                            labels_gp = gpar(fontsize = 5),
-                            grid_width = unit(1.5, "mm"),
-                            grid_height = unit(1.5, "mm")
-                            )
-            )
-
-    
-    #width = 2, height = 2
-    #draw(ht, heatmap_legend_side = "bottom")
-
-}
-
-
-
-
-
 
 
 
