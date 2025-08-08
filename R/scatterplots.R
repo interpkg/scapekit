@@ -352,9 +352,8 @@ ScatterPlotWithCor <- function(
     p <- ggscatter(data, x = x, y = y, 
             color=dot_col, shape = 16, size = dot_size, alpha=alpha,
             add = "reg.line", add.params = list(color = reg_line_cor, size=lwd),
-            conf.int = TRUE, cor.coef = TRUE, cor.coef.size = 2.5,
-            cor.coeff.args = list(method = cor_method), ggtheme=clean_theme()
-           ) + 
+            conf.int = TRUE, cor.coef = TRUE, cor.coef.size = 2.5, ggtheme=clean_theme()) + 
+        stat_cor(aes(label = ..r.label..), method = cor_method) +
         theme_linedraw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
         theme(
            axis.ticks = element_line(linewidth = 0.3),
