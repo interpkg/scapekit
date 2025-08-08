@@ -36,7 +36,7 @@ UMAPSignalSplit <- function(data=NULL,
             theme(plot.title = element_text(hjust = 0.5, size=8)) +
             theme(text = element_text(size = 6, face = "bold"))
 
-    p <- p + scale_color_manual(name = legend_title, breaks=breaks, values=colors)
+    p <- p + scale_color_manual(name = legend_title, breaks=breaks, values=colors) +
             theme(legend.title=element_text(size=5, face = "bold")) +
             guides(color=guide_legend(override.aes=list(size=legend_size)))
 
