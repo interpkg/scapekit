@@ -66,11 +66,12 @@ DensityRidgesGradient_SplitGroup <- function(data, x1='', y='', split_group='', 
 #' @export
 #'
 DensityPlot_Pseudotime <- function(data, x='pseudotime', y='cell_type2', t1=3, t2=15)
-{
+{   
+    library(ggplot2)
     library(ggpubr)
     library(ggridges)
 
-    p <- ggplot(data, aes_string(x = x, y = y, fill = stat(x))) +
+    p <- ggplot(data, aes(x = .data[[x]], y = .data[[y]], fill = after_stat(x))) +
         geom_density_ridges_gradient(scale = 1, gradient_lwd = 1) +
         scale_x_continuous(expand = c(0, 0)) +
         scale_y_discrete(expand = expand_scale(mult = c(0.01, 0.25))) +
@@ -82,8 +83,7 @@ DensityPlot_Pseudotime <- function(data, x='pseudotime', y='cell_type2', t1=3, t
                 legend.text=element_text(size=5),
                 legend.key.height=unit(0.4,"line"),
                 legend.key.size = unit(0.8, 'lines')) +
-        theme(axis.ticks = element_line(linewidth = 0.1),
-              axis.ticks.length=unit(1, "mm")) +
+        theme(axis.ticks = element_line(linewidth = 0.1), axis.ticks.length=unit(1, "mm")) +
         geom_vline(xintercept = t1, linetype="dashed", color = "#696969", size=0.3) +
         geom_vline(xintercept = t2, linetype="dashed", color = "#696969", size=0.3)
 
