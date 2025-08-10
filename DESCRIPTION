@@ -12,7 +12,7 @@ Collate:
     'barplot.R'
     'boxplot.R'
     'convert.R'
+    'density.R'
     'groupplots.R'
     'heatmap.R'
-    'plots.R'
     'scatterplots.R'

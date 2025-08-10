@@ -15,6 +15,10 @@ UMAPSignalSplit(
   decreasing_group = FALSE,
   pt_size = 0.01,
   title = "",
+  legend_title = "Signal",
+  legend_size = 1,
+  colors = c(High = "#CB4335", Medium = "#2E86C1", Low = "#D7DBDD"),
+  breaks = c("High", "Medium", "Low"),
   ncol = 6
 )
 }
