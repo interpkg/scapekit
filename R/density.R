@@ -70,7 +70,7 @@ DensityPlot_Pseudotime <- function(data, x='pseudotime', y='cell_type2', t1=3, t
     library(ggpubr)
     library(ggridges)
 
-    p <- ggplot(data, aes_string(x = pseudotime, y = y, fill = stat(x))) +
+    p <- ggplot(data, aes_string(x = x, y = y, fill = stat(x))) +
         geom_density_ridges_gradient(scale = 1, gradient_lwd = 1) +
         scale_x_continuous(expand = c(0, 0)) +
         scale_y_discrete(expand = expand_scale(mult = c(0.01, 0.25))) +
