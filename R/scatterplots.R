@@ -170,7 +170,7 @@ ScatterPlotWithCor <- function(
 Scatter2DSigSplit <- function(
     data=NULL, 
     title='',
-    x='fus_score1',
+    x='zr_score1',
     y='cc_score1',
     group='group',
     x_lab="ZR-Fusion Target Gene signal",
@@ -178,10 +178,7 @@ Scatter2DSigSplit <- function(
     pt_size=0.5,
     text_size=5,
     split_by='cell_type2',
-    g1='YES',
-    g2='NO',
-    g1c='red',
-    g2c='gray',
+    colors=c('YES'='red', 'NO'='gray'),
     hlineL=0,
     hlineH=0.2,
     vlineL=0,
@@ -195,7 +192,7 @@ Scatter2DSigSplit <- function(
         guides(color = guide_legend(override.aes = list(size = 2))) +
         theme(legend.title = element_text(size=6, face='bold')) +
         theme(text=element_text(size=text_size, face='bold', color='black')) +
-        scale_colour_manual(values=c(g1=g1c, g2=g2c)) +
+        scale_colour_manual(values=colors) +
         geom_hline(yintercept=hlineL, linetype="dashed", size=lws) +
         geom_hline(yintercept=hlineH, linetype="dashed", size=lws) +
         geom_vline(xintercept=vlineL, linetype="dashed", size=lws) +      
