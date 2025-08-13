@@ -190,20 +190,20 @@ Scatter2DSigSplit <- function(
     xlim=c(-0.4, 0.5)
 ) {
     p <- ggscatter(data, x = x, y = y, color=group, size=pt_size) + 
-    labs(x=x_lab, y=y_lab) +
-    theme(plot.title = element_text(hjust = 0.5, size=7)) +
-    guides(color = guide_legend(override.aes = list(size = 2))) +
-    theme(legend.title = element_text(size=6, face='bold')) +
-    theme(text=element_text(size=text_size, face='bold', color='black')) +
-    scale_colour_manual(values=c(g1=g1c, g2=g2c)) +
-    geom_hline(yintercept=hlineL, linetype="dashed", size=lws) +
-    geom_hline(yintercept=hlineH, linetype="dashed", size=lws) +
-    geom_vline(xintercept=vlineL, linetype="dashed", size=lws) +      
-    geom_vline(xintercept=vlineH, linetype="dashed", size=lws) +
-    theme(legend.position = "none") +
-    xlim(xlim)
+        labs(x=x_lab, y=y_lab) +
+        theme(plot.title = element_text(hjust = 0.5, size=7)) +
+        guides(color = guide_legend(override.aes = list(size = 2))) +
+        theme(legend.title = element_text(size=6, face='bold')) +
+        theme(text=element_text(size=text_size, face='bold', color='black')) +
+        scale_colour_manual(values=c(g1=g1c, g2=g2c)) +
+        geom_hline(yintercept=hlineL, linetype="dashed", size=lws) +
+        geom_hline(yintercept=hlineH, linetype="dashed", size=lws) +
+        geom_vline(xintercept=vlineL, linetype="dashed", size=lws) +      
+        geom_vline(xintercept=vlineH, linetype="dashed", size=lws) +
+        theme(legend.position = "none") +
+        xlim(xlim)
 
-    p <- p + facet_grid(. ~ .data[[split_by]]) +
+    p <- p + facet_grid(cols = vars(split_by)) +
         theme(strip.background = element_blank(), strip.text = element_text(size=text_size))
 
     return(p)
