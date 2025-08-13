@@ -8,18 +8,20 @@ DensityPlot_Pseudotime(
   data,
   x = "pseudotime",
   y = "cell_type2",
-  t1 = 3,
-  t2 = 15
+  t1 = NULL,
+  t2 = NULL
 )
 }
 \arguments{
 \item{data}{frame}
 
+\item{x}{axis name}
+
 \item{y}{axis name}
 
-\item{x1}{axis name}
+\item{t1}{early time point}
 
-\item{group}{column}
+\item{t2}{later time point}
 }
 \value{
 plot

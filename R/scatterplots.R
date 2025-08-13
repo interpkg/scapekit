@@ -33,7 +33,6 @@ UMAPSignalSplit <- function(data=NULL,
     p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]])) + 
             geom_point(aes(color=.data[[group]]), size=pt_size) +
             theme_classic(base_line_size=0.1) +
-
             theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
             theme(axis.ticks = element_blank(), axis.text.x=element_blank(), axis.text.y=element_blank()) +
             labs(title=title, x=x, y=y, color=group) +
@@ -49,6 +48,45 @@ UMAPSignalSplit <- function(data=NULL,
         theme(panel.spacing=unit(1, 'mm', data=NULL))
     
     return(p)
+}
+
+
+
+
+
+#' UMAPSignal
+#'
+#' @param data dataframe
+#'
+#' @export
+#'
+UMAPSignal <- function(
+    data=NULL, 
+    x='UMAP_1', y='UMAP_2', signal='pseudotime', 
+    title='',
+    order_dec=FALSE, 
+    point_size=0.01, 
+    color='rocket', color_direc=-1,
+    show_umap_lab=FALSE
+){
+    # decreasing true
+    data <- data[order(data[[signal]], decreasing=order_dec), ]
+    
+    p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]])) + 
+            geom_point(aes(color=.data[[signal]]), size=point_size) +
+            theme_classic(base_line_size=0.1) +
+            theme(legend.title=element_blank(),
+                legend.key.width = unit(3, 'mm'),
+                legend.key.height = unit(4, 'mm')) +
+            theme(text=element_text(size=6)) +
+            ggtitle(title) +
+            theme(plot.title = element_text(hjust = 0.5, size=8, face = "bold"))
+
+    # color_opt: https://ggplot2.tidyverse.org/reference/scale_viridis.html
+    # 'magma','inferno','plasma','viridis','cividis','rocket','mako','turbo'
+    p <- p + scale_color_viridis_c(option=color, direction = color_direc, na.value='#E0E0E0')
+    
+    p
 }
 
 
