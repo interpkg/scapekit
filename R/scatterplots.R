@@ -145,6 +145,73 @@ ScatterPlotWithCor <- function(
 
 
 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
+#      Scatter - 2D
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
+
+
+#' Scatter2DSigSplit
+#'
+#' @param data data frame
+#' @param group group
+#' @param x axis x
+#' @param y axis y
+#' @param x_lab x lab
+#' @param y_lab y lab
+#' @param point_size point size 
+#' @param split_by split by
+#'
+#' @return plot
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+Scatter2DSigSplit <- function(
+    data=NULL, 
+    title='',
+    x='fus_score1',
+    y='cc_score1',
+    group='group',
+    x_lab="ZR-Fusion Target Gene signal",
+    y_lab="Cell-Cycling signal",
+    pt_size=0.5,
+    text_size=5,
+    split_by='cell_type2',
+    g1='YES',
+    g2='NO',
+    g1c='red',
+    g2c='gray',
+    hlineL=0,
+    hlineH=0.2,
+    vlineL=0,
+    vlineH=0.2,
+    lws=0.3,
+    xlim=c(-0.4, 0.5)
+) {
+    p <- ggscatter(data, x = x, y = y, color=group, size=pt_size) + 
+    labs(x=x_lab, y=y_lab) +
+    theme(plot.title = element_text(hjust = 0.5, size=7)) +
+    guides(color = guide_legend(override.aes = list(size = 2))) +
+    theme(legend.title = element_text(size=6, face='bold')) +
+    theme(text=element_text(size=text_size, face='bold', color='black')) +
+    scale_colour_manual(values=c(g1=g1c, g2=g2c)) +
+    geom_hline(yintercept=hlineL, linetype="dashed", size=lws) +
+    geom_hline(yintercept=hlineH, linetype="dashed", size=lws) +
+    geom_vline(xintercept=vlineL, linetype="dashed", size=lws) +      
+    geom_vline(xintercept=vlineH, linetype="dashed", size=lws) +
+    theme(legend.position = "none") +
+    xlim(xlim)
+
+    p <- p + facet_grid(. ~ .data[[split_by]]) +
+        theme(strip.background = element_blank(), strip.text = element_text(size=text_size))
+
+    return(p)
+}
+
+
+
+
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
