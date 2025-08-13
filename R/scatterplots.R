@@ -203,7 +203,7 @@ Scatter2DSigSplit <- function(
         theme(legend.position = "none") +
         xlim(xlim)
 
-    p <- p + facet_grid(cols = vars(split_by)) +
+    p <- p + facet_grid(cols = vars(.data[[split_by]])) +
         theme(strip.background = element_blank(), strip.text = element_text(size=text_size))
 
     return(p)
