@@ -175,7 +175,7 @@ Scatter2DSigSplit <- function(
     group='group',
     x_lab="ZR-Fusion Target Gene signal",
     y_lab="Cell-Cycling signal",
-    pt_size=0.5,
+    pt_size=0.2,
     text_size=5,
     split_by='cell_type2',
     colors=c('YES'='red', 'NO'='gray'),
