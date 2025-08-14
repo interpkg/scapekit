@@ -12,7 +12,7 @@ CorrectInfoByMarkerData <- function(
     library(dplyr)
     #1.markers
     diff_marker <- diff_marker %>% group_by(gene) %>% filter(n() == 1) %>% ungroup()
-    rownames(diff_marker) <- 1:nrow(diff_marker)
+    row.names(diff_marker) <- 1:nrow(diff_marker)
     diff_marker$index <- 1:nrow(diff_marker)
     
     #2.exp matrix
@@ -35,7 +35,7 @@ CorrectInfoByMarkerData <- function(
 #' @param group group name
 #' @param sort_group sorted group name
 #' @param col_group color group
-#' @param show_labels show genes
+#' @param show_gene show genes
 #' @param scaled scaled or not
 #'
 #' @export
@@ -47,7 +47,7 @@ Heatmap_DiffMarkers_Vert <- function(
     group='cluster',
     sort_group=NULL,
     col_group=NULL, 
-    show_labels=NULL,
+    show_gene=NULL,
     scaled=TRUE,
     gap=0.4
 ) { 
@@ -69,8 +69,8 @@ Heatmap_DiffMarkers_Vert <- function(
                 annotation_name_gp = gpar(fontsize = 6)
         )
 
-    gene_at <- diff_marker$index[diff_marker$gene %in% show_labels]
-    haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_labels, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5)) )
+    gene_at <- diff_marker$index[diff_marker$gene %in% show_gene]
+    haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_gene, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5)) )
 
     col_score = colorRamp2(c(-2, 0, 2), c("#2E86C1", "white", "#CB4335"))
     title_ht = "Row Z-Score"
@@ -141,7 +141,7 @@ Heatmap_Motif_Group2 <- function(
     sort_group=NULL,
     sample_id='',
     diff_marker=NULL,
-    show_labels=NULL,
+    show_gene=NULL,
     ht_title ='Motif Score', 
     col_group=NULL, 
     col_sample=NULL,
@@ -165,8 +165,8 @@ Heatmap_Motif_Group2 <- function(
                 annotation_name_gp = gpar(fontsize = 6, fontface="bold")
         )
 
-    gene_at <- diff_marker$index[diff_marker$gene %in% show_labels]
-    haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_labels, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5), padding = unit(1, "mm")) )
+    gene_at <- diff_marker$index[diff_marker$gene %in% show_gene]
+    haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_gene, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5), padding = unit(1, "mm")) )
 
 
 
