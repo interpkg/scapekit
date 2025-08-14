@@ -247,9 +247,8 @@ Heatmap_Motif_Group2 <- function(
     print(4)
 
     #-- draw plot
-    draw(ht, heatmap_legend_side = "bottom", annotation_legend_side = "bottom", annotation_legend_list = pd)
-
-    print(5)
+    #draw(ht, heatmap_legend_side = "bottom", annotation_legend_side = "bottom", annotation_legend_list = pd)
+    return(ht)
 }
 
 
