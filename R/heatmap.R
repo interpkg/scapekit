@@ -82,6 +82,8 @@ Heatmap_DiffMarkers_Vert <- function(
     gene_at <- diff_marker$index[diff_marker$gene %in% show_gene]
     haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_gene, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5)) )
 
+    print(1)
+
     col_score = circlize::colorRamp2(c(-2, 0, 2), c("#2E86C1", "white", "#CB4335"))
     title_ht = "Row Z-Score"
 
@@ -126,6 +128,8 @@ Heatmap_DiffMarkers_Vert <- function(
                         grid_height = unit(2, "mm")
                         )
             )
+
+    print(2)
 
     return(ht)
 }
@@ -177,7 +181,8 @@ Heatmap_Motif_Group2 <- function(
         )
 
     gene_at <- diff_marker$index[diff_marker$gene %in% show_gene]
-    haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_gene, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5), padding = unit(1, "mm")) )
+    #haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_gene, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5), padding = unit(1, "mm")) )
+    haR <- rowAnnotation(Motif=anno_mark(at=label_index, labels=labels, labels_gp=gpar(fontsize=7), padding = unit(1, "mm")))
 
     print(1)
 
