@@ -102,7 +102,7 @@ Heatmap_DiffMarkers_Vert <- function(
 
                 # split
                 #column_title = NULL,
-                column_title_gp = gpar(fontsize = 7),
+                column_title_gp = gpar(fontsize = 6),
                 column_split = factor(meta[[group]], levels=sort_group), 
                 cluster_column_slices = F,
                 column_gap = unit(gap, "mm"),
@@ -110,7 +110,7 @@ Heatmap_DiffMarkers_Vert <- function(
                 
                 # split rows to three groups
                 row_title = row_title, 
-                row_title_gp = gpar(fontsize = 7),
+                row_title_gp = gpar(fontsize = 6),
                 row_split = factor(diff_marker$cluster, levels=sort_group),
                 cluster_row_slices = F,
                 row_gap = unit(gap, "mm"),
@@ -172,8 +172,7 @@ HeatmapMotif_Group <- function(
 
     row_names <- rownames(d_mtx)
     marker_info <- marker_info[row_names,]
-    # add new row name to 'd_mtx'
-    # show - gene(motif_id)
+
     rownames(d_mtx) <- paste0(marker_info[[gene]], '(', row_names, ')')
 
     # show label
@@ -191,10 +190,10 @@ HeatmapMotif_Group <- function(
     haT <- HeatmapAnnotation(
                 Group = anno_simple(x = data_anno[[group]], simple_anno_size = unit(2, "mm"), col=col_group),
                 annotation_name_side = "right",
-                annotation_name_gp = gpar(fontsize = 7, fontface="bold")
+                annotation_name_gp = gpar(fontsize = 5, fontface="bold")
             )
 
-    haR <- rowAnnotation(Motif=anno_mark(at=label_index, labels=labels, labels_gp=gpar(fontsize=7), padding = unit(1, "mm")))
+    haR <- rowAnnotation(Motif=anno_mark(at=label_index, labels=labels, labels_gp=gpar(fontsize=5), padding = unit(1, "mm")))
 
 
     # z-score
@@ -209,13 +208,13 @@ HeatmapMotif_Group <- function(
                 col = col_score,
 
                 show_row_names = F,
-                row_names_gp = gpar(fontsize = 6),
+                row_names_gp = gpar(fontsize = 5),
                 show_row_dend = TRUE,
                 cluster_rows = TRUE,
 
                 show_column_names = F,
                 column_names_rot = 60,
-                column_names_gp = gpar(fontsize = 6, fontface="bold"),
+                column_names_gp = gpar(fontsize = 5, fontface="bold"),
                 show_column_dend = FALSE,
                 cluster_columns = TRUE,
 
@@ -230,7 +229,7 @@ HeatmapMotif_Group <- function(
                 column_split = col_split,
                 cluster_column_slices = FALSE,
                 column_gap = unit(gap, "mm"),
-                column_title_gp = grid::gpar(fontsize = 8, fontface="bold"),
+                column_title_gp = grid::gpar(fontsize = 6, fontface="bold"),
 
                 border = border,
                 
@@ -242,10 +241,10 @@ HeatmapMotif_Group <- function(
                         title = ht_title,
                         direction = "horizontal",
                         title_position = "lefttop",
-                        title_gp = gpar(fontsize = 8, fontface="bold"), 
-                        labels_gp = gpar(fontsize = 6),
-                        legend_width = unit(4, "cm"),
-                        grid_height = unit(3, "mm")
+                        title_gp = gpar(fontsize = 5, fontface="bold"), 
+                        labels_gp = gpar(fontsize = 5),
+                        legend_width = unit(2, "cm"),
+                        grid_height = unit(2, "mm")
                     )
             )
 
@@ -309,10 +308,10 @@ HeatmapMotif_Group2 <- function(
                 Group = anno_simple(x = data_anno[[group]], simple_anno_size = unit(2, "mm"), col=col_group),
                 Sample = anno_simple(x = data_anno[[sample_id]], simple_anno_size = unit(2, "mm"), col=col_sample),
                 annotation_name_side = "right",
-                annotation_name_gp = gpar(fontsize = 7, fontface="bold")
+                annotation_name_gp = gpar(fontsize = 5, fontface="bold")
             )
 
-    haR <- rowAnnotation(Motif=anno_mark(at=label_index, labels=labels, labels_gp=gpar(fontsize=7), padding = unit(1, "mm")))
+    haR <- rowAnnotation(Motif=anno_mark(at=label_index, labels=labels, labels_gp=gpar(fontsize=5), padding = unit(1, "mm")))
 
 
     # z-score
@@ -327,13 +326,13 @@ HeatmapMotif_Group2 <- function(
                 col = col_score,
 
                 show_row_names = F,
-                row_names_gp = gpar(fontsize = 6),
+                row_names_gp = gpar(fontsize = 5),
                 show_row_dend = TRUE,
                 cluster_rows = TRUE,
 
                 show_column_names = F,
                 column_names_rot = 60,
-                column_names_gp = gpar(fontsize = 6, fontface="bold"),
+                column_names_gp = gpar(fontsize = 5, fontface="bold"),
                 show_column_dend = FALSE,
                 cluster_columns = TRUE,
 
@@ -348,7 +347,7 @@ HeatmapMotif_Group2 <- function(
                 column_split = col_split,
                 cluster_column_slices = FALSE,
                 column_gap = unit(gap, "mm"),
-                column_title_gp = grid::gpar(fontsize = 8, fontface="bold"),
+                column_title_gp = grid::gpar(fontsize = 6, fontface="bold"),
 
                 border = border,
                 
@@ -360,16 +359,16 @@ HeatmapMotif_Group2 <- function(
                         title = ht_title,
                         direction = "horizontal",
                         title_position = "lefttop",
-                        title_gp = gpar(fontsize = 8, fontface="bold"), 
-                        labels_gp = gpar(fontsize = 6),
-                        legend_width = unit(4, "cm"),
-                        grid_height = unit(3, "mm")
+                        title_gp = gpar(fontsize = 5, fontface="bold"), 
+                        labels_gp = gpar(fontsize = 5),
+                        legend_width = unit(2, "cm"),
+                        grid_height = unit(2, "mm")
                     )
             )
 
 
-    lgd1 = Legend(title = "Group", labels = names(col_group), legend_gp = gpar(fill = col_group, fontsize = 6), nrow=1)
-    lgd2 = Legend(title = "Sample", labels = names(col_sample), legend_gp = gpar(fill = col_sample, fontsize = 6), nrow=1)
+    lgd1 = Legend(title = "Group", labels = names(col_group), legend_gp = gpar(fill = col_group, fontsize = 5), nrow=1)
+    lgd2 = Legend(title = "Sample", labels = names(col_sample), legend_gp = gpar(fill = col_sample, fontsize = 5), nrow=1)
     pd = packLegend(list = list(lgd1, lgd2), direction = "horizontal", max_width = unit(10, "cm"), column_gap = unit(5, "mm"), row_gap = unit(5, "mm"))
 
     #-- draw plot
