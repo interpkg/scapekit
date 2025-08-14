@@ -56,7 +56,10 @@ Heatmap_DiffMarkers_Vert <- function(
     mtx <- data_list[[1]]
     meta <- data_list[[2]]
     diff_marker <- data_list[[3]]
-    
+    print('After Correction:')
+    print(paste0('Matrix: ', dim(mtx)))
+    print(paste0('Meta: ', dim(meta)))
+    print(paste0('Markers: ', dim(diff_marker)))
 
     # z-score: row z-score
     if (scaled){ mtx <- t(scale(t(mtx))) }
@@ -72,7 +75,7 @@ Heatmap_DiffMarkers_Vert <- function(
     gene_at <- diff_marker$index[diff_marker$gene %in% show_gene]
     haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_gene, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5)) )
 
-    col_score = colorRamp2(c(-2, 0, 2), c("#2E86C1", "white", "#CB4335"))
+    col_score = circlize::colorRamp2(c(-2, 0, 2), c("#2E86C1", "white", "#CB4335"))
     title_ht = "Row Z-Score"
 
     ht <- Heatmap(
