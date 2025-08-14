@@ -7,16 +7,16 @@
 CorrectInfoByMarkerData <- function(
     mtx=NULL,
     meta=NULL,
-    diff_marker=NULL
+    marker_info=NULL
 ){
     library(dplyr)
     #1.markers
-    diff_marker <- as.data.frame(diff_marker) %>% group_by(gene) %>% filter(n() == 1) %>% ungroup()
-    rownames(diff_marker) <- 1:nrow(diff_marker)
-    diff_marker$index <- 1:nrow(diff_marker)
+    marker_info <- as.data.frame(marker_info) %>% group_by(gene) %>% filter(n() == 1) %>% ungroup()
+    rownames(marker_info) <- 1:nrow(marker_info)
+    marker_info$index <- 1:nrow(marker_info)
     
     #2.exp matrix
-    marker_genes <- diff_marker$gene
+    marker_genes <- marker_info$gene
     mtx <- as.data.frame(mtx)[marker_genes, ]
 
     #3.meta
@@ -28,9 +28,9 @@ CorrectInfoByMarkerData <- function(
     #print('Meta')
     #print(dim(meta))
     #print('Markers')
-    #print(dim(diff_marker))
+    #print(dim(marker_info))
 
-    return(list(mtx, meta, diff_marker))
+    return(list(mtx, meta, marker_info))
 }
 
 
@@ -39,7 +39,7 @@ CorrectInfoByMarkerData <- function(
 #'
 #' @param data dataframe
 #' @param meta top annotation group-1
-#' @param diff_marker top annotation group-2
+#' @param marker_info top annotation group-2
 #' @param group group name
 #' @param sort_group sorted group name
 #' @param col_group color group
@@ -51,7 +51,7 @@ CorrectInfoByMarkerData <- function(
 Heatmap_DiffMarkers_Vert <- function(
     data=NULL,
     meta=NULL,
-    diff_marker=NULL,
+    marker_info=NULL,
     group='cluster',
     sort_group=NULL,
     col_group=NULL, 
@@ -63,10 +63,10 @@ Heatmap_DiffMarkers_Vert <- function(
     gap=0.4
 ) { 
 
-    data_list <- CorrectInfoByMarkerData(mtx=data, meta=meta, diff_marker=diff_marker)
+    data_list <- CorrectInfoByMarkerData(mtx=data, meta=meta, marker_info=marker_info)
     mtx <- data_list[[1]]
     meta <- data_list[[2]]
-    diff_marker <- data_list[[3]]
+    marker_info <- data_list[[3]]
 
     # z-score: row z-score
     if (scaled){ mtx <- t(scale(t(mtx))) }
@@ -79,7 +79,7 @@ Heatmap_DiffMarkers_Vert <- function(
                 annotation_name_gp = gpar(fontsize = 6)
         )
 
-    gene_at <- diff_marker$index[diff_marker$gene %in% show_gene]
+    gene_at <- marker_info$index[marker_info$gene %in% show_gene]
     haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_gene, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5)) )
 
     print(1)
@@ -111,7 +111,7 @@ Heatmap_DiffMarkers_Vert <- function(
                 # split rows to three groups
                 row_title = row_title, 
                 row_title_gp = gpar(fontsize = 6),
-                row_split = factor(diff_marker$cluster, levels=sort_group),
+                row_split = factor(marker_info$cluster, levels=sort_group),
                 cluster_row_slices = F,
                 row_gap = unit(gap, "mm"),
 
@@ -141,6 +141,108 @@ Heatmap_DiffMarkers_Vert <- function(
 ##########################################
 ##         Motif
 ##########################################
+
+#' ComplexHeatmap Motif-TF Group-2x
+#'
+#' @param data dataframe
+#'
+#' @export
+#'
+HeatmapMotif_GroupX <- function(
+    data=NULL, 
+    meta=NULL,
+    group='cell_type2',
+    marker_info=NULL,
+    levels=NULL,
+    scaled=TRUE,
+    col_group=NULL,
+    labels=NULL,
+    gap=0.2,
+    border=FALSE,
+    ht_title = "Row Z-Score"
+){
+    data_list <- CorrectInfoByMarkerData(mtx=data, meta=meta, marker_info=marker_info)
+    d_mtx <- data_list[[1]]
+    data_info <- data_list[[2]]
+    marker_info <- data_list[[3]]
+
+
+    #row_names <- rownames(d_mtx)
+    #rownames(d_mtx) <- paste0(marker_info$TF, '(', row_names, ')')
+    marker_info$TF_motif <- paste0(marker_info$TF, '(', marker_info$gene, ')')
+    rownames(d_mtx) <- marker_info$TF_motif
+
+    # split
+    row_split <- factor(marker_info$cluster, levels = levels)
+    col_split <- factor(data_info[[group]], levels = levels)
+
+    haT <- HeatmapAnnotation(
+                Group = anno_simple(x = data_info[[group]], simple_anno_size = unit(2, "mm"), col=col_group),
+                annotation_name_side = "right",
+                annotation_name_gp = gpar(fontsize = 5, fontface="bold")
+            )
+
+    label_at <- marker_info$index[marker_info$TF_motif %in% labels]
+    haR <- rowAnnotation(Motif=anno_mark(at=label_at, labels=labels, labels_gp=gpar(fontsize=5), padding = unit(1, "mm")))
+
+    # z-score
+    if (scaled){ d_mtx = t(scale(t(d_mtx))) }
+
+    col_score = circlize::colorRamp2(c(-2, -1, 0, 1, 2), c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF"))
+
+    ht <- Heatmap(
+                d_mtx,
+                
+                col = col_score,
+
+                show_row_names = F,
+                row_names_gp = gpar(fontsize = 5),
+                show_row_dend = TRUE,
+                cluster_rows = TRUE,
+
+                show_column_names = F,
+                column_names_rot = 60,
+                column_names_gp = gpar(fontsize = 5, fontface="bold"),
+                show_column_dend = FALSE,
+                cluster_columns = TRUE,
+
+                # split row
+                row_split = row_split,
+                row_gap = unit(gap, "mm"),
+                row_title = NULL,
+                cluster_row_slices = FALSE,
+                #row_title_gp = grid::gpar(fontsize = 7),
+                
+                # split column
+                column_split = col_split,
+                cluster_column_slices = FALSE,
+                column_gap = unit(gap, "mm"),
+                column_title_gp = grid::gpar(fontsize = 6, fontface="bold"),
+
+                border = border,
+                
+                top_annotation = haT,
+                right_annotation = haR,
+
+                # legend
+                heatmap_legend_param = list(
+                        title = ht_title,
+                        direction = "horizontal",
+                        title_position = "lefttop",
+                        title_gp = gpar(fontsize = 5, fontface="bold"), 
+                        labels_gp = gpar(fontsize = 5),
+                        legend_width = unit(2, "cm"),
+                        grid_height = unit(2, "mm")
+                    )
+            )
+
+    draw(ht, heatmap_legend_side = "bottom")
+}
+
+
+
+
+
 
 
 #' ComplexHeatmap Motif-TF Group-2x
@@ -250,7 +352,6 @@ HeatmapMotif_Group <- function(
 
     draw(ht, heatmap_legend_side = "bottom")
 }
-
 
 
 
