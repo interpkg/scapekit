@@ -179,9 +179,11 @@ Heatmap_Motif_Group2 <- function(
     gene_at <- diff_marker$index[diff_marker$gene %in% show_gene]
     haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_gene, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5), padding = unit(1, "mm")) )
 
-
+    print(1)
 
     col_score <- circlize::colorRamp2(c(-2, -1, 0, 1, 2), c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF"))
+
+    print(2)
 
     ht <- Heatmap(
                 as.matrix(mtx),
@@ -199,6 +201,13 @@ Heatmap_Motif_Group2 <- function(
                 show_column_dend = T,
                 cluster_columns = T,
 
+                # split column
+                column_split = factor(meta[[group]], levels=sort_group),
+                cluster_column_slices = FALSE,
+                column_gap = unit(gap, "mm"),
+                column_title_gp = grid::gpar(fontsize = 8, fontface="bold"),
+
+
                 # split row
                 row_split = factor(diff_marker$cluster, levels=sort_group),
                 row_gap = unit(gap, "mm"),
@@ -206,11 +215,6 @@ Heatmap_Motif_Group2 <- function(
                 cluster_row_slices = FALSE,
                 #row_title_gp = grid::gpar(fontsize = 7),
                 
-                # split column
-                column_split = factor(meta[[group]], levels=sort_group),
-                cluster_column_slices = FALSE,
-                column_gap = unit(gap, "mm"),
-                column_title_gp = grid::gpar(fontsize = 8, fontface="bold"),
 
                 border = border,
                 
@@ -229,13 +233,18 @@ Heatmap_Motif_Group2 <- function(
                     )
             )
 
+    print(3)
+
     lgd1 = Legend(title = "Group", labels = names(col_group), legend_gp = gpar(fill = col_group, fontsize = 6), nrow=1)
     lgd2 = Legend(title = "Sample", labels = names(col_sample), legend_gp = gpar(fill = col_sample, fontsize = 6), nrow=1)
     pd = packLegend(list = list(lgd1, lgd2), direction = "horizontal", max_width = unit(10, "cm"), column_gap = unit(5, "mm"), row_gap = unit(5, "mm"))
 
+    print(4)
+
     #-- draw plot
     draw(ht, heatmap_legend_side = "bottom", annotation_legend_side = "bottom", annotation_legend_list = pd)
 
+    print(5)
 }
 
 
