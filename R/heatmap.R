@@ -22,6 +22,14 @@ CorrectInfoByMarkerData <- function(
     #3.meta
     meta <- as.data.frame(meta)[colnames(mtx), ]
 
+    #print('After Correction:')
+    #print('Matrix')
+    #print(dim(mtx))
+    #print('Meta')
+    #print(dim(meta))
+    #print('Markers')
+    #print(dim(diff_marker))
+
     return(list(mtx, meta, diff_marker))
 }
 
@@ -49,6 +57,9 @@ Heatmap_DiffMarkers_Vert <- function(
     col_group=NULL, 
     show_gene=NULL,
     scaled=TRUE,
+    row_title='Differentially expressed genes',
+    show_column_dend=FALSE,
+    legend_title='Expression\nZ-score',
     gap=0.4
 ) { 
 
@@ -56,14 +67,6 @@ Heatmap_DiffMarkers_Vert <- function(
     mtx <- data_list[[1]]
     meta <- data_list[[2]]
     diff_marker <- data_list[[3]]
-    
-    print('After Correction-')
-    print('Matrix')
-    print(dim(mtx))
-    print('Meta')
-    print(dim(meta))
-    print('Markers')
-    print(dim(diff_marker))
 
     # z-score: row z-score
     if (scaled){ mtx <- t(scale(t(mtx))) }
@@ -92,7 +95,7 @@ Heatmap_DiffMarkers_Vert <- function(
                 cluster_rows = T,
 
                 show_column_names = F,
-                show_column_dend = F,
+                show_column_dend = show_column_dend,
                 cluster_columns = T,
 
                 # split
@@ -104,7 +107,7 @@ Heatmap_DiffMarkers_Vert <- function(
                 
                 
                 # split rows to three groups
-                row_title = 'Differentially expressed genes', 
+                row_title = row_title, 
                 row_title_gp = gpar(fontsize = 7),
                 row_split = factor(diff_marker$cluster, levels=sort_group),
                 cluster_row_slices = F,
@@ -116,7 +119,7 @@ Heatmap_DiffMarkers_Vert <- function(
 
                 # legend
                 heatmap_legend_param = list(
-                        title = 'Expression\nZ-score',
+                        title = legend_title,
                         title_gp = gpar(fontsize = 5), 
                         labels_gp = gpar(fontsize = 5),
                         grid_width = unit(2, "mm"),
@@ -144,12 +147,13 @@ Heatmap_DiffMarkers_Vert <- function(
 Heatmap_Motif_Group2 <- function(
     data=NULL, 
     meta=NULL,
+    diff_marker=NULL,
     group='', 
     sort_group=NULL,
     sample_id='',
-    diff_marker=NULL,
     show_gene=NULL,
     ht_title ='Motif Score', 
+    scaled=TRUE,
     col_group=NULL, 
     col_sample=NULL,
     gap=0.4,
