@@ -182,7 +182,7 @@ Heatmap_Motif_Group2 <- function(
 
     gene_at <- diff_marker$index[diff_marker$gene %in% show_gene]
     #haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_gene, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5), padding = unit(1, "mm")) )
-    haR <- rowAnnotation(Motif=anno_mark(at=label_index, labels=labels, labels_gp=gpar(fontsize=7), padding = unit(1, "mm")))
+    haR <- rowAnnotation(Motif=anno_mark(at=gene_at, labels=show_gene, labels_gp=gpar(fontsize=7), padding = unit(1, "mm")))
 
     print(1)
 
