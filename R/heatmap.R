@@ -8,7 +8,7 @@ CorrectInfoByMarkerData <- function(
     library(dplyr)
     #1.markers
     diff_marker <- diff_marker %>% group_by(gene) %>% filter(n() == 1) %>% ungroup()
-    rownames(diff_marker) <- NULL
+    rownames(diff_marker) <- 1:nrow(diff_marker)
     
     #2.exp matrix
     marker_genes <- diff_marker$gene
