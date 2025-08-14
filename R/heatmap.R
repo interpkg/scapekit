@@ -9,6 +9,7 @@ CorrectInfoByMarkerData <- function(
     #1.markers
     diff_marker <- diff_marker %>% group_by(gene) %>% filter(n() == 1) %>% ungroup()
     rownames(diff_marker) <- 1:nrow(diff_marker)
+    diff_marker$index <- 1:nrow(diff_marker)
     
     #2.exp matrix
     marker_genes <- diff_marker$gene
@@ -65,7 +66,7 @@ Heatmap_DiffMarkers_Vertical <- function(
 
     
 
-    gene_at <- rownames(diff_marker)[diff_marker$gene %in% show_gene]
+    gene_at <- diff_marker$index[diff_marker$gene %in% show_gene]
     gene_anno <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_gene, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5)) )
 
     col_zscore = colorRamp2(c(-2, 0, 2), c("#2E86C1", "white", "#CB4335"))
