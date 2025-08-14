@@ -247,10 +247,148 @@ Heatmap_Motif_Group2 <- function(
     print(4)
 
     #-- draw plot
-    #draw(ht, heatmap_legend_side = "bottom", annotation_legend_side = "bottom", annotation_legend_list = pd)
-    return(ht)
+    draw(ht, heatmap_legend_side = "bottom", annotation_legend_side = "bottom", annotation_legend_list = pd)
 }
 
 
+
+
+
+
+
+
+#' ComplexHeatmap Motif-TF Group-2x
+#'
+#' @param data dataframe
+#'
+#' @export
+#'
+ComplexHeatmapMotif_Group2x <- function(
+    data=NULL, group='', sample_id='',
+    ht_title ='Motif Score', col_group=NULL, col_sample=NULL,
+    zscore=FALSE,
+    cluster_columns=TRUE,
+    cluster_rows=FALSE,
+    show_row_dend=FALSE,
+    show_column_dend=TRUE,
+    feature_info=NULL, gene='gene',
+    labels=NULL,
+    levels=NULL,
+    limits=NULL,
+    colors=c("blue", "white", "red"),
+    gap=0.4,
+    border=FALSE,
+    max_cutoff=NULL
+){
+
+    top_anno <- data[,c(sample_id, group)]
+    col_names <- colnames(data)
+    features <- col_names[!colnames(data) %in% c(sample_id, group)]
+    d_mtx <- as.matrix(t(data[, features]))
+
+    row_names <- rownames(d_mtx)
+    feature_info_sorted <- feature_info[row_names,]
+    # add new row name to 'd_mtx'
+    # show - gene(motif_id)
+    rownames(d_mtx) <- paste0(feature_info_sorted[[gene]], '(', row_names, ')')
+
+    # show label
+    motif_set <- as.data.frame(row.names(d_mtx))
+    colnames(motif_set) <- 'motif'
+    motif_set$index <- rownames(motif_set)
+    label_index <- as.numeric(motif_set[motif_set$motif %in% labels, 'index'])
+
+    # split
+    row_split <- NULL
+    col_split <- NULL
+    if (length(levels) > 0){
+        row_split <- factor(feature_info_sorted[[group]], levels = levels)
+        col_split <- factor(top_anno[[group]], levels = levels)
+    } else {
+        row_split <- factor(feature_info_sorted[[group]], levels = unique(feature_info_sorted[[group]]))
+        col_split <- factor(top_anno[[group]], levels = unique(top_anno[[group]]))
+    }
+    
+
+    haT <- HeatmapAnnotation(
+                Group = anno_simple(x = top_anno[[group]], simple_anno_size = unit(2, "mm"), col=col_group),
+                Sample = anno_simple(x = top_anno[[sample_id]], simple_anno_size = unit(2, "mm"), col=col_sample),
+                annotation_name_side = "right",
+                annotation_name_gp = gpar(fontsize = 7, fontface="bold")
+            )
+
+    haR <- rowAnnotation(Motif=anno_mark(at=label_index, labels=labels, labels_gp=gpar(fontsize=7), padding = unit(1, "mm")))
+
+
+    # z-score
+    if (zscore){
+        d_mtx = t(scale(t(d_mtx))) 
+        ht_title = "Row Z-Score"
+    }
+
+
+    # customized color set
+    color_set <- NULL
+    if (length(limits) > 0){
+        color_set <- circlize::colorRamp2(limits, colors)
+    } else {
+        color_set <- circlize::colorRamp2(c(min(d_mtx), 0, max(d_mtx)), colors)
+    }
+
+
+    ht_map <- Heatmap(
+                d_mtx,
+                
+                col = color_set,
+
+                show_row_names = F,
+                row_names_gp = gpar(fontsize = 6),
+                show_row_dend = show_row_dend,
+                cluster_rows = cluster_rows,
+
+                show_column_names = F,
+                column_names_rot = 60,
+                column_names_gp = gpar(fontsize = 6, fontface="bold"),
+                show_column_dend = show_column_dend,
+                cluster_columns = cluster_columns,
+
+                # split row
+                row_split = row_split,
+                row_gap = unit(gap, "mm"),
+                row_title = NULL,
+                cluster_row_slices = FALSE,
+                #row_title_gp = grid::gpar(fontsize = 7),
+                
+                # split column
+                column_split = col_split,
+                cluster_column_slices = FALSE,
+                column_gap = unit(gap, "mm"),
+                column_title_gp = grid::gpar(fontsize = 8, fontface="bold"),
+
+                border = border,
+                
+                top_annotation = haT,
+                right_annotation = haR,
+
+                # legend
+                heatmap_legend_param = list(
+                        title = ht_title,
+                        direction = "horizontal",
+                        title_position = "lefttop",
+                        title_gp = gpar(fontsize = 8, fontface="bold"), 
+                        labels_gp = gpar(fontsize = 6),
+                        legend_width = unit(4, "cm"),
+                        grid_height = unit(3, "mm")
+                    )
+            )
+
+    lgd1 = Legend(title = "Group", labels = names(col_group), legend_gp = gpar(fill = col_group, fontsize = 6), nrow=1)
+    lgd2 = Legend(title = "Sample", labels = names(col_sample), legend_gp = gpar(fill = col_sample, fontsize = 6), nrow=1)
+    pd = packLegend(list = list(lgd1, lgd2), direction = "horizontal", max_width = unit(10, "cm"), column_gap = unit(5, "mm"), row_gap = unit(5, "mm"))
+
+    #-- draw plot
+    draw(ht_map, heatmap_legend_side = "bottom", annotation_legend_side = "bottom", annotation_legend_list = pd)
+
+}
 
 

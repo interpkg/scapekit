@@ -11,8 +11,11 @@ Heatmap_DiffMarkers_Vert(
   group = "cluster",
   sort_group = NULL,
   col_group = NULL,
-  show_labels = NULL,
+  show_gene = NULL,
   scaled = TRUE,
+  row_title = "Differentially expressed genes",
+  show_column_dend = FALSE,
+  legend_title = "Expression\\nZ-score",
   gap = 0.4
 )
 }
@@ -29,7 +32,7 @@ Heatmap_DiffMarkers_Vert(
 
 \item{col_group}{color group}
 
-\item{show_labels}{show genes}
+\item{show_gene}{show genes}
 
 \item{scaled}{scaled or not}
 }
