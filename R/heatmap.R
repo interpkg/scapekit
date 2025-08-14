@@ -56,10 +56,14 @@ Heatmap_DiffMarkers_Vert <- function(
     mtx <- data_list[[1]]
     meta <- data_list[[2]]
     diff_marker <- data_list[[3]]
-    print('After Correction:')
-    print(paste0('Matrix: ', dim(mtx)))
-    print(paste0('Meta: ', dim(meta)))
-    print(paste0('Markers: ', dim(diff_marker)))
+    
+    print('After Correction-')
+    print('Matrix')
+    print(dim(mtx))
+    print('Meta')
+    print(dim(meta))
+    print('Markers')
+    print(dim(diff_marker))
 
     # z-score: row z-score
     if (scaled){ mtx <- t(scale(t(mtx))) }
