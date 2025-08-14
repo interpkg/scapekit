@@ -12,7 +12,7 @@ CorrectInfoByMarkerData <- function(
     
     #2.exp matrix
     marker_genes <- diff_marker$gene
-    mtx <- data[marker_genes, ]
+    mtx <- mtx[marker_genes, ]
 
     #3.meta
     meta <- meta[colnames(mtx), ]
