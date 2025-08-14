@@ -20,7 +20,7 @@ CorrectInfoByMarkerData <- function(
     mtx <- as.data.frame(mtx)[marker_genes, ]
 
     #3.meta
-    meta <- meta[colnames(mtx), ]
+    meta <- as.data.frame(meta)[colnames(mtx), ]
 
     return(list(mtx, meta, diff_marker))
 }
