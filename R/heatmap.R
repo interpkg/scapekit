@@ -184,7 +184,8 @@ HeatmapMotif_Group <- function(
                 annotation_name_gp = gpar(fontsize = 5, fontface="bold")
             )
 
-    label_at <- marker_info$index[marker_info$TF_motif %in% labels]
+    #label_at <- marker_info$index[marker_info$TF_motif %in% labels]
+    label_at <- which(rownames(d_mtx) %in% labels)
     haR <- rowAnnotation(Motif=anno_mark(at=label_at, labels=labels, labels_gp=gpar(fontsize=5), padding = unit(1, "mm"), side = "right"))
 
 
@@ -214,7 +215,6 @@ HeatmapMotif_Group <- function(
                 row_gap = unit(gap, "mm"),
                 row_title = NULL,
                 cluster_row_slices = FALSE,
-                row_names_centered = TRUE,
                 #row_title_gp = grid::gpar(fontsize = 7),
                 
                 # split column
