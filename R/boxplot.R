@@ -41,7 +41,8 @@ GGboxplotPval <- function(
 
     if (add_test){
         #p <- p + stat_compare_means(comparisons = data, label.y = max(data[[y]])*1.2, size=2)
-        p <- p + stat_compare_means(aes(group = .data[[group]]), label = "p.signif")
+        max_y <- max(data[[y]]) * 0.9
+        p <- p + stat_compare_means(aes(group = .data[[group]]), label = "p.signif", label.y = max_y)
     }
 
     if (nolegend){
