@@ -68,9 +68,9 @@ ComplexHeatmap_Group <- function(
     marker_info <- data_list[[3]]
 
     dir.create(outdir)
-    write.table(paste0(outdir, '/matrix.tsv'), sep='\t', quote=F, col.names=NA)
-    write.table(paste0(outdir, '/data_info.xls'), sep='\t', quote=F, col.names=NA)
-    write.table(paste0(outdir, '/marker_info.xls'), sep='\t', quote=F, col.names=NA)
+    write.table(d_mtx, paste0(outdir, '/matrix.tsv'), sep='\t', quote=F, col.names=NA)
+    write.table(data_info, paste0(outdir, '/data_info.xls'), sep='\t', quote=F, col.names=NA)
+    write.table(marker_info, paste0(outdir, '/marker_info.xls'), sep='\t', quote=F, col.names=NA)
 
 
     # Set row names
