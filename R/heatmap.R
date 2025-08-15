@@ -46,6 +46,7 @@ ComplexHeatmap_Group <- function(
     meta = NULL,
     group = 'cell_type2',
     marker_info = NULL,
+    TF = TRUE,
     levels = NULL,
     scaled = TRUE,
     col_group = NULL,
@@ -73,9 +74,12 @@ ComplexHeatmap_Group <- function(
     write.table(marker_info, paste0(outdir, '/marker_info.xls'), sep='\t', quote=F, col.names=NA)
 
 
-    # Set row names
-    marker_info$TF_motif <- paste0(marker_info$TF, '(', marker_info$gene, ')')
-    rownames(d_mtx) <- marker_info$TF_motif
+    # Set row names  
+    if (TF){
+        marker_info$TF_motif <- paste0(marker_info$TF, '(', marker_info$gene, ')')
+        rownames(d_mtx) <- marker_info$TF_motif
+    }
+    
 
     # Split factors
     row_split <- factor(marker_info$cluster, levels = levels)
