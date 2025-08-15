@@ -155,7 +155,8 @@ ComplexHeatmap_Group <- function(
         )
     )
 
-    draw(ht, heatmap_legend_side = "bottom")
+    return(ht)
+    #draw(ht, heatmap_legend_side = "bottom")
 }
 
 
