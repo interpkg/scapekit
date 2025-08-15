@@ -149,26 +149,27 @@ Heatmap_DiffMarkers_Vert <- function(
 #' @export
 #'
 HeatmapMotif_Group <- function(
-    data=NULL, 
-    meta=NULL,
-    group='cell_type2',
-    marker_info=NULL,
-    levels=NULL,
-    scaled=TRUE,
-    col_group=NULL,
-    labels=NULL,
-    cluster_rows=TRUE,
-    show_row_dend=TRUE,
-    gap=0.2,
-    border=FALSE,
+    data = NULL, 
+    meta = NULL,
+    group = 'cell_type2',
+    marker_info = NULL,
+    levels = NULL,
+    scaled = TRUE,
+    col_group = NULL,
+    labels = NULL,
+    cluster_rows = TRUE,
+    show_row_dend = TRUE,
+    gap = 0.2,
+    border = FALSE,
     ht_title = "Row Z-Score"
 ){
-    # Prepare data
-    data_list <- CorrectInfoByMarkerData(mtx=data, meta=meta, marker_info=marker_info)
+    # Process data
+    data_list <- CorrectInfoByMarkerData(mtx = data, meta = meta, marker_info = marker_info)
     d_mtx <- data_list[[1]]
     data_info <- data_list[[2]]
     marker_info <- data_list[[3]]
 
+    # Set row names
     marker_info$TF_motif <- paste0(marker_info$TF, '(', marker_info$gene, ')')
     rownames(d_mtx) <- marker_info$TF_motif
 
@@ -178,83 +179,78 @@ HeatmapMotif_Group <- function(
 
     # Top annotation
     haT <- HeatmapAnnotation(
-        Group = anno_simple(x = data_info[[group]], 
-                            simple_anno_size = unit(2, "mm"), 
-                            col=col_group),
+        Group = anno_simple(x = data_info[[group]], simple_anno_size = unit(2, "mm"), col = col_group),
         annotation_name_side = "right",
-        annotation_name_gp = gpar(fontsize = 5, fontface="bold")
+        annotation_name_gp = gpar(fontsize = 5, fontface = "bold")
     )
 
-    # Z-score transform
-    if (scaled){ d_mtx <- t(scale(t(d_mtx))) }
+    # Right annotation (Motif labels)
+    if (is.null(labels) || length(labels) == 0) {
+        warning("No labels provided for right annotation. Using all row names.")
+        label_at <- seq_len(nrow(d_mtx))
+        labels <- rownames(d_mtx)
+    } else {
+        label_at <- which(rownames(d_mtx) %in% labels)
+        if (length(label_at) == 0) {
+            stop("No matching labels found in rownames(d_mtx). Check the 'labels' input.")
+        }
+        labels <- rownames(d_mtx)[label_at]  # Ensure labels match the indices
+    }
 
-    col_score <- circlize::colorRamp2(
-        c(-2, -1, 0, 1, 2),
-        c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF")
+    haR <- rowAnnotation(
+        Motif = anno_mark(
+            at = label_at,
+            labels = labels,
+            labels_gp = gpar(fontsize = 6, fontface = "plain"),  # Increased font size for clarity
+            padding = unit(2, "mm"),  # Increased padding for better spacing
+            side = "right"
+        )
     )
 
-    # Base heatmap (no right_annotation here)
+    # Z-score scaling
+    if (scaled) { d_mtx <- t(scale(t(d_mtx))) }
+
+    # Color scale
+    col_score <- circlize::colorRamp2(c(-2, -1, 0, 1, 2), c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF"))
+
+    # Heatmap
     ht <- Heatmap(
         d_mtx,
         col = col_score,
-
         show_row_names = FALSE,
         row_names_gp = gpar(fontsize = 5),
         show_row_dend = show_row_dend,
         cluster_rows = cluster_rows,
-
         show_column_names = FALSE,
         column_names_rot = 60,
-        column_names_gp = gpar(fontsize = 5, fontface="bold"),
+        column_names_gp = gpar(fontsize = 5, fontface = "bold"),
         show_column_dend = FALSE,
         cluster_columns = TRUE,
-
         row_split = row_split,
         row_gap = unit(gap, "mm"),
         row_title = NULL,
         cluster_row_slices = FALSE,
-
         column_split = col_split,
         cluster_column_slices = FALSE,
         column_gap = unit(gap, "mm"),
-        column_title_gp = gpar(fontsize = 6, fontface="bold"),
-
+        column_title_gp = gpar(fontsize = 6, fontface = "bold"),
         border = border,
         top_annotation = haT,
-
+        right_annotation = haR,
         heatmap_legend_param = list(
             title = ht_title,
             direction = "horizontal",
             title_position = "lefttop",
-            title_gp = gpar(fontsize = 5, fontface="bold"), 
+            title_gp = gpar(fontsize = 5, fontface = "bold"), 
             labels_gp = gpar(fontsize = 5),
             legend_width = unit(2, "cm"),
             grid_height = unit(2, "mm")
         )
     )
 
-    # Draw heatmap
-    ht_obj <- draw(ht, heatmap_legend_side = "bottom")
-
-    # Add motif marks after drawing (handles split properly)
-    for (slice_name in names(row_order(ht_obj))) {
-        slice_rows <- row_order(ht_obj)[[slice_name]]
-        slice_labels <- rownames(d_mtx)[slice_rows]
-
-        # Find label positions within this slice
-        slice_at <- which(slice_labels %in% labels)
-        slice_lab <- slice_labels[slice_at]
-
-        if (length(slice_at) > 0) {
-            decorate_annotation("Motif", slice = slice_name, {
-                anno_mark(at = slice_at, labels = slice_lab,
-                          labels_gp = gpar(fontsize = 5),
-                          padding = unit(1, "mm"),
-                          side = "right")
-            })
-        }
-    }
+    draw(ht, heatmap_legend_side = "bottom")
 }
+
 
 
 
