@@ -182,9 +182,6 @@ HeatmapMotif_Group <- function(
                 annotation_name_gp = gpar(fontsize = 5, fontface="bold")
             )
 
-    label_at <- marker_info$index[marker_info$TF_motif %in% labels]
-    haR <- rowAnnotation(Motif=anno_mark(at=label_at, labels=labels, labels_gp=gpar(fontsize=5), padding = unit(1, "mm")))
-
     # z-score
     if (scaled){ d_mtx = t(scale(t(d_mtx))) }
 
@@ -222,7 +219,7 @@ HeatmapMotif_Group <- function(
                 border = border,
                 
                 top_annotation = haT,
-                right_annotation = haR,
+                #right_annotation = haR,
 
                 # legend
                 heatmap_legend_param = list(
@@ -235,6 +232,9 @@ HeatmapMotif_Group <- function(
                         grid_height = unit(2, "mm")
                     )
             )
+    label_at <- marker_info$index[marker_info$TF_motif %in% labels]
+    rowAnnotation(Motif=anno_mark(at=label_at, labels=labels, labels_gp=gpar(fontsize=5), padding = unit(1, "mm")))
+
 
     draw(ht, heatmap_legend_side = "bottom")
 }
