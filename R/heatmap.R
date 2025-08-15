@@ -157,6 +157,8 @@ HeatmapMotif_Group <- function(
     scaled=TRUE,
     col_group=NULL,
     labels=NULL,
+    cluster_rows=TRUE,
+    show_row_dend=TRUE,
     gap=0.2,
     border=FALSE,
     ht_title = "Row Z-Score"
@@ -195,8 +197,8 @@ HeatmapMotif_Group <- function(
 
                 show_row_names = F,
                 row_names_gp = gpar(fontsize = 5),
-                show_row_dend = TRUE,
-                cluster_rows = TRUE,
+                show_row_dend = show_row_dend,
+                cluster_rows = cluster_rows,
 
                 show_column_names = F,
                 column_names_rot = 60,
