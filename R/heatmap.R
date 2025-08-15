@@ -1,8 +1,4 @@
 
-##########################################
-##         Diff Markers
-##########################################
-
 #' Correct data for heatmap
 CorrectInfoByMarkerData <- function(
     mtx=NULL,
@@ -35,121 +31,18 @@ CorrectInfoByMarkerData <- function(
 
 
 
-#' HeatMap_ExpGroups_Vertical
-#'
-#' @param data dataframe
-#' @param meta top annotation group-1
-#' @param marker_info top annotation group-2
-#' @param group group name
-#' @param sort_group sorted group name
-#' @param col_group color group
-#' @param show_gene show genes
-#' @param scaled scaled or not
-#'
-#' @export
-#'
-Heatmap_DiffMarkers_Vert <- function(
-    data=NULL,
-    meta=NULL,
-    marker_info=NULL,
-    group='cluster',
-    sort_group=NULL,
-    col_group=NULL, 
-    show_gene=NULL,
-    scaled=TRUE,
-    row_title='Differentially expressed genes',
-    show_column_dend=FALSE,
-    legend_title='Expression\nZ-score',
-    gap=0.4
-) { 
-
-    data_list <- CorrectInfoByMarkerData(mtx=data, meta=meta, marker_info=marker_info)
-    mtx <- data_list[[1]]
-    meta <- data_list[[2]]
-    marker_info <- data_list[[3]]
-
-    # z-score: row z-score
-    if (scaled){ mtx <- t(scale(t(mtx))) }
-
-    set.seed(42)
-    
-    haT <- HeatmapAnnotation(
-                Group = anno_simple(x = meta[[group]], simple_anno_size = unit(2, "mm"), col=col_group),
-                annotation_name_side = "right",
-                annotation_name_gp = gpar(fontsize = 6)
-        )
-
-    gene_at <- marker_info$index[marker_info$gene %in% show_gene]
-    haR <- rowAnnotation( link = anno_mark(at=gene_at, labels=show_gene, which="bottom", link_width=unit(2,"mm"), labels_gp=gpar(fontsize = 5)) )
-
-    print(1)
-
-    col_score = circlize::colorRamp2(c(-2, 0, 2), c("#2E86C1", "white", "#CB4335"))
-    title_ht = "Row Z-Score"
-
-    ht <- Heatmap(
-                as.matrix(mtx),
-                    
-                col = col_score,
-                    
-                show_row_names = F,
-                show_row_dend = F,
-                cluster_rows = T,
-
-                show_column_names = F,
-                show_column_dend = show_column_dend,
-                cluster_columns = T,
-
-                # split
-                #column_title = NULL,
-                column_title_gp = gpar(fontsize = 6),
-                column_split = factor(meta[[group]], levels=sort_group), 
-                cluster_column_slices = F,
-                column_gap = unit(gap, "mm"),
-                
-                
-                # split rows to three groups
-                row_title = row_title, 
-                row_title_gp = gpar(fontsize = 6),
-                row_split = factor(marker_info$cluster, levels=sort_group),
-                cluster_row_slices = F,
-                row_gap = unit(gap, "mm"),
-
-                # top-anno
-                top_annotation = haT,
-                right_annotation = haR,
-
-                # legend
-                heatmap_legend_param = list(
-                        title = legend_title,
-                        title_gp = gpar(fontsize = 5), 
-                        labels_gp = gpar(fontsize = 5),
-                        grid_width = unit(2, "mm"),
-                        grid_height = unit(2, "mm")
-                        )
-            )
-
-    print(2)
-
-    return(ht)
-}
-
-
-
-
-
 ##########################################
-##         Motif
+##         Motif/Gene expression
 ##########################################
 
 #' ComplexHeatmap Motif-TF Groupx
 #'
-#' @param data dataframe
+#' @param df dataframe
 #'
 #' @export
 #'
-HeatmapMotif_Group <- function(
-    data = NULL, 
+ComplexHeatmap_Group <- function(
+    df = NULL, 
     meta = NULL,
     group = 'cell_type2',
     marker_info = NULL,
@@ -161,13 +54,24 @@ HeatmapMotif_Group <- function(
     show_row_dend = TRUE,
     gap = 0.2,
     border = FALSE,
-    ht_title = "Row Z-Score"
+    color_set = 'motif',
+    ht_title = "Row Z-Score",
+    row_title = NULL,
+    show_column_dend = FALSE,
+    legend_title = '',
+    outdir = 'ht_temp'
 ){
     # Process data
-    data_list <- CorrectInfoByMarkerData(mtx = data, meta = meta, marker_info = marker_info)
+    data_list <- CorrectInfoByMarkerData(mtx = df, meta = meta, marker_info = marker_info)
     d_mtx <- data_list[[1]]
     data_info <- data_list[[2]]
     marker_info <- data_list[[3]]
+
+    dir.create(outdir)
+    write.table(paste0(outdir, '/matrix.tsv'), sep='\t', quote=F, col.names=NA)
+    write.table(paste0(outdir, '/data_info.xls'), sep='\t', quote=F, col.names=NA)
+    write.table(paste0(outdir, '/marker_info.xls'), sep='\t', quote=F, col.names=NA)
+
 
     # Set row names
     marker_info$TF_motif <- paste0(marker_info$TF, '(', marker_info$gene, ')')
@@ -211,7 +115,10 @@ HeatmapMotif_Group <- function(
     if (scaled) { d_mtx <- t(scale(t(d_mtx))) }
 
     # Color scale
+    # motif color set
     col_score <- circlize::colorRamp2(c(-2, -1, 0, 1, 2), c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF"))
+    # exp color set
+    if (color_set == 'expression'){ col_score = circlize::colorRamp2(c(-2, 0, 2), c("#2E86C1", "white", "#CB4335")) }
 
     # Heatmap
     ht <- Heatmap(
@@ -224,11 +131,11 @@ HeatmapMotif_Group <- function(
         show_column_names = FALSE,
         column_names_rot = 60,
         column_names_gp = gpar(fontsize = 5, fontface = "bold"),
-        show_column_dend = FALSE,
+        show_column_dend = show_column_dend,
         cluster_columns = TRUE,
         row_split = row_split,
         row_gap = unit(gap, "mm"),
-        row_title = NULL,
+        row_title = row_title,
         cluster_row_slices = FALSE,
         column_split = col_split,
         cluster_column_slices = FALSE,
@@ -238,7 +145,7 @@ HeatmapMotif_Group <- function(
         top_annotation = haT,
         right_annotation = haR,
         heatmap_legend_param = list(
-            title = ht_title,
+            title = legend_title,
             direction = "horizontal",
             title_position = "lefttop",
             title_gp = gpar(fontsize = 5, fontface = "bold"), 
@@ -258,12 +165,12 @@ HeatmapMotif_Group <- function(
 
 #' ComplexHeatmap Motif Group-2
 #'
-#' @param data dataframe
+#' @param df dataframe
 #'
 #' @export
 #'
 HeatmapMotif_Group2 <- function(
-    data=NULL, 
+    df=NULL, 
     meta=NULL,
     group='cell_type2',
     marker_info=NULL,
@@ -277,7 +184,7 @@ HeatmapMotif_Group2 <- function(
     ht_title = "Row Z-Score"
 ){
 
-    data_list <- CorrectInfoByMarkerData(mtx=data, meta=meta, marker_info=marker_info)
+    data_list <- CorrectInfoByMarkerData(mtx=df, meta=meta, marker_info=marker_info)
     d_mtx <- data_list[[1]]
     data_info <- data_list[[2]]
     marker_info <- data_list[[3]]
