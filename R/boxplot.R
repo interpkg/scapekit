@@ -40,7 +40,8 @@ GGboxplotPval <- function(
             theme(legend.key.size = unit(4, 'mm'))
 
     if (add_test){
-        p <- p + stat_compare_means(comparisons = data, label.y = max(data[[y]])*1.2, size=2)
+        #p <- p + stat_compare_means(comparisons = data, label.y = max(data[[y]])*1.2, size=2)
+        p <- p + stat_compare_means(aes(group = .data[[group]]), label = "p.signif")
     }
 
     if (nolegend){
