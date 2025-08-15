@@ -233,7 +233,7 @@ HeatmapMotif_Group <- function(
                     )
             )
     label_at <- marker_info$index[marker_info$TF_motif %in% labels]
-    rowAnnotation(Motif=anno_mark(at=label_at, labels=labels, labels_gp=gpar(fontsize=5), padding = unit(1, "mm")))
+    rowAnnotation(Motif=anno_mark(at=label_at, labels=labels, labels_gp=gpar(fontsize=5), padding = unit(1, "mm"), side = "right"))
 
 
     draw(ht, heatmap_legend_side = "bottom")
