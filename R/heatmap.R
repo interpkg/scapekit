@@ -118,7 +118,7 @@ ComplexHeatmap_Group <- function(
     # motif color set
     col_score <- circlize::colorRamp2(c(-2, -1, 0, 1, 2), c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF"))
     # exp color set
-    if (color_set == 'expression'){ col_score = circlize::colorRamp2(c(-2, 0, 2), c("#2E86C1", "white", "#CB4335")) }
+    if (color_set == 'exp'){ col_score = circlize::colorRamp2(c(-2, 0, 2), c("#2E86C1", "white", "#CB4335")) }
 
     # Heatmap
     ht <- Heatmap(
