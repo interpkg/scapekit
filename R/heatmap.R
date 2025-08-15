@@ -172,6 +172,8 @@ HeatmapMotif_Group <- function(
     marker_info$TF_motif <- paste0(marker_info$TF, '(', marker_info$gene, ')')
     rownames(d_mtx) <- marker_info$TF_motif
 
+    label_at <- marker_info$index[marker_info$TF_motif %in% labels]
+
     # split
     row_split <- factor(marker_info$cluster, levels = levels)
     col_split <- factor(data_info[[group]], levels = levels)
@@ -231,9 +233,8 @@ HeatmapMotif_Group <- function(
                         legend_width = unit(2, "cm"),
                         grid_height = unit(2, "mm")
                     )
-            )
-    label_at <- marker_info$index[marker_info$TF_motif %in% labels]
-    rowAnnotation(Motif=anno_mark(at=label_at, labels=labels, labels_gp=gpar(fontsize=5), padding = unit(1, "mm"), side = "right"))
+            ) +
+        rowAnnotation(Motif=anno_mark(at=label_at, labels=labels, labels_gp=gpar(fontsize=5), padding = unit(1, "mm"), side = "right"))
 
 
     draw(ht, heatmap_legend_side = "bottom")
