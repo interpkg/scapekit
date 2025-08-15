@@ -193,7 +193,7 @@ HeatmapMotif_Group <- function(
         c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF")
     )
 
-    # Step 1: Create heatmap without right annotation
+    # Base heatmap (no right_annotation here)
     ht <- Heatmap(
         d_mtx,
         col = col_score,
@@ -209,13 +209,11 @@ HeatmapMotif_Group <- function(
         show_column_dend = FALSE,
         cluster_columns = TRUE,
 
-        # split row
         row_split = row_split,
         row_gap = unit(gap, "mm"),
         row_title = NULL,
         cluster_row_slices = FALSE,
-        
-        # split column
+
         column_split = col_split,
         cluster_column_slices = FALSE,
         column_gap = unit(gap, "mm"),
@@ -224,7 +222,6 @@ HeatmapMotif_Group <- function(
         border = border,
         top_annotation = haT,
 
-        # legend
         heatmap_legend_param = list(
             title = ht_title,
             direction = "horizontal",
@@ -234,30 +231,29 @@ HeatmapMotif_Group <- function(
             legend_width = unit(2, "cm"),
             grid_height = unit(2, "mm")
         )
-    ) 
-
-    # Step 2: Draw to get row order
-    ht_obj <- draw(ht)
-
-    # Step 3: Get final row order for ALL slices
-    all_row_orders <- unlist(row_order(ht_obj), use.names = FALSE)
-    final_labels <- rownames(d_mtx)[all_row_orders]
-    label_at <- which(final_labels %in% labels)
-
-    # Step 4: Build right annotation with correct positions
-    haR <- rowAnnotation(
-        Motif = anno_mark(
-            at = label_at,
-            labels = labels,
-            labels_gp = gpar(fontsize = 5),
-            padding = unit(1, "mm"),
-            side = "right"
-        )
     )
 
-    # Step 5: Add right annotation and redraw
-    ht@right_annotation <- haR
-    draw(ht, heatmap_legend_side = "bottom")
+    # Draw heatmap
+    ht_obj <- draw(ht, heatmap_legend_side = "bottom")
+
+    # Add motif marks after drawing (handles split properly)
+    for (slice_name in names(row_order(ht_obj))) {
+        slice_rows <- row_order(ht_obj)[[slice_name]]
+        slice_labels <- rownames(d_mtx)[slice_rows]
+
+        # Find label positions within this slice
+        slice_at <- which(slice_labels %in% labels)
+        slice_lab <- slice_labels[slice_at]
+
+        if (length(slice_at) > 0) {
+            decorate_annotation("Motif", slice = slice_name, {
+                anno_mark(at = slice_at, labels = slice_lab,
+                          labels_gp = gpar(fontsize = 5),
+                          padding = unit(1, "mm"),
+                          side = "right")
+            })
+        }
+    }
 }
 
 
