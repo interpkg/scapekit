@@ -163,88 +163,102 @@ HeatmapMotif_Group <- function(
     border=FALSE,
     ht_title = "Row Z-Score"
 ){
+    # Prepare data
     data_list <- CorrectInfoByMarkerData(mtx=data, meta=meta, marker_info=marker_info)
     d_mtx <- data_list[[1]]
     data_info <- data_list[[2]]
     marker_info <- data_list[[3]]
 
-
     marker_info$TF_motif <- paste0(marker_info$TF, '(', marker_info$gene, ')')
     rownames(d_mtx) <- marker_info$TF_motif
 
-    
-
-    # split
+    # Split factors
     row_split <- factor(marker_info$cluster, levels = levels)
     col_split <- factor(data_info[[group]], levels = levels)
 
+    # Top annotation
     haT <- HeatmapAnnotation(
-                Group = anno_simple(x = data_info[[group]], simple_anno_size = unit(2, "mm"), col=col_group),
-                annotation_name_side = "right",
-                annotation_name_gp = gpar(fontsize = 5, fontface="bold")
-            )
+        Group = anno_simple(x = data_info[[group]], 
+                            simple_anno_size = unit(2, "mm"), 
+                            col=col_group),
+        annotation_name_side = "right",
+        annotation_name_gp = gpar(fontsize = 5, fontface="bold")
+    )
 
-    #label_at <- marker_info$index[marker_info$TF_motif %in% labels]
-    label_at <- which(rownames(d_mtx) %in% labels)
-    haR <- rowAnnotation(Motif=anno_mark(at=label_at, labels=labels, labels_gp=gpar(fontsize=5), padding = unit(1, "mm"), side = "right"))
+    # Z-score transform
+    if (scaled){ d_mtx <- t(scale(t(d_mtx))) }
 
+    col_score <- circlize::colorRamp2(
+        c(-2, -1, 0, 1, 2),
+        c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF")
+    )
 
-    # z-score
-    if (scaled){ d_mtx = t(scale(t(d_mtx))) }
-
-    col_score = circlize::colorRamp2(c(-2, -1, 0, 1, 2), c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF"))
-
+    # Step 1: Create heatmap without right annotation
     ht <- Heatmap(
-                d_mtx,
-                
-                col = col_score,
+        d_mtx,
+        col = col_score,
 
-                show_row_names = F,
-                row_names_gp = gpar(fontsize = 5),
-                show_row_dend = show_row_dend,
-                cluster_rows = cluster_rows,
+        show_row_names = FALSE,
+        row_names_gp = gpar(fontsize = 5),
+        show_row_dend = show_row_dend,
+        cluster_rows = cluster_rows,
 
-                show_column_names = F,
-                column_names_rot = 60,
-                column_names_gp = gpar(fontsize = 5, fontface="bold"),
-                show_column_dend = FALSE,
-                cluster_columns = TRUE,
+        show_column_names = FALSE,
+        column_names_rot = 60,
+        column_names_gp = gpar(fontsize = 5, fontface="bold"),
+        show_column_dend = FALSE,
+        cluster_columns = TRUE,
 
-                # split row
-                row_split = row_split,
-                row_gap = unit(gap, "mm"),
-                row_title = NULL,
-                cluster_row_slices = FALSE,
-                #row_title_gp = grid::gpar(fontsize = 7),
-                
-                # split column
-                column_split = col_split,
-                cluster_column_slices = FALSE,
-                column_gap = unit(gap, "mm"),
-                column_title_gp = grid::gpar(fontsize = 6, fontface="bold"),
-
-                border = border,
-                
-                top_annotation = haT,
-                right_annotation = haR,
-
-                # legend
-                heatmap_legend_param = list(
-                        title = ht_title,
-                        direction = "horizontal",
-                        title_position = "lefttop",
-                        title_gp = gpar(fontsize = 5, fontface="bold"), 
-                        labels_gp = gpar(fontsize = 5),
-                        legend_width = unit(2, "cm"),
-                        grid_height = unit(2, "mm")
-                    )
-            ) 
+        # split row
+        row_split = row_split,
+        row_gap = unit(gap, "mm"),
+        row_title = NULL,
+        cluster_row_slices = FALSE,
         
+        # split column
+        column_split = col_split,
+        cluster_column_slices = FALSE,
+        column_gap = unit(gap, "mm"),
+        column_title_gp = gpar(fontsize = 6, fontface="bold"),
 
+        border = border,
+        top_annotation = haT,
+
+        # legend
+        heatmap_legend_param = list(
+            title = ht_title,
+            direction = "horizontal",
+            title_position = "lefttop",
+            title_gp = gpar(fontsize = 5, fontface="bold"), 
+            labels_gp = gpar(fontsize = 5),
+            legend_width = unit(2, "cm"),
+            grid_height = unit(2, "mm")
+        )
+    ) 
+
+    # Step 2: Draw to get row order
+    ht_obj <- draw(ht)
+
+    # Step 3: Get final row order for ALL slices
+    all_row_orders <- unlist(row_order(ht_obj), use.names = FALSE)
+    final_labels <- rownames(d_mtx)[all_row_orders]
+    label_at <- which(final_labels %in% labels)
+
+    # Step 4: Build right annotation with correct positions
+    haR <- rowAnnotation(
+        Motif = anno_mark(
+            at = label_at,
+            labels = labels,
+            labels_gp = gpar(fontsize = 5),
+            padding = unit(1, "mm"),
+            side = "right"
+        )
+    )
+
+    # Step 5: Add right annotation and redraw
+    ht@right_annotation <- haR
     draw(ht, heatmap_legend_side = "bottom")
 }
-
-
 
 
 
