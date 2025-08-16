@@ -71,8 +71,9 @@ DensityPlot_Pseudotime <- function(
     x='pseudotime', 
     y='cell_type2', 
     t1=NULL, 
-    t2=NULL)
-{ 
+    t2=NULL,
+    xlim=NULL
+) { 
 
     p <- ggplot(data, aes(x = .data[[x]], y = .data[[y]], fill = after_stat(x))) +
         geom_density_ridges_gradient(scale = 1, gradient_lwd = 1) +
@@ -88,12 +89,9 @@ DensityPlot_Pseudotime <- function(
                 legend.key.size = unit(0.8, 'lines')) +
         theme(axis.ticks = element_line(linewidth = 0.1), axis.ticks.length=unit(1, "mm"))
 
-    if (length(t1)>0){
-        p <- p + geom_vline(xintercept = t1, linetype="dashed", color = "#696969", size=0.3)
-    }
-    if (length(t2)>0){
-        p <- p + geom_vline(xintercept = t2, linetype="dashed", color = "#696969", size=0.3)
-    }
+    if (length(xlim) > 0){ p <- p + xlim(xlim) }
+    if (length(t1)>0){ p <- p + geom_vline(xintercept = t1, linetype="dashed", color = "#696969", size=0.3) }
+    if (length(t2)>0){ p <- p + geom_vline(xintercept = t2, linetype="dashed", color = "#696969", size=0.3) }
 
     p
 }
