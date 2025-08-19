@@ -90,6 +90,7 @@ ComplexHeatmap_Group <- function(
     col_group = NULL,
     labels = NULL,
     cluster_rows = TRUE,
+    cluster_col = TRUE,
     show_row_dend = TRUE,
     gap = 0.2,
     border = FALSE,
@@ -188,7 +189,7 @@ ComplexHeatmap_Group <- function(
         column_names_rot = 60,
         column_names_gp = gpar(fontsize = 5, fontface = "bold"),
         show_column_dend = show_column_dend,
-        cluster_columns = TRUE,
+        cluster_columns = cluster_col,
 
         row_split = row_split,
         row_gap = unit(gap, "mm"),
@@ -247,6 +248,7 @@ ComplexHeatmap_Group2 <- function(
     col_sample=NULL,
     labels = NULL,
     cluster_rows = TRUE,
+    cluster_col = TRUE,
     show_row_dend = TRUE,
     gap = 0.2,
     border = FALSE,
@@ -347,7 +349,7 @@ ComplexHeatmap_Group2 <- function(
         column_names_rot = 60,
         column_names_gp = gpar(fontsize = 5, fontface = "bold"),
         show_column_dend = show_column_dend,
-        cluster_columns = TRUE,
+        cluster_columns = cluster_col,
         
         row_split = row_split,
         row_gap = unit(gap, "mm"),
