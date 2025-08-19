@@ -18,7 +18,7 @@ FilterMarkersByGroup <- function(
     d_filtered <- df %>% 
             filter(pct.1 > 0.3) %>% 
             arrange(desc(avg_diff)) %>% 
-            duplicated(df[[gene]])
+            distinct(gene, .keep_all = TRUE)
 
     # re-sort by original index
     d_filtered <- d_filtered[order(d_filtered$index),]
