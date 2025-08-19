@@ -21,13 +21,13 @@ FilterMarkersByGroup <- function(
             distinct(gene, .keep_all = TRUE)
 
     # re-sort by original index
-    d_filtered <- d_filtered[order(d_filtered$index),]
-    d_filtered$index <- 1:nrow(d_filtered)
-    rownames(d_filtered) <- d_filtered$index
-    d_filtered$index <- NULL
+    diff_marker <- d_filtered[order(d_filtered$index),]
+    diff_marker$index <- 1:nrow(diff_marker)
+    rownames(diff_marker) <- diff_marker$index
+    diff_marker$index <- NULL
 
 
-    return(d_filtered)
+    return(diff_marker)
 }
 
 
