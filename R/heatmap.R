@@ -24,6 +24,7 @@ FilterMarkersByGroup <- function(
     d_filtered <- d_filtered[order(d_filtered$index),]
     d_filtered$index <- 1:nrow(d_filtered)
     rownames(d_filtered) <- d_filtered$index
+    d_filtered$index <- NULL
 
 
     return(d_filtered)
