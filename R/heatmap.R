@@ -22,8 +22,8 @@ FilterMarkersByGroup <- function(
 
     # re-sort by original index
     d_filtered <- d_filtered[order(d_filtered$index),]
-    d_filtered_marker$index <- 1:nrow(d_filtered_marker)
-    rownames(d_filtered_marker) <- d_filtered_marker$index
+    d_filtered$index <- 1:nrow(d_filtered)
+    rownames(d_filtered) <- d_filtered$index
 
 
     return(d_filtered)
