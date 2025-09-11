@@ -447,7 +447,7 @@ BarPlotGroupProportion <- function(
         theme(text=element_text(size=text_size, face='bold'), 
             axis.title=element_text(size= text_size + 1), 
             axis.text=element_text(size=text_size, color='black'),
-            axis.text.y = element_text(size = text_size - 1)
+            axis.text.y = element_text(size = text_size)
         ) +
         scale_x_discrete(guide=guide_axis(angle=angle)) +
         theme(panel.background = element_blank(),

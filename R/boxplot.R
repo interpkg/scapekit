@@ -77,7 +77,7 @@ StandardBoxplot <- function(
     font_size=7, font_size_title=8,
     nolegend=FALSE, 
     add_test=FALSE, test_method="wilcox.test",
-    show_pval_position=10,
+    font_size_pval=2,
     outlier=16,
     alpha=1,
     colors='blue'
@@ -97,8 +97,8 @@ StandardBoxplot <- function(
             
     if (add_test){
         stat.test <- ggpubr::compare_means(formula = as.formula(paste(y, "~", x)), data = data, method = test_method)
-        stat.test <- stat.test %>% mutate(y.position=show_pval_position)
-        p <- p + stat_pvalue_manual(stat.test, label = "p = {p.adj}", size=1.5)
+        stat.test <- stat.test %>% mutate(y.position=max(data[[y]]) * 1.1)
+        p <- p + stat_pvalue_manual(stat.test, label = "p = {p.adj}", size=font_size_pval)
     }
 
     if (nolegend){
