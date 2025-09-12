@@ -16,3 +16,4 @@ Collate:
     'groupplots.R'
     'heatmap.R'
     'scatterplots.R'
+    'volcanoplot.R'
