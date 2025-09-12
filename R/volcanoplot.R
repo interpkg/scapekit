@@ -1,9 +1,3 @@
-#' @include calculate.R
-#'
-NULL
-
-
-
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 #      Volcano plot
