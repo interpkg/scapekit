@@ -114,6 +114,66 @@ BarPlotGroup <- function(
 
 
 
+#' Bar plot with group & label 
+#'
+#' @param data frame
+#' @param group column
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
+#' @param title name 
+#' @param colors code
+#' @param hline number
+#' @param hcol hline color
+#'
+#' @return plot
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+#'
+BarPlotGroupText <- function(
+    df=NULL, 
+    x=NULL, 
+    y=NULL, 
+    group=NULL, 
+    title='',
+    x_lab='', 
+    y_lab='Frequency (%)', 
+    colors=c('Yes'='#D90000', 'No'='#DEDEDE'),
+    base_lz=0.3,
+    tz=8,
+    legend_key_z=4,
+    show_text=TRUE,
+    label_z=3,
+    label_suffix='%'
+){
+    p <- ggplot(df, aes_string(x=x, y=y, fill=group)) + 
+            geom_bar( stat="identity" ) +
+            theme_classic(base_line_size=base_lz) +
+            theme(text=element_text(size=tz, face='bold', color='black')) +
+            theme(axis.text=element_text(size=tz-1, face='bold', color='black')) +
+            labs(title=title, x=x_lab, y=y_lab) +
+            theme(legend.key.size=unit(legend_key_z, "mm"), legend.title = element_blank())
+
+    # show text
+    if (show_text){
+        p <- p + geom_text(aes(label = paste0(.data[[y]], label_suffix)), fontface = "bold", position = position_stack(vjust = .5), size=label_z)
+    }
+
+    # set color for bar
+    if (length(colors) > 1){ 
+        p <- p + scale_fill_manual(values=colors)
+    }
+
+    p
+}
+
+
+
+
 #' BarPlot Two Group +- in Y-axis
 #'
 #' @param data frame
