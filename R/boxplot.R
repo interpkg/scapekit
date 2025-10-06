@@ -56,6 +56,8 @@ GGboxplotPval <- function(
 
 
 
+
+
 #' StandardBoxplot
 #'
 #' @param data frame
@@ -76,10 +78,13 @@ StandardBoxplot <- function(
     title='', x_lab='', y_lab='Mean peak signal', 
     font_size=7, font_size_title=8,
     nolegend=FALSE, 
-    add_test=FALSE, test_method="wilcox.test",
+    comp_group=NULL,
+    test_method="wilcox.test",
+    test_label="p.format",
     font_size_pval=2,
     outlier=16,
     alpha=1,
+    angle=0,
     colors=NULL
 ){
     p <- ggplot(data, aes_string(x=x, y=y)) +
@@ -99,11 +104,22 @@ StandardBoxplot <- function(
         p <- p + scale_fill_manual(values = colors) 
     }
 
-    if (add_test){
-        stat.test <- ggpubr::compare_means(formula = as.formula(paste(y, "~", x)), data = data, method = test_method)
-        stat.test <- stat.test %>% mutate(y.position=max(data[[y]]) * 1.1)
-        p <- p + stat_pvalue_manual(stat.test, label = "p = {p.adj}", size=font_size_pval)
+
+    if (angle == 45){
+        p <- p + theme(axis.text.x = element_text(angle = angle, hjust = 1, vjust=1))
     }
+    if (angle == 90){
+        p <- p + theme(axis.text.x = element_text(angle = angle, hjust = 1, vjust=0.5))
+    }
+
+
+    if (length(comp_group) > 0){
+        p <- p + ggpubr::stat_compare_means(comparisons = comp_group,
+                     method = test_method, size=font_size_pval,
+                     label = test_label
+                )
+    }
+
 
     if (nolegend){
         p <- p + theme(legend.position = "none")
@@ -111,8 +127,6 @@ StandardBoxplot <- function(
 
     p 
 }
-
-
 
 
 
@@ -191,7 +205,7 @@ StandardFacetWrapBoxplot <- function(
     if (add_test){
         stat.test <- ggpubr::compare_means(formula = as.formula(paste(y, "~", x)), data = data, method = test_method)
         stat.test <- stat.test %>% mutate(y.position=max(data[[y]]) * 1.05)
-        p <- p + stat_pvalue_manual(stat.test, size=font_size_pval, label = "p = {p.adj}", xmin = "group1", xmax = "group2",y.position = "y.position")
+        p <- p + ggpubr::stat_pvalue_manual(stat.test, size=font_size_pval, label = "p = {p.adj}", xmin = "group1", xmax = "group2",y.position = "y.position")
     }
 
     if (nolegend){
