@@ -14,11 +14,13 @@ StandardBoxplot(
   font_size = 7,
   font_size_title = 8,
   nolegend = FALSE,
-  add_test = FALSE,
+  comp_group = NULL,
   test_method = "wilcox.test",
+  test_label = "p.format",
   font_size_pval = 2,
   outlier = 16,
   alpha = 1,
+  angle = 0,
   colors = NULL
 )
 }
