@@ -19,7 +19,7 @@ UMAPSignal <- function(
     order_dec=FALSE,
     line_size=0.1,
     font_size=6,
-    point_size=0.01, 
+    pt_size=0.01, 
     legend_title=NULL,
     breaks=waiver(),
     colors=c("#CB4335", "#2E86C1", "#D7DBDD")
@@ -29,7 +29,7 @@ UMAPSignal <- function(
     data <- data[order(data[[signal]], decreasing=order_dec), ]
     
     p <- ggplot(data, aes(x=.data[[x]], y=.data[[y]], color=.data[[signal]])) + 
-            geom_point(size=point_size) +
+            geom_point(size=pt_size) +
             theme_classic(base_line_size=line_size) +
             ggtitle(title) +
             theme(plot.title = element_text(hjust = 0.5, size=font_size+1, face = "bold")) +
