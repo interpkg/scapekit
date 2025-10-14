@@ -174,8 +174,8 @@ ComplexHeatmap_GroupX <- function(
             TF = anno_mark(
                 at = label_at,
                 labels = labels,
-                labels_gp = gpar(fontsize = font_size, fontface = "bold"),
-                #padding = unit(1, "mm"),
+                labels_gp = gpar(fontsize = font_size + .5, fontface = "bold"),
+                padding = unit(0.5, "mm"),
                 side = "right"
             )
         )
@@ -225,7 +225,7 @@ ComplexHeatmap_GroupX <- function(
         row_split = row_split,
         row_gap = unit(gap, "mm"),
         row_title = row_title,
-        row_title_gp = gpar(fontsize = font_size, fontface = "bold"),
+        row_title_gp = gpar(fontsize = font_size + 1, fontface = "bold"),
         cluster_row_slices = FALSE,
         
         column_split = col_split,
@@ -243,7 +243,7 @@ ComplexHeatmap_GroupX <- function(
             direction = ht_lgd_direc,
             title_position = "lefttop",
             title_gp = gpar(fontsize = font_size, fontface = "bold"), 
-            labels_gp = gpar(fontsize = font_size-1),
+            labels_gp = gpar(fontsize = font_size),
             legend_width = unit(2, "cm"),
             grid_height = unit(2, "mm")
         )
