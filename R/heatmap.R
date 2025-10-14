@@ -55,14 +55,6 @@ CorrectInfoByMarkerData <- function(
     #3.meta
     meta <- as.data.frame(meta)[colnames(mtx), ]
 
-    #print('After Correction:')
-    #print('Matrix')
-    #print(dim(mtx))
-    #print('Meta')
-    #print(dim(meta))
-    #print('Markers')
-    #print(dim(d_filtered_marker))
-
     return(list(mtx, meta, d_filtered_marker))
 }
 
@@ -230,13 +222,13 @@ ComplexHeatmap_Group <- function(
 
 
 
-#' ComplexHeatmap Motif-TF Group2
+#' ComplexHeatmap Motif-TF Group with Legends
 #'
 #' @param df dataframe
 #'
 #' @export
 #'
-ComplexHeatmap_Group2 <- function(
+ComplexHeatmap_LegendTwoGroups <- function(
     df = NULL, 
     meta = NULL,
     group = 'cell_type2',
