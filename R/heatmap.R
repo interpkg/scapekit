@@ -161,6 +161,14 @@ ComplexHeatmap_GroupX <- function(
     haR <- NULL
 
     if (length(labels) > 0){
+        label_at <- which(rownames(d_mtx) %in% labels)
+
+        if (length(label_at) == 0) {
+            stop("No matching labels found in rownames(d_mtx). Check the 'labels' input.")
+        }
+        labels <- rownames(d_mtx)[label_at] 
+
+
         haR <- rowAnnotation(
             TF = anno_mark(
                 at = label_at,
