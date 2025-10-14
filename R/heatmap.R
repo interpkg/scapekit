@@ -174,7 +174,7 @@ ComplexHeatmap_GroupX <- function(
             TF = anno_mark(
                 at = label_at,
                 labels = labels,
-                labels_gp = gpar(fontsize = font_size + .5, fontface = "bold"),
+                labels_gp = gpar(fontsize = font_size - .5, fontface = "bold"),
                 padding = unit(0.5, "mm"),
                 side = "right"
             )
