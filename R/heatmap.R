@@ -94,6 +94,7 @@ ComplexHeatmap_GroupX <- function(
     cluster_rows = TRUE,
     cluster_col = TRUE,
     show_row_dend = TRUE,
+    font_size = 6,
     gap = 0.2,
     border = FALSE,
     color_set = 'motif',
@@ -142,7 +143,7 @@ ComplexHeatmap_GroupX <- function(
     haT <- HeatmapAnnotation(
         Group = anno_simple(x = data_info[[group]], simple_anno_size = unit(2, "mm"), col = col_group),
         annotation_name_side = "right",
-        annotation_name_gp = gpar(fontsize = 6, fontface = "bold")
+        annotation_name_gp = gpar(fontsize = font_size, fontface = "bold")
     )
 
     if (length(group) > 0 & length(sample) > 0){
@@ -150,7 +151,7 @@ ComplexHeatmap_GroupX <- function(
                 Group = anno_simple(x = data_info[[group]], simple_anno_size = unit(2, "mm"), col=col_group),
                 Sample = anno_simple(x = data_info[[sample]], simple_anno_size = unit(2, "mm"), col=col_sample),
                 annotation_name_side = "right",
-                annotation_name_gp = gpar(fontsize = 6, fontface="bold")
+                annotation_name_gp = gpar(fontsize = font_size, fontface="bold")
             )
     }
     #---------------//
@@ -173,8 +174,8 @@ ComplexHeatmap_GroupX <- function(
             TF = anno_mark(
                 at = label_at,
                 labels = labels,
-                labels_gp = gpar(fontsize = 5, fontface = "bold"),
-                padding = unit(1, "mm"),  # Increased padding for better spacing
+                labels_gp = gpar(fontsize = font_size, fontface = "bold"),
+                #padding = unit(1, "mm"),
                 side = "right"
             )
         )
@@ -211,26 +212,26 @@ ComplexHeatmap_GroupX <- function(
         col = col_score,
         
         show_row_names = FALSE,
-        row_names_gp = gpar(fontsize = 5),
+        row_names_gp = gpar(fontsize = font_size),
         show_row_dend = show_row_dend,
         cluster_rows = cluster_rows,
         
         show_column_names = FALSE,
         column_names_rot = 60,
-        column_names_gp = gpar(fontsize = 5, fontface = "bold"),
+        column_names_gp = gpar(fontsize = font_size, fontface = "bold"),
         show_column_dend = show_column_dend,
         cluster_columns = cluster_col,
 
         row_split = row_split,
         row_gap = unit(gap, "mm"),
         row_title = row_title,
-        row_title_gp = gpar(fontsize = 6, fontface = "bold"),
+        row_title_gp = gpar(fontsize = font_size, fontface = "bold"),
         cluster_row_slices = FALSE,
         
         column_split = col_split,
         cluster_column_slices = FALSE,
         column_gap = unit(gap, "mm"),
-        column_title_gp = gpar(fontsize = 6, fontface = "bold"),
+        column_title_gp = gpar(fontsize = font_size, fontface = "bold"),
         
         border = border,
         
@@ -241,8 +242,8 @@ ComplexHeatmap_GroupX <- function(
             title = legend_title,
             direction = ht_lgd_direc,
             title_position = "lefttop",
-            title_gp = gpar(fontsize = 5, fontface = "bold"), 
-            labels_gp = gpar(fontsize = 5),
+            title_gp = gpar(fontsize = font_size, fontface = "bold"), 
+            labels_gp = gpar(fontsize = font_size-1),
             legend_width = unit(2, "cm"),
             grid_height = unit(2, "mm")
         )
@@ -253,8 +254,8 @@ ComplexHeatmap_GroupX <- function(
 
     #--------------// Show legend or not 
     if (show_lgd){
-        lgd1 = Legend(title = "Group", labels = names(col_group), legend_gp = gpar(fill = col_group, fontsize = 5), nrow=1)
-        lgd2 = Legend(title = "Sample", labels = names(col_sample), legend_gp = gpar(fill = col_sample, fontsize = 5), nrow=1)
+        lgd1 = Legend(title = "Group", labels = names(col_group), legend_gp = gpar(fill = col_group, fontsize = font_size-1), nrow=1)
+        lgd2 = Legend(title = "Sample", labels = names(col_sample), legend_gp = gpar(fill = col_sample, fontsize = font_size-1), nrow=1)
         pd = packLegend(list = list(lgd1, lgd2), direction = "horizontal", max_width = unit(10, "cm"), column_gap = unit(5, "mm"), row_gap = unit(5, "mm"))
 
         #-- draw plot
