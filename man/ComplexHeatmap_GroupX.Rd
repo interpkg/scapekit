@@ -17,6 +17,7 @@ ComplexHeatmap_GroupX(
   levels = NULL,
   scaled = TRUE,
   col_group = NULL,
+  col_sample = NULL,
   labels = NULL,
   cluster_rows = TRUE,
   cluster_col = TRUE,
