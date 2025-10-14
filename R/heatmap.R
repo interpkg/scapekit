@@ -157,8 +157,7 @@ ComplexHeatmap_GroupX <- function(
 
 
 
-
-    #--------------// rowAnnotation - Label TFs
+    #--------------// RowAnnotation - Label TFs
     haR <- NULL
 
     if (length(labels) > 0){
@@ -184,17 +183,29 @@ ComplexHeatmap_GroupX <- function(
 
 
 
-    # Z-score scaling
+    #-------------- Z-score scaling
     if (scaled) { d_mtx <- t(scale(t(d_mtx))) }
 
-    # Color scale
-    # motif color set
-    col_score <- circlize::colorRamp2(c(-2, -1, 0, 1, 2), c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF"))
-    # exp color set
-    if (color_set == 'exp'){ col_score = circlize::colorRamp2(c(-1, 0, 1), c("#2E86C1", "white", "#CB4335")) }
-    if (color_set == 'peak'){ col_score = circlize::colorRamp2(c(-1, 0, 1), c("#E5D4CD", "white", "#2286A9")) }
 
-    # Heatmap
+    #-------------- Color scale
+    if (color_set == 'motif'){
+        score_range <- c(-2, -1, 0, 1, 2)
+        colors <- c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF")
+    }
+    if (color_set == 'exp'){
+        score_range <- c(-2, 0, 2)
+        colors <- c("#2E86C1", "white", "#CB4335")
+    }
+    if (color_set == 'peak'){
+        score_range <- c(-1, 0, 1)
+        colors <-c("#E5D4CD", "white", "#2286A9")
+    }
+
+    col_score = circlize::colorRamp2(score_range, colors)
+
+
+
+    ##--------------// Heatmap
     ht <- Heatmap(
         d_mtx,
         col = col_score,
@@ -236,11 +247,11 @@ ComplexHeatmap_GroupX <- function(
             grid_height = unit(2, "mm")
         )
     )
-
+    #--------------// 
     
 
 
-    #--------------// show legend or not 
+    #--------------// Show legend or not 
     if (show_lgd){
         lgd1 = Legend(title = "Group", labels = names(col_group), legend_gp = gpar(fill = col_group, fontsize = 5), nrow=1)
         lgd2 = Legend(title = "Sample", labels = names(col_sample), legend_gp = gpar(fill = col_sample, fontsize = 5), nrow=1)
