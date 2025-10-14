@@ -102,6 +102,7 @@ ComplexHeatmap_GroupX <- function(
     show_column_dend = FALSE,
     legend_title = '',
     ht_lgd_direc = "horizontal",
+    show_lgd = FALSE,
     outdir = 'ht_temp'
 ){
 
