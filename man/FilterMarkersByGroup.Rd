@@ -4,7 +4,14 @@
 \alias{FilterMarkersByGroup}
 \title{Filter markers}
 \usage{
-FilterMarkersByGroup(data = NULL, group = "cluster", gene = "gene", n = 200)
+FilterMarkersByGroup(
+  data = NULL,
+  pct1 = "pct.1",
+  avg_diff = "avg_diff",
+  group = "cluster",
+  gene = "gene",
+  n = 200
+)
 }
 \description{
 Filter markers

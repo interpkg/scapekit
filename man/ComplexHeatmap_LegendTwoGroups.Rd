@@ -10,6 +10,7 @@ ComplexHeatmap_LegendTwoGroups(
   group = "cell_type2",
   sample = "orig.ident",
   marker_info = NULL,
+  topn = 10000,
   tf_tag = FALSE,
   levels = NULL,
   scaled = TRUE,

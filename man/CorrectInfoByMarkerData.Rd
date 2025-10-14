@@ -8,9 +8,11 @@ CorrectInfoByMarkerData(
   mtx = NULL,
   meta = NULL,
   marker_info = NULL,
+  pct1 = "pct.1",
+  avg_diff = "avg_diff",
   group = "cluster",
   gene = "gene",
-  n = 100
+  n = 200
 )
 }
 \description{

@@ -3,6 +3,8 @@
 #' Filter markers
 FilterMarkersByGroup <- function(
     data=NULL, 
+    pct1='pct.1',
+    avg_diff='avg_diff',
     group='cluster', 
     gene='gene',
     n=200
@@ -16,8 +18,8 @@ FilterMarkersByGroup <- function(
     
     # filter
     d_filtered <- df %>% 
-            filter(pct.1 > 0.3) %>% 
-            arrange(desc(avg_diff)) %>% 
+            filter(.data[[pct1]] > 0.3) %>% 
+            arrange(desc(.data[[avg_diff]])) %>% 
             distinct(gene, .keep_all = TRUE)
 
     # re-sort by original index
@@ -39,13 +41,15 @@ CorrectInfoByMarkerData <- function(
     mtx=NULL,
     meta=NULL,
     marker_info=NULL,
+    pct1='pct.1',
+    avg_diff='avg_diff',
     group='cluster',
     gene='gene',
-    n=100
+    n=200
 ){
     library(dplyr)
     #1.markers
-    d_filtered_marker <- FilterMarkersByGroup(data=marker_info, group=group, gene=gene, n=n)
+    d_filtered_marker <- FilterMarkersByGroup(data=marker_info, pct1=pct1, avg_diff=avg_diff, group=group, gene=gene, n=n)
 
     
     #2.exp matrix
@@ -77,6 +81,9 @@ ComplexHeatmap_Group <- function(
     meta = NULL,
     group = 'cell_type2',
     marker_info = NULL,
+    topn = 10000,
+    pct1='pct.1',
+    avg_diff='avg_log2FC',
     tf_tag = FALSE,
     levels = NULL,
     scaled = TRUE,
@@ -97,7 +104,7 @@ ComplexHeatmap_Group <- function(
 ){
 
     #--------------// Process data
-    data_list <- CorrectInfoByMarkerData(mtx = df, meta = meta, marker_info = marker_info)
+    data_list <- CorrectInfoByMarkerData(mtx = df, meta = meta, marker_info = marker_info, pct1=pct1, avg_diff=avg_diff, n=topn)
     d_mtx <- data_list[[1]]
     data_info <- data_list[[2]]
     marker_info <- data_list[[3]]
@@ -234,6 +241,7 @@ ComplexHeatmap_LegendTwoGroups <- function(
     group = 'cell_type2',
     sample = 'orig.ident',
     marker_info = NULL,
+    topn = 10000,
     tf_tag = FALSE,
     levels = NULL,
     scaled = TRUE,
@@ -255,7 +263,7 @@ ComplexHeatmap_LegendTwoGroups <- function(
 ){
 
     #--------------// Process data
-    data_list <- CorrectInfoByMarkerData(mtx = df, meta = meta, marker_info = marker_info)
+    data_list <- CorrectInfoByMarkerData(mtx = df, meta = meta, marker_info = marker_info, n=topn)
     d_mtx <- data_list[[1]]
     data_info <- data_list[[2]]
     marker_info <- data_list[[3]]
