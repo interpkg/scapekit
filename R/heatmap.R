@@ -35,31 +35,27 @@ FilterMarkersByGroup <- function(
 
 
 
+#' Color score
+ColorScore <- function(colset){
+    score_range <- NULL
+    colors <- NULL
 
-#' Correct data for heatmap
-CorrectInfoByMarkerData <- function(
-    mtx=NULL,
-    meta=NULL,
-    marker_info=NULL,
-    pct1='pct.1',
-    avg_diff='avg_diff',
-    group='cluster',
-    gene='gene',
-    n=200
-){
-    library(dplyr)
-    #1.markers
-    d_filtered_marker <- FilterMarkersByGroup(data=marker_info, pct1=pct1, avg_diff=avg_diff, group=group, gene=gene, n=n)
+    if (colset == 'motif'){
+        score_range <- c(-2, -1, 0, 1, 2)
+        colors <- c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF")
+    }
+    if (colset == 'exp'){
+        score_range <- c(-2, 0, 2)
+        colors <- c("#2E86C1", "white", "#CB4335")
+    }
+    if (colset == 'peak'){
+        score_range <- c(-1, 0, 1)
+        colors <-c("#E5D4CD", "white", "#2286A9")
+    }
 
-    
-    #2.exp matrix
-    marker_genes <- d_filtered_marker[[gene]]
-    mtx <- as.data.frame(mtx)[marker_genes, ]
+    col_score <- circlize::colorRamp2(score_range, colors)
 
-    #3.meta
-    meta <- as.data.frame(meta)[colnames(mtx), ]
-
-    return(list(mtx, meta, d_filtered_marker))
+    return(col_score)
 }
 
 
@@ -82,6 +78,7 @@ ComplexHeatmap_GroupX <- function(
     group = 'cell_type2',
     sample = NULL,
     marker_info = NULL,
+    filter = TRUE,
     topn = 10000,
     pct1='pct.1',
     avg_diff='avg_log2FC',
@@ -98,25 +95,39 @@ ComplexHeatmap_GroupX <- function(
     gap = 0.2,
     border = FALSE,
     color_set = 'motif',
-    ht_title = "Row Z-Score",
     row_title = NULL,
     show_column_dend = FALSE,
-    legend_title = '',
+    ht_title = "Row Z-Score",
     ht_lgd_direc = "horizontal",
     show_lgd = FALSE,
     outdir = 'ht_temp'
 ){
 
-    #--------------// Process data
-    data_list <- CorrectInfoByMarkerData(mtx = df, meta = meta, marker_info = marker_info, pct1=pct1, avg_diff=avg_diff, n=topn)
-    d_mtx <- data_list[[1]]
-    data_info <- data_list[[2]]
-    marker_info <- data_list[[3]]
+    #--------------// Process data - sec-filter
+    if (filter){
+        #1.marker info - filtered-2
+        marker_info <- FilterMarkersByGroup(data=marker_info, pct1=pct1, avg_diff=avg_diff, group=group, gene='gene', n=topn)
 
-    dir.create(outdir)
-    write.table(d_mtx, paste0(outdir, '/matrix.tsv'), sep='\t', quote=F, col.names=NA)
-    write.table(data_info, paste0(outdir, '/data_info.xls'), sep='\t', quote=F, col.names=NA)
-    write.table(marker_info, paste0(outdir, '/marker_info.xls'), sep='\t', quote=F, col.names=NA)
+        #2.exp matrix
+        marker_genes <- marker_info[[gene]]
+        d_mtx <- as.data.frame(df)[marker_genes, ]
+
+        #3.meta
+        data_info <- as.data.frame(meta)[colnames(d_mtx), ]
+        
+        dir.create(outdir)
+        write.table(marker_info, paste0(outdir, '/marker_info.xls'), sep='\t', quote=F, col.names=NA)
+        write.table(d_mtx, paste0(outdir, '/matrix.tsv'), sep='\t', quote=F, col.names=NA)
+        write.table(data_info, paste0(outdir, '/data_info.xls'), sep='\t', quote=F, col.names=NA)
+    } else {
+        #marker_info <- marker_info
+        d_mtx <- df
+        data_info <- meta
+    }
+    
+    df <- NULL
+    meta <- NULL
+    
     #---------------//
 
 
@@ -189,20 +200,7 @@ ComplexHeatmap_GroupX <- function(
 
 
     #-------------- Color scale
-    if (color_set == 'motif'){
-        score_range <- c(-2, -1, 0, 1, 2)
-        colors <- c("#440154FF", "#414487FF", "#2A788EFF", "#7AD151FF", "#FDE725FF")
-    }
-    if (color_set == 'exp'){
-        score_range <- c(-2, 0, 2)
-        colors <- c("#2E86C1", "white", "#CB4335")
-    }
-    if (color_set == 'peak'){
-        score_range <- c(-1, 0, 1)
-        colors <-c("#E5D4CD", "white", "#2286A9")
-    }
-
-    col_score = circlize::colorRamp2(score_range, colors)
+    col_score <- ColorScore(color_set)
 
 
 
@@ -239,9 +237,9 @@ ComplexHeatmap_GroupX <- function(
         right_annotation = haR,
         
         heatmap_legend_param = list(
-            title = legend_title,
-            direction = ht_lgd_direc,
+            title = ht_title,
             title_position = "lefttop",
+            direction = ht_lgd_direc,
             title_gp = gpar(fontsize = font_size, fontface = "bold"), 
             labels_gp = gpar(fontsize = font_size),
             legend_width = unit(2, "cm"),
@@ -272,6 +270,112 @@ ComplexHeatmap_GroupX <- function(
 
 
 
+
+
+
+
+
+#' ComplexHeatmap Simple version
+#'
+#' @param d_mtx dataframe
+#'
+#' @export
+#'
+ComplexHeatmap_Basic <- function(
+    d_mtx = NULL, 
+    meta = NULL,
+    row_info = NULL,
+    group = 'cell_type2',
+    sample = NULL,
+    scaled = TRUE,
+    col_group = NULL,
+    col_sample = NULL,
+    cluster_rows = TRUE,
+    cluster_col = TRUE,
+    show_row_dend = TRUE,
+    font_size = 6,
+    gap = 0.2,
+    color_set = 'peak',
+    row_title = NULL,
+    show_column_dend = FALSE,
+    ht_title = "Row Z-Score",
+    ht_lgd_direc = "horizontal"
+){
+
+
+    # Z-score scaling
+    if (scaled) { d_mtx <- t(scale(t(d_mtx))) }
+
+    # Color scale
+    col_score <- ColorScore(color_set)
+
+
+
+    #-------------- Split factors
+    row_split <- row_info[[group]]
+    col_split <- meta[[group]]
+
+
+
+    #--------------- Top annotation
+    haT <- HeatmapAnnotation(
+        Group = anno_simple(x = meta[[group]], simple_anno_size = unit(2, "mm"), col = col_group),
+        annotation_name_side = "right",
+        annotation_name_gp = gpar(fontsize = font_size, fontface = "bold")
+    )
+
+    if (length(group) > 0 & length(sample) > 0){
+        haT <- HeatmapAnnotation(
+                Group = anno_simple(x = meta[[group]], simple_anno_size = unit(2, "mm"), col=col_group),
+                Sample = anno_simple(x = meta[[sample]], simple_anno_size = unit(2, "mm"), col=col_sample),
+                annotation_name_side = "right",
+                annotation_name_gp = gpar(fontsize = font_size, fontface="bold")
+            )
+    }
+
+
+
+    #-------------- Heatmap
+    ht <- Heatmap(
+        d_mtx,
+        col = col_score,
+        
+        show_row_names = FALSE,
+        show_row_dend = show_row_dend,
+        cluster_rows = cluster_rows,
+        
+        show_column_names = FALSE,
+        show_column_dend = show_column_dend,
+        cluster_columns = cluster_col,
+
+        row_title = row_title,
+        row_title_gp = gpar(fontsize = font_size + 1, fontface = "bold"),
+        row_split = row_split,
+        row_gap = unit(gap, "mm"),
+        cluster_row_slices = FALSE,
+        
+        column_split = col_split,
+        cluster_column_slices = FALSE,
+        column_gap = unit(gap, "mm"),
+        
+        top_annotation = haT,
+        
+        heatmap_legend_param = list(
+            title = ht_title,
+            title_position = "lefttop",
+            direction = ht_lgd_direc,
+            title_gp = gpar(fontsize = font_size, fontface = "bold"), 
+            labels_gp = gpar(fontsize = font_size),
+            legend_width = unit(2, "cm"),
+            grid_height = unit(2, "mm")
+        )
+    )
+    
+
+    return(ht)
+    #draw(ht, heatmap_legend_side = "bottom")
+
+}
 
 
 
