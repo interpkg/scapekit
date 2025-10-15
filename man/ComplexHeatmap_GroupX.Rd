@@ -11,6 +11,7 @@ ComplexHeatmap_GroupX(
   sample = NULL,
   marker_info = NULL,
   mk_group = "cluster",
+  mk_gene = "gene",
   filter = TRUE,
   topn = 10000,
   pct1 = "pct.1",

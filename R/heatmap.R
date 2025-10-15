@@ -79,6 +79,7 @@ ComplexHeatmap_GroupX <- function(
     sample = NULL,
     marker_info = NULL,
     mk_group = 'cluster',
+    mk_gene = 'gene',
     filter = TRUE,
     topn = 10000,
     pct1='pct.1',
@@ -107,10 +108,10 @@ ComplexHeatmap_GroupX <- function(
     #--------------// Process data - sec-filter
     if (filter){
         #1.marker info - filtered-2
-        marker_info <- FilterMarkersByGroup(data=marker_info, pct1=pct1, avg_diff=avg_diff, group=mk_group, gene='gene', n=topn)
+        marker_info <- FilterMarkersByGroup(data=marker_info, pct1=pct1, avg_diff=avg_diff, group=mk_group, gene=mk_gene, n=topn)
 
         #2.exp matrix
-        marker_genes <- marker_info[[gene]]
+        marker_genes <- marker_info[[mk_gene]]
         d_mtx <- as.data.frame(df)[marker_genes, ]
 
         #3.meta
