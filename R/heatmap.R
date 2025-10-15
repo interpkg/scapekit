@@ -78,6 +78,7 @@ ComplexHeatmap_GroupX <- function(
     group = 'cell_type2',
     sample = NULL,
     marker_info = NULL,
+    mk_group = 'cluster',
     filter = TRUE,
     topn = 10000,
     pct1='pct.1',
@@ -92,7 +93,7 @@ ComplexHeatmap_GroupX <- function(
     cluster_col = TRUE,
     show_row_dend = FALSE,
     font_size = 6,
-    gap = 0.2,
+    gap = 0.3,
     border = FALSE,
     color_set = 'motif',
     row_title = NULL,
@@ -106,7 +107,7 @@ ComplexHeatmap_GroupX <- function(
     #--------------// Process data - sec-filter
     if (filter){
         #1.marker info - filtered-2
-        marker_info <- FilterMarkersByGroup(data=marker_info, pct1=pct1, avg_diff=avg_diff, group=group, gene='gene', n=topn)
+        marker_info <- FilterMarkersByGroup(data=marker_info, pct1=pct1, avg_diff=avg_diff, group=mk_group, gene='gene', n=topn)
 
         #2.exp matrix
         marker_genes <- marker_info[[gene]]
@@ -295,7 +296,7 @@ ComplexHeatmap_Basic <- function(
     cluster_col = TRUE,
     show_row_dend = FALSE,
     font_size = 6,
-    gap = 0.2,
+    gap = 0.3,
     color_set = 'peak',
     row_title = NULL,
     show_column_dend = FALSE,
