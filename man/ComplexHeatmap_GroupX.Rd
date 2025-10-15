@@ -22,7 +22,7 @@ ComplexHeatmap_GroupX(
   labels = NULL,
   cluster_rows = TRUE,
   cluster_col = TRUE,
-  show_row_dend = TRUE,
+  show_row_dend = FALSE,
   font_size = 6,
   gap = 0.2,
   border = FALSE,

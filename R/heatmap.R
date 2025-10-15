@@ -90,7 +90,7 @@ ComplexHeatmap_GroupX <- function(
     labels = NULL,
     cluster_rows = TRUE,
     cluster_col = TRUE,
-    show_row_dend = TRUE,
+    show_row_dend = FALSE,
     font_size = 6,
     gap = 0.2,
     border = FALSE,
@@ -286,13 +286,14 @@ ComplexHeatmap_Basic <- function(
     meta = NULL,
     row_info = NULL,
     group = 'cell_type2',
+    levels = NULL,
     sample = NULL,
     scaled = TRUE,
     col_group = NULL,
     col_sample = NULL,
     cluster_rows = TRUE,
     cluster_col = TRUE,
-    show_row_dend = TRUE,
+    show_row_dend = FALSE,
     font_size = 6,
     gap = 0.2,
     color_set = 'peak',
@@ -315,12 +316,17 @@ ComplexHeatmap_Basic <- function(
     row_split <- row_info[[group]]
     col_split <- meta[[group]]
 
+    if (length(levels) > 1){
+        row_split <- factor(row_info[[group]], levels = levels)
+        col_split <- factor(meta[[group]], levels = levels)
+    }
+
 
 
     #--------------- Top annotation
     haT <- HeatmapAnnotation(
         Group = anno_simple(x = meta[[group]], simple_anno_size = unit(2, "mm"), col = col_group),
-        annotation_name_side = "right",
+        annotation_name_side = "left",
         annotation_name_gp = gpar(fontsize = font_size, fontface = "bold")
     )
 
@@ -328,7 +334,7 @@ ComplexHeatmap_Basic <- function(
         haT <- HeatmapAnnotation(
                 Group = anno_simple(x = meta[[group]], simple_anno_size = unit(2, "mm"), col=col_group),
                 Sample = anno_simple(x = meta[[sample]], simple_anno_size = unit(2, "mm"), col=col_sample),
-                annotation_name_side = "right",
+                annotation_name_side = "left",
                 annotation_name_gp = gpar(fontsize = font_size, fontface="bold")
             )
     }
@@ -354,6 +360,7 @@ ComplexHeatmap_Basic <- function(
         row_gap = unit(gap, "mm"),
         cluster_row_slices = FALSE,
         
+        column_title_gp = gpar(fontsize = font_size + 1, fontface = "bold"),
         column_split = col_split,
         cluster_column_slices = FALSE,
         column_gap = unit(gap, "mm"),
