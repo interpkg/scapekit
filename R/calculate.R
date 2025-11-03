@@ -76,7 +76,41 @@ CalMinMax <- function(data, minc=.25, maxc=.75){
 
 
 
-#' Call Proportion
+#' Call Ratio by vector
+#'
+#' @param x vector
+#'
+#' @return data frame
+#'
+#' @export
+#'
+CallRatio <- function(x=NULL)
+{
+    df <- data.frame(table(x))
+    colnames(df) <- c('x', 'count')
+
+    total <- sum(df$count)
+    df$ratio <- round(df$count/total*100, 1)
+    df$group <- 'Yes'
+    # x count ratio
+
+    df2 <- df
+    df2$group <- 'No'
+    for (s in df$x){
+        df2[df$x==s, 'count'] <- total - df[df$x==s, 'count']
+        df2[df$x==s, 'ratio'] <- 100 - df[df$x==s, 'ratio']
+    }
+
+    d_merged <- rbind(df, df2)
+
+    return(d_merged)
+}
+
+
+
+
+
+#' Call Proportion by group
 #'
 #' @param data frame
 #' @param x sample name
@@ -86,7 +120,7 @@ CalMinMax <- function(data, minc=.25, maxc=.75){
 #'
 #' @export
 #'
-CallProportion <- function(data, x='', group='')
+CallRatio_byGroup <- function(data, x='', group='')
 {
     x_size <- length(unique(data[[x]]))
 
@@ -106,7 +140,7 @@ CallProportion <- function(data, x='', group='')
 
 
 
-#' Call Proportion 2
+#' Call Proportion by group 2
 #'
 #' @param data frame
 #' @param x main column
@@ -117,7 +151,7 @@ CallProportion <- function(data, x='', group='')
 #'
 #' @export
 #'
-CallProportion2 <- function(data, x='', g1='', g2='')
+CallRatio_byGroup2 <- function(data, x='', g1='', g2='')
 {
     x_size <- length(unique(data[[x]]))
 

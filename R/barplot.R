@@ -49,6 +49,74 @@ BarPlotCount <- function(
 
 
 
+#' Bar plot ratio
+#'
+#' @param vec frame
+#' @param y_lab name
+#' @param color color code
+#'
+#' @return plot
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+BarPlotRatio <- function(
+    vec=NULL, 
+    title='', 
+    y_lab='Proportion (%)', 
+    breaks=c('Yes', 'No'),
+    colors=c('Yes'='#D90000', 'No'='#DEDEDE'), 
+    sort=FALSE,
+    nolegend=FALSE,
+    legend_nrow=1, 
+    legend_position='bottom',
+    lsz=2,
+    text_size=5, 
+    title_size=6, 
+    angle=45, 
+    line_size=0.3
+){    
+    df <- CallRatio(x=vec)
+    # x count ratio group
+
+    if (sort){
+        sorted_x <- (df %>% filter(group=='Yes') %>% arrange(desc(ratio)))$x
+        df$x <- factor(df$x, levels=sorted_x)
+    }
+    
+
+    p <- ggplot(df, aes(x=x, y=ratio, fill=group, group=group)) + 
+        geom_col(width=0.8) +
+        theme_classic(base_line_size=line_size) + 
+        labs(title=title, x='', y=y_lab) +
+        theme(plot.title = element_text(hjust = 0.5, size=title_size, face='bold')) +
+        theme(text=element_text(size=text_size, face='bold'), 
+            axis.title=element_text(size= text_size + 1), 
+            axis.text=element_text(size=text_size, color='black'),
+            axis.text.y = element_text(size = text_size)
+        ) +
+        scale_x_discrete(guide=guide_axis(angle=angle)) +
+        theme(panel.background = element_blank(),
+            legend.title=element_blank(),
+            legend.key.size = unit(lsz, 'mm'),
+            legend.text=element_text(size=text_size),
+            legend.position=legend_position
+        ) + 
+        guides(fill=guide_legend(nrow=legend_nrow, byrow=T))
+
+    # change color
+    p <- p + scale_fill_manual(breaks=breaks, values=colors)
+    
+    if (nolegend){ p <- p + theme(legend.position="none") }
+
+    p
+}
+
+
+
+
+
 #' Bar plot with group
 #'
 #' @param data frame
@@ -135,7 +203,7 @@ BarPlotGroup <- function(
 #'
 #'
 BarPlotGroupText <- function(
-    df=NULL, 
+    data=NULL, 
     x=NULL, 
     y=NULL, 
     group=NULL, 
@@ -150,7 +218,7 @@ BarPlotGroupText <- function(
     label_z=3,
     label_suffix='%'
 ){
-    p <- ggplot(df, aes_string(x=x, y=y, fill=group)) + 
+    p <- ggplot(data, aes_string(x=x, y=y, fill=group)) + 
             geom_bar( stat="identity" ) +
             theme_classic(base_line_size=base_lz) +
             theme(text=element_text(size=tz, face='bold', color='black')) +
@@ -170,6 +238,77 @@ BarPlotGroupText <- function(
 
     p
 }
+
+
+
+
+
+
+
+#' Bar plot with group & label 
+#'
+#' @param data frame
+#' @param group column
+#' @param x axis name
+#' @param y axis name
+#' @param x_lab name
+#' @param y_lab name
+#' @param title name 
+#' @param colors code
+#'
+#' @return plot
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+#'
+BarPlotGroupX1 <- function(
+    data=NULL,
+    x=NULL,
+    y=NULL,
+    group=NULL,
+    levels=NULL,
+    colors=c("#E41A1C", "#377EB8"),
+    title='',
+    x_lab='',
+    y_lab='Tumor cell ratio (%)',
+    bw = 0.7,
+    bls=0.3,
+    text_size=8, 
+    title_size=10
+){
+    # Calculate total ratio for each cell type and sort
+    df_sorted <- data %>%
+      group_by(.data[[x]]) %>%
+      mutate(total_ratio = sum(ratio)) %>%
+      ungroup() %>%
+      mutate(cell_type2 = factor(.data[[x]], levels = unique(.data[[x]][order(-total_ratio)])))
+
+
+    if (length(levels) > 0){
+        df_sorted[[group]] <- factor(df[[group]], levels = levels)
+    }
+
+    p <- ggplot(df_sorted, aes(x = .data[[x]], y = .data[[y]], fill = .data[[group]])) +
+          geom_bar(width = bw, stat = "identity", position = "dodge") +
+          theme_classic(base_line_size=bls) +
+          labs(title = title, x = x_lab, y = y_lab, fill = '') +
+          scale_fill_manual(values = colors) +
+          theme(
+            plot.title = element_text(hjust = 0.5, face = "bold", size = title_size),
+            text = element_text(size=text_size, face = "bold", color = "black"),
+            axis.text = element_text(face = "bold", color = "black"),
+            axis.text.x = element_text(size = text_size, angle = 45, hjust = 1),
+            legend.position = c(0.8, 0.9),
+            legend.key.size=unit(2,"mm"),
+            legend.text = element_text(size = text_size-1)
+          )
+
+    p
+
+}
+
 
 
 
@@ -486,7 +625,7 @@ BarPlotGroupProportion <- function(
     factor_x=NULL
 ){   
     # call proportion
-    dcount <- CallProportion(data, x, group)
+    dcount <- CallRatio_byGroup(data, x, group)
     # <x> <group> count total_count ratio
 
     # factor x
@@ -548,8 +687,6 @@ BarPlotGroupProportion <- function(
 #'
 BarPlotSignal <- function(
     data, 
-    x='', 
-    y='ratio', 
     clusters='clusters',
     signal='group', 
     colors=c("High"="#CB4335", "Medium"="#2E86C1", "Low"="#D7DBDD"),

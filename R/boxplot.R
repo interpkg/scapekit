@@ -114,7 +114,9 @@ StandardBoxplot <- function(
 
 
     if (length(comp_group) > 0){
-        p <- p + ggpubr::stat_compare_means(comparisons = comp_group,
+        comparison_list <- combn(comp_group, length(comp_group), simplify = FALSE)
+        
+        p <- p + ggpubr::stat_compare_means(comparisons = comparison_list,
                      method = test_method, size=font_size_pval,
                      label = test_label
                 )
