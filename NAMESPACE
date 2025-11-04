@@ -2,7 +2,7 @@
 
 export(AreaPlotGroup)
 export(AreaPlotGroupProportion)
-export(BarPlot2d)
+export(BarPlot2D)
 export(BarPlotCount)
 export(BarPlotGroup)
 export(BarPlotGroupPosNeg)

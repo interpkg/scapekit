@@ -49,7 +49,7 @@ BarPlotCount <- function(
 
 
 
-#' Bar plot 2d
+#' Bar plot 2D
 #'
 #' @param data data.frame
 #' @param x  column1
@@ -61,7 +61,7 @@ BarPlotCount <- function(
 #'
 #' @export
 #'
-BarPlot2d <- function(
+BarPlot2D <- function(
     data=NULL, 
     x=NULL, 
     y=NULL,
