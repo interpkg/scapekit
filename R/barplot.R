@@ -13,7 +13,7 @@ NULL
 #' @param data frame
 #' @param x axis name
 #' @param y_lab name
-#' @param color color code
+#' @param colors color code
 #'
 #' @return plot
 #'
@@ -49,11 +49,56 @@ BarPlotCount <- function(
 
 
 
+#' Bar plot 2d
+#'
+#' @param data data.frame
+#' @param x  column1
+#' @param colors color code
+#'
+#' @return plot
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+BarPlot2d <- function(
+    data=NULL, 
+    x=NULL, 
+    y=NULL,
+    lsz=.3,
+    text_size=6, 
+    title_size=7,
+    color="steelblue",
+    x_lab='PLAGL2', 
+    y_lab='',
+    title='', 
+    colors='steelblue'
+){
+    p <- ggplot(data, aes(x = .data[[x]], y = .data[[y]])) +
+          geom_col(fill = colors) 
+          
+    p <- p + theme_classic(base_line_size=lsz) + 
+          labs(title=title, x=x_lab, y=y_lab) +
+          theme(plot.title = element_text(hjust = 0.5, size=title_size, face='bold')) +
+            theme(text=element_text(size=text_size, face='bold'), 
+            axis.title=element_text(size= text_size + 1), 
+            axis.text=element_text(size=text_size + .5, color='black'),
+            axis.text.y = element_text(size = text_size),
+            axis.line = element_line(color = "black"),
+                    axis.ticks = element_line(color = "black")
+            )
+  p
+}
+
+
+
+
+
 #' Bar plot ratio
 #'
 #' @param vec frame
 #' @param y_lab name
-#' @param color color code
+#' @param colors color code
 #'
 #' @return plot
 #'
