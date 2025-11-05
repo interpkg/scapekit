@@ -24,13 +24,31 @@ GGboxplotPval <- function(
     title='', x_lab='', y_lab='Mean peak signal', 
     font_size=7, font_size_title=8,
     nolegend=FALSE, add_test=FALSE,
+    errorbar=TRUE,
+    add_mean=TRUE, mean_dot_shape=20, mean_dot_size=3,
     colors="supp"
 ){
     p <- ggpubr::ggboxplot(data, x = x, y = y, 
             color = group, palette = colors, 
             outlier.size = .1, 
-            bxp.errorbar=F
+            bxp.errorbar=errorbar
           )
+
+    # add mean dot to boxplot
+    if (add_mean){
+        mean_data <- data %>%
+            group_by(.data[[x]], .data[[group]]) %>%
+            summarise(mean_value = mean(.data[[y]], na.rm = TRUE))
+    
+        p <- p + geom_point(
+            data = mean_data,
+            aes(x = .data[[x]], y = mean_value, group = .data[[group]]),
+            shape = mean_dot_shape, 
+            size = mean_dot_size, 
+            color = "black",
+            position = position_dodge(0.8))
+    }
+
     p <- p + theme(axis.line=element_line(size=0.5, colour = "black"), 
                   axis.ticks = element_line(size = 0.5, colour = "black")) +
             labs(title=title, x=x_lab, y = y_lab) +
@@ -40,7 +58,6 @@ GGboxplotPval <- function(
             theme(legend.key.size = unit(4, 'mm'))
 
     if (add_test){
-        #p <- p + stat_compare_means(comparisons = data, label.y = max(data[[y]])*1.2, size=2)
         max_y <- max(data[[y]]) * 0.9
         p <- p + stat_compare_means(aes(group = .data[[group]]), label = "p.signif", label.y = max_y)
     }
@@ -77,6 +94,7 @@ StandardBoxplot <- function(
     data=NULL, x='sample', y='mean_peak_sig', 
     title='', x_lab='', y_lab='Mean peak signal', 
     font_size=7, font_size_title=8,
+    add_mean=FALSE, mean_dot_shape=20, mean_dot_size=3,
     nolegend=FALSE, 
     comp_group=NULL,
     test_method="wilcox.test",
@@ -91,6 +109,11 @@ StandardBoxplot <- function(
             stat_boxplot(geom = "errorbar", width = 0.2) +
             geom_boxplot(aes_string(fill =x), color="black", alpha=alpha, width=0.5, outlier.shape = outlier, outlier.size = 0.5) +
             theme_classic()
+
+    if (add_mean){
+        p <- p + stat_summary(fun = mean, geom = "point", shape = mean_dot_shape, size = mean_dot_size, color = "black", alpha=0.8, position = position_dodge(0.5))
+    }
+    
 
     p <- p + theme(axis.line=element_line(size=0.5, color = "black"), 
                   axis.ticks = element_line(size = 0.5, color = "black")) +
