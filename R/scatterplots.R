@@ -193,7 +193,9 @@ DotLinePlotGroup <- function(
 ##      Scatter - Others
 ###############################
 
-#' Scatter Plot
+
+
+#' Scatter Plot Plus
 #'
 #' @param data is data frame
 #' @param group column

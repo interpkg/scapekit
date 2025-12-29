@@ -3,6 +3,48 @@
 ##    Scatter - UMAP
 ###############################
 
+#' UMAP - Signal Score
+#'
+#' @param data dataframe
+#'
+#' @export
+#'
+UMAPSignalScore <- function(
+    data=NULL, 
+    x='UMAP_1', y='UMAP_2', signal='zr_score1', 
+    order_dec=FALSE,
+    title='',
+    legend_title='Signal',
+    set_mid=NULL,
+    line_size=0.1,
+    font_size=7,
+    pt_size=0.1, 
+    legend_size=2,
+    colors=c("#D7DBDD", "#2E86C1", "#CB4335")
+
+){
+    data <- data[order(data[[signal]], decreasing=order_dec), ]
+    
+    p <-  ggpubr::ggscatter(data, x=x, y=y, color=signal, shape=16, size=pt_size) + 
+            theme_classic(base_line_size=line_size) +
+            labs(title=title, color=legend_title) +
+            theme(plot.title = element_text(hjust = 0.5, size=font_size+1, face = "bold")) +
+            theme(text=element_text(size=font_size, face="bold")) +
+            theme(legend.title=element_text(size=font_size, face="bold"))
+
+    if (length(set_mid) > 0){
+        p <- p + scale_colour_gradientn(colours = colors, rescaler = ~ scales::rescale_mid(.x, mid = set_mid)) 
+    } else {
+        p <- p + scale_colour_gradientn(colours = colors)
+    }
+
+    return(p)
+}
+
+
+
+
+
 
 
 #' UMAP - Signal
@@ -14,7 +56,7 @@
 UMAPSignal <- function(
     data=NULL, 
     x='UMAP_1', y='UMAP_2', 
-    group='group',
+    group='signal',
     signal='zr_score1', 
     order_dec=FALSE,
     title='',

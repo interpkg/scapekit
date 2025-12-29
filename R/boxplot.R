@@ -19,10 +19,12 @@
 #'
 #' @export
 #'
+
 GGboxplotPval <- function(
     data=NULL, x='sample', y='mean_peak_sig', group=NA, 
     title='', x_lab='', y_lab='Mean peak signal', 
     font_size=7, font_size_title=8,
+    lsz=.3,
     nolegend=FALSE, add_test=FALSE,
     errorbar=TRUE,
     add_mean=TRUE, mean_dot_shape=20, mean_dot_size=3,
@@ -49,8 +51,8 @@ GGboxplotPval <- function(
             position = position_dodge(0.8))
     }
 
-    p <- p + theme(axis.line=element_line(size=0.5, colour = "black"), 
-                  axis.ticks = element_line(size = 0.5, colour = "black")) +
+    p <- p + theme(axis.line=element_line(size=lsz, colour = "black"), 
+                  axis.ticks = element_line(size = lsz, colour = "black")) +
             labs(title=title, x=x_lab, y = y_lab) +
             theme(plot.title = element_text(hjust = 0.5, size=font_size_title)) +
             theme(text = element_text(size = font_size, face="bold", color = "black"), axis.text= element_text(size = font_size, color = "black")) +
@@ -68,7 +70,6 @@ GGboxplotPval <- function(
 
     p 
 }
-
 
 
 
@@ -94,6 +95,7 @@ StandardBoxplot <- function(
     data=NULL, x='sample', y='mean_peak_sig', 
     title='', x_lab='', y_lab='Mean peak signal', 
     font_size=7, font_size_title=8,
+    lsz=.3,
     add_mean=FALSE, mean_dot_shape=20, mean_dot_size=3,
     nolegend=FALSE, 
     comp_group=NULL,
@@ -108,7 +110,7 @@ StandardBoxplot <- function(
     p <- ggplot(data, aes_string(x=x, y=y)) +
             stat_boxplot(geom = "errorbar", width = 0.2) +
             geom_boxplot(aes_string(fill =x), color="black", alpha=alpha, width=0.5, outlier.shape = outlier, outlier.size = 0.5) +
-            theme_classic()
+            theme_classic(base_line_size=lsz)
 
     if (add_mean){
         p <- p + stat_summary(fun = mean, geom = "point", shape = mean_dot_shape, size = mean_dot_size, color = "black", alpha=0.8, position = position_dodge(0.5))
@@ -186,6 +188,7 @@ StandardFacetWrapBoxplot <- function(
     y_lab='Mean peak signal', 
     font_size=6, 
     font_size_title=8,
+    lsz=.3,
     nolegend=FALSE, 
     add_test=FALSE, 
     test_method="wilcox.test",
@@ -198,7 +201,7 @@ StandardFacetWrapBoxplot <- function(
     p <- ggplot(data, aes_string(x=x, y=y)) +
             stat_boxplot(geom = "errorbar", width = 0.2) +
             geom_boxplot(aes_string(fill =x), color="black", alpha=alpha, width=0.5, outlier.shape = outlier, outlier.size = 0.5) +
-            theme_bw() + 
+            theme_bw(base_line_size=lsz) + 
             theme(panel.grid = element_blank(),
                 strip.background = element_rect(fill = "black", color='black'),
                 strip.text = element_text(color = "white", size = font_size, face = "bold", margin = margin(t = 2, b=2, unit = "pt")),
