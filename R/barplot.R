@@ -48,6 +48,61 @@ BarPlotCount <- function(
 
 
 
+#' Bar plot for mean signal
+#'
+#' @param data frame
+#'
+#' @return plot
+#'
+#' @import ggplot2
+#'
+#' @export
+#'
+
+BarPlotMeanSignal <- function(
+    data=NULL, 
+    group='clusters',
+    signal='signal_score1', 
+    sort=TRUE,
+    width=.5,
+    lsz=.3,
+    highlight='Tumor',
+    title='', 
+    x_lab='',
+    y_lab='Mean Signal'
+
+){
+    df <- data %>% group_by(.data[[group]]) %>% summarise(meanSig = mean(.data[[signal]], na.rm = TRUE))
+
+    if (sort){
+        sorted_x <- (df %>% arrange(desc(meanSig)))[[group]]
+        df[[group]] <- factor(df[[group]], levels=sorted_x)
+    }
+
+    bar_colors <- ifelse(df[[group]] %in% highlight, "red", "lightgray")
+    
+    p <- ggplot(df, aes(x = .data[[group]], y=meanSig)) +
+            geom_bar(stat = "identity", width=width, fill=bar_colors) 
+
+    p <- p + theme_classic(base_line_size=lsz) + 
+            labs(title=title, x=x_lab, y=y_lab) +
+            theme(plot.title = element_text(size = 8, hjust=.5),
+                text = element_text(size=7, colour='black', face='bold'),
+                axis.text = element_text(colour='black', face='bold'),
+                axis.text.x = element_text(angle=90, vjust=1, hjust=1)
+            ) +
+            theme(legend.title = element_blank(),
+                #legend.position=c(0.8, 0.9),
+                legend.text = element_text(size=6),
+                legend.key.size=unit(2,"mm")
+            )
+
+    return(p)
+}
+
+
+
+
 
 #' Bar plot 2D
 #'
@@ -85,7 +140,7 @@ BarPlot2D <- function(
             axis.text=element_text(size=text_size + .5, color='black'),
             axis.text.y = element_text(size = text_size),
             axis.line = element_line(color = "black"),
-                    axis.ticks = element_line(color = "black")
+            axis.ticks = element_line(color = "black")
             )
   p
 }
