@@ -10,16 +10,16 @@ ShowTopNGenes <- function(
     n=10,
     gene='gene',
     group='signal',
-    logfc='log2FC'
+    sort_by='log2FC'
 ){
     # sort up
     d_up <- df[df[[group]]=='Up',]
-    up <- d_up[order(d_up[[logfc]], decreasing = TRUE), gene]
+    up <- d_up[order(d_up[[sort_by]], decreasing = TRUE), gene]
     topN_up_gene <- up[1:n]
     
     # sort down
     d_down <- df[df[[group]]=='Down',]
-    down <- d_down[order(d_down[[logfc]]), gene]
+    down <- d_down[order(d_down[[sort_by]]), gene]
     topN_down_gene <- down[1:n]
 
     # merge up + down

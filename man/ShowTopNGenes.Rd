@@ -9,7 +9,7 @@ ShowTopNGenes(
   n = 10,
   gene = "gene",
   group = "signal",
-  logfc = "log2FC"
+  sort_by = "log2FC"
 )
 }
 \arguments{
