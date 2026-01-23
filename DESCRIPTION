@@ -17,4 +17,5 @@ Collate:
     'heatmap.R'
     'scatterplots.R'
     'umap_plot.R'
+    'utilities.R'
     'volcanoplot.R'

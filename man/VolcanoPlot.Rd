@@ -13,6 +13,7 @@ VolcanoPlot(
   x_lab = "log2(Fold Change)",
   y_lab = "-log10(FDR)",
   x_cutoff = 0.585,
+  y_cutoff = 1.3,
   pt_size = 0.3,
   alpha = 0.8,
   title = "",
